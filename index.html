@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Quaker City — Illegal Market</title>
+<title>Quaker City — Contraband System</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,37 +11,43 @@
 <style>
 :root{
   --bg:#071027;
-  --panel:#0f1a2a;
   --accent:#dc143c;
   --accent-2:#0047ab;
   --muted:#b0b8c0;
   --text:#ffffff;
-  --glass: rgba(255,255,255,.03);
   --glass-border: rgba(255,255,255,.04);
-  --card-radius:14px;
   --maxw:1320px;
   --kill-glow: 0 12px 44px rgba(220,20,60,0.12);
 }
 
-/* base */
+/* reset */
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:"Rajdhani",sans-serif;background:
-  radial-gradient(900px 420px at 10% -10%, rgba(220,20,60,.06), transparent 60%),
-  radial-gradient(900px 420px at 110% 10%, rgba(0,71,171,.06), transparent 60%),
-  linear-gradient(180deg,var(--bg),#031022 120%);
-color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;padding:28px;display:flex;justify-content:center;}
+html,body{height:100%;margin:0;font-family:"Rajdhani",sans-serif;background:transparent;color:var(--text);-webkit-font-smoothing:antialiased;padding:28px;}
 
-.background-logo{
-  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-  width:900px; height:900px; background:url('Quaker.png') no-repeat center/contain;
-  filter: blur(20px) saturate(.9); opacity:.10; pointer-events:none; z-index:1;
+/* ===== background video + overlay ===== */
+.video-bg{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
+  filter: blur(10px) saturate(.88);
+  transform: scale(1.03);
+  will-change: transform, filter;
 }
-@media(max-width:1024px){ .background-logo{ width:700px;height:700px; filter:blur(16px); opacity:.08 } }
-@media(max-width:640px){ .background-logo{ width:480px;height:480px; filter:blur(12px); opacity:.06 } }
+.video-overlay{
+  position:fixed;
+  inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.64));
+  z-index:1;
+}
 
-.wrap{ width:100%; max-width:var(--maxw); margin:0 auto; position:relative; z-index:6; }
-.container{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-  border-radius:18px; padding:22px; border:1px solid var(--glass-border); box-shadow:0 22px 60px rgba(0,0,0,.6); backdrop-filter: blur(8px); }
+/* container on top of video */
+.wrap{ position:relative; z-index:6; width:100%; max-width:var(--maxw); margin:0 auto; }
+
+/* glass panel */
+.container{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border-radius:18px; padding:22px; border:1px solid var(--glass-border); box-shadow:0 22px 60px rgba(0,0,0,.6); backdrop-filter: blur(8px); }
 
 /* header */
 .header{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:18px; }
@@ -51,8 +57,7 @@ color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:gra
 
 /* topnav */
 .topnav{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; align-items:center; }
-.topnav .cat{ padding:10px 14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-  color:var(--muted); border:1px solid rgba(255,255,255,.03); font-weight:800; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
+.topnav .cat{ padding:10px 14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); color:var(--muted); border:1px solid rgba(255,255,255,.03); font-weight:800; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
 .topnav .cat.active{ color:var(--text); border-color: rgba(220,20,60,.28); box-shadow: var(--kill-glow); background: linear-gradient(180deg, rgba(220,20,60,.06), rgba(0,71,171,.03)); }
 
 /* subtabs */
@@ -101,7 +106,7 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
 .acquired-heading{ margin-top:18px; font-weight:900; color:var(--accent); }
 .acquired-grid{ margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; }
 
-/* modals */
+/* modal */
 .modal-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.72); z-index:9999; }
 .modal-overlay.open{ display:flex; }
 .modal{ width:920px; max-width:96%; border-radius:12px; padding:18px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.06); box-shadow: 0 22px 60px rgba(0,0,0,.6); }
@@ -109,10 +114,16 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
 /* responsive */
 @media(max-width:980px){ .title{ font-size:34px } .grid{ grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); } .img-wrap img{ max-height:90px; } .modal{ width:92% } }
 @media(max-width:640px){ .title{ font-size:26px } .grid{ grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); } .img-wrap img{ max-height:76px; } }
+
 </style>
 </head>
 <body>
-  <div class="background-logo" aria-hidden="true"></div>
+  <!-- video background (muted, looped) -->
+  <video class="video-bg" id="bgVideo" autoplay muted loop playsinline>
+    <source src="background.mp4" type="video/mp4">
+    <!-- fallback: user-hosted remote URL can be put here -->
+  </video>
+  <div class="video-overlay" aria-hidden="true"></div>
 
   <div class="wrap">
     <div class="header">
@@ -240,16 +251,13 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
     <div style="color:var(--muted); margin-top:10px; font-size:13px;">Admin password (client-side): <b>Qacti</b></div>
   </div>
 
-  <!-- audio -->
-  <audio id="bgm" src="OceanEyes.mp3" loop preload="auto"></audio>
+  <!-- audio (extracted from video) -->
+  <audio id="bgm" src="background_audio.mp3" loop preload="auto"></audio>
 
 <script>
-/* Final single-file Quaker City (Killadelphia-style) */
+/* Final Quaker City — video background + extracted audio; Killadelphia-style UI */
 
-/* ---------- Image mapping ----------
-   Put your weapon images in /images/ and name them to match keys
-   If you don't upload them, placeholders will appear.
-*/
+/* ---------- IMAGES mapping (put your images in /images/) ---------- */
 const IMAGES = {
   'Ghost Glock 17': 'images/ghost_glock_17.png',
   'Glock 19': 'images/glock_19.png',
@@ -272,7 +280,7 @@ const IMAGES = {
 };
 const FALLBACK = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="240"%3E%3Crect fill="%23333" width="400" height="240"/%3E%3Ctext x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23999"%3ENo Image%3C/text%3E%3C/svg%3E';
 
-/* weapon stats (kept for modal details only) */
+/* weapon stats (modal only) */
 const WEAPON_STATS = {
   'Ghost Glock 17': { damage: 28, fire: 750, ammo: '9mm', magStd: 15, magExt: 33 },
   'Glock 19': { damage: 28, fire: 750, ammo: '9mm', magStd: 15, magExt: 33 },
@@ -294,7 +302,7 @@ const WEAPON_STATS = {
   'ACR': { damage: 40, fire: 750, ammo: '5.56x45', magStd: 30, magExt: 60 }
 };
 
-/* items grouped by tab */
+/* items */
 const ITEMS = {
   tier1: [
     { name:'Ghost Glock 17', rarity:'common', category:'Pistols', img:IMAGES['Ghost Glock 17'] || FALLBACK },
@@ -332,8 +340,8 @@ const DEFAULT_WEIGHTS = {
   drugs: { common:35, uncommon:25, rare:25, epic:15 }
 };
 
-/* ---------------- DOM refs ---------------- */
-let itemGrid = document.getElementById('itemGrid'); // let so we can rebind
+/* refs (mutables) */
+let itemGrid = document.getElementById('itemGrid');
 const contentArea = document.getElementById('contentArea');
 const subtabsEl = document.getElementById('subtabs');
 const filterSelect = document.getElementById('filterSelect');
@@ -344,7 +352,6 @@ const spinModal = document.getElementById('spinModal');
 const spinStrip = document.getElementById('spinStrip');
 const spinStartBtn = document.getElementById('spinStartBtn');
 const closeSpin = document.getElementById('closeSpin');
-
 const musicToggle = document.getElementById('musicToggle');
 const musicLabel = document.getElementById('musicLabel');
 const bgm = document.getElementById('bgm');
@@ -369,7 +376,7 @@ let activeSub = 'All';
 let acquired = [];
 let spinning = false;
 
-/* ---------- helpers ---------- */
+/* helpers */
 function tick(ms){ return new Promise(r=> setTimeout(r,ms)); }
 function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function loadCfg(){ try{return JSON.parse(localStorage.getItem('qc_cfg')||'{}')}catch(e){return{}} }
@@ -377,7 +384,7 @@ function saveCfg(c){ localStorage.setItem('qc_cfg', JSON.stringify(c)); }
 function getWeights(){ const c = loadCfg(); return c.weights || DEFAULT_WEIGHTS; }
 function setWeights(w){ const c = loadCfg(); c.weights = w; saveCfg(c); }
 
-/* ---------- admin ---------- */
+/* admin */
 const ADMIN_PASS = 'Qacti';
 function isAdmin(){ return sessionStorage.getItem('qc_admin') === '1'; }
 function setAdmin(flag){ if(flag) sessionStorage.setItem('qc_admin','1'); else sessionStorage.removeItem('qc_admin'); adminPanel.style.display = flag ? 'block':'none'; }
@@ -392,14 +399,13 @@ saveAdminBtn.addEventListener('click', ()=> {
 });
 function loadAdmin(){ const cfg = loadCfg(); adminWebhook.value = cfg.webhook||''; adminUptime.value = cfg.uptime||''; adminPrices.value = cfg.prices||''; }
 
-/* ---------- subtabs sets (Option2 simple categories) ---------- */
+/* subtabs */
 const SUBTABS = {
   tier1: ['All','Pistols','SMG','ARs','Specials'],
   tier2: ['All','ARs','Snipers','LMGs'],
   attachments: ['All','Mags','Optics','Other'],
   drugs: ['All','Common','Rare']
 };
-
 function renderSubtabs(tab){
   subtabsEl.innerHTML = '';
   const arr = SUBTABS[tab] || ['All'];
@@ -419,7 +425,7 @@ function renderSubtabs(tab){
   activeSub = arr[0];
 }
 
-/* ---------- filtering ---------- */
+/* filtering */
 function itemsForTab(tab){
   const all = (ITEMS[tab] || []).slice();
   const filter = filterSelect.value;
@@ -437,7 +443,7 @@ function itemsForTab(tab){
   return res;
 }
 
-/* ---------- create card (CLEAN: no stats on card) ---------- */
+/* create card (clean, no stats) */
 function createCard(item){
   const el = document.createElement('div');
   el.className = 'card';
@@ -451,19 +457,16 @@ function createCard(item){
   return el;
 }
 
-/* ---------- render grid ---------- */
+/* render grid (handles turf tab) */
 function renderGrid(){
   const nodes = itemsForTab(activeTab);
-  // if turf tab, show turf map content
   if(activeTab === 'turf'){
-    // prefer local turf image if present, else remote Discord image
     const local = 'images/turfmap.png';
     const remote = 'https://media.discordapp.net/attachments/1445307831220699229/1447757901463683114/image.png';
     contentArea.innerHTML = `<div class="turf-map"><img src="${local}" alt="Turf Map" onerror="this.onerror=null; this.src='${remote}';"></div>`;
     return;
   }
 
-  // normal grid
   contentArea.innerHTML = `<div class="grid-wrap"><div class="grid" id="itemGrid" aria-live="polite"></div></div>`;
   itemGrid = document.getElementById('itemGrid');
   itemGrid.innerHTML = '';
@@ -474,7 +477,7 @@ function renderGrid(){
   nodes.forEach(it => itemGrid.appendChild(createCard(it)));
 }
 
-/* ---------- open card modal (details) ---------- */
+/* card details modal */
 function openCardDetails(item){
   statsTitle.textContent = item.name;
   statsRarity.textContent = (item.rarity||'common').toUpperCase();
@@ -491,14 +494,12 @@ function openCardDetails(item){
   `;
   statsModal.classList.add('open'); statsModal.style.display = 'flex';
 }
-
-/* close stats modal */
 closeStats.addEventListener('click', ()=> { statsModal.classList.remove('open'); statsModal.style.display = 'none'; });
 document.getElementById('statsModal').addEventListener('click', (e)=> { if(e.target.id === 'statsModal'){ statsModal.classList.remove('open'); statsModal.style.display = 'none'; } });
 
-/* ---------- topnav click handler (robust, fixes tab bug) ---------- */
+/* topnav click (robust) */
 document.querySelectorAll('.topnav .cat').forEach(el=>{
-  el.addEventListener('click', ()=>{
+  el.addEventListener('click', ()=> {
     document.querySelectorAll('.topnav .cat').forEach(x=> x.classList.remove('active'));
     el.classList.add('active');
     activeTab = el.dataset.tab;
@@ -508,10 +509,10 @@ document.querySelectorAll('.topnav .cat').forEach(el=>{
   });
 });
 
-/* filter change */
+/* filter */
 filterSelect.addEventListener('change', ()=> renderGrid());
 
-/* ---------- music toggle ---------- */
+/* music toggle logic */
 function setMusicOn(on){
   localStorage.setItem('qc_music_on', on ? '1':'0');
   if(on){ musicToggle.classList.add('on'); musicLabel.textContent = 'Music: On'; musicToggle.querySelector('i').className='fa-solid fa-volume-high'; bgm.play().catch(()=>{}); }
@@ -521,12 +522,11 @@ musicToggle.addEventListener('click', ()=> {
   const current = localStorage.getItem('qc_music_on') === '1';
   setMusicOn(!current);
 });
-// start music after user gesture
 function enableBGM(){ function start(){ if(bgm){ bgm.play().catch(()=>{}); } document.removeEventListener('click', start); document.removeEventListener('touchstart', start); } document.addEventListener('click', start); document.addEventListener('touchstart', start); }
 enableBGM();
 setTimeout(()=> { const mp = localStorage.getItem('qc_music_on'); setMusicOn(mp !== '0'); }, 100);
 
-/* ---------- spinner modal (DROP) ---------- */
+/* spinner modal */
 function renderSpinStrip(){
   spinStrip.innerHTML = '';
   const pool = (ITEMS[activeTab]||[]).slice();
@@ -562,8 +562,6 @@ function pickWeightedItem(tabKey){
   const all = [].concat(...Object.values(ITEMS));
   return rand(all);
 }
-
-/* spin */
 spinStartBtn.addEventListener('click', async ()=>{
   if(spinning) return;
   spinning = true;
@@ -582,7 +580,7 @@ spinStartBtn.addEventListener('click', async ()=>{
   setTimeout(()=> { closeSpinModal(); spinning = false; }, 1200);
 });
 
-/* add to acquired */
+/* acquired */
 function addAcquired(item){
   acquired.unshift(item);
   const card = document.createElement('div');
@@ -595,11 +593,11 @@ function addAcquired(item){
   while(acquiredGrid.children.length > 120) acquiredGrid.removeChild(acquiredGrid.lastChild);
 }
 
-/* ---------- SFX & BGM ---------- */
+/* SFX */
 const audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext||window.webkitAudioContext)() : null;
 function playTone(freq,len=0.08,type='sine',gain=0.06){
   if(!audioCtx) return;
-  try{ const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type=type; o.frequency.value=freq; o.connect(g); g.connect(audioCtx.destination); const now = audioCtx.currentTime; g.gain.value=0; g.gain.linearRampToValueAtTime(gain, now + 0.01); o.start(now); g.gain.exponentialRampToValueAtTime(0.0001, now + len); o.stop(now + len + 0.02); }catch(e){}
+  try{ const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type=type; o.frequency.value=freq; o.connect(g); g.connect(audioCtx.destination); const now = audioCtx.currentTime; g.gain.value=0; g.gain.linearRampToValueAtTime(gain, now+0.01); o.start(now); g.gain.exponentialRampToValueAtTime(0.0001, now+len); o.stop(now+len+0.02); }catch(e){}
 }
 function playSFX(name){
   if(!audioCtx) return;
@@ -609,7 +607,7 @@ function playSFX(name){
   if(name === 'win'){ playTone(880,0.08,'sine',0.12); setTimeout(()=>playTone(1320,0.12,'sine',0.11),120); setTimeout(()=>playTone(1760,0.16,'sine',0.09),260); }
 }
 
-/* ---------- webhooks ---------- */
+/* webhooks */
 function sendWebhook(payload){
   const cfg = loadCfg();
   const webhook = cfg.webhook || '';
@@ -618,7 +616,7 @@ function sendWebhook(payload){
     .catch(e=> console.warn('webhook fail', e));
 }
 
-/* ---------- startup ---------- */
+/* startup */
 function init(){
   renderSubtabs(activeTab);
   renderGrid();
@@ -630,15 +628,15 @@ function init(){
   // music pref
   const mp = localStorage.getItem('qc_music_on');
   setTimeout(()=> setMusicOn(mp !== '0'), 60);
-  // allow audio context resume on first interaction
+  // enable audio context resume
   document.addEventListener('click', ()=> { if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{}); });
-  console.log('Quaker City final build ready. Admin password (client-side):', ADMIN_PASS);
+  console.log('Quaker City final (video bg + audio) ready. Admin password (client-side):', ADMIN_PASS);
 }
 init();
 
-/* ESC closes modals */
+/* ESC close modals */
 document.addEventListener('keydown', (e)=> { if(e.key === 'Escape'){ document.querySelectorAll('.modal-overlay.open').forEach(m=>{ m.classList.remove('open'); m.style.display='none'; }); } });
-/* close modal by clicking backdrop */
+/* backdrop close */
 document.querySelectorAll('.modal-overlay').forEach(m=> m.addEventListener('click', (e)=> { if(e.target === m){ m.classList.remove('open'); m.style.display='none'; } }));
 
 </script>
