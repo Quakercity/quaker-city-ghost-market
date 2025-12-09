@@ -5,20 +5,284 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Quaker City Ghost Market</title>
   <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; background:#0b1220; color:#e6eef8; }
-    .card { text-align:center; padding:2rem; border-radius:12px; background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow:0 6px 30px rgba(2,6,23,0.6); max-width:720px; }
-    img.logo { width:96px; height:96px; object-fit:contain; display:block; margin:0 auto 1rem; }
-    a.button { display:inline-block; margin-top:1rem; padding:.6rem 1rem; border-radius:8px; background:#1f8fff; color:white; text-decoration:none; }
-    small { opacity:0.7; display:block; margin-top:.6rem; }
+    :root{--bg:#071021;--card:#0b1220;--accent:#1f8fff;--muted:#9fb3cc}
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:0;background:linear-gradient(180deg,var(--bg),#04101a);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+    .wrap{width:100%;max-width:980px}
+    header{display:flex;gap:1rem;align-items:center}
+    img.logo{width:88px;height:88px;object-fit:contain;border-radius:10px}
+    h1{margin:0;font-size:1.6rem}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:1rem;margin-top:1rem}
+    .card{background:rgba(255,255,255,0.03);padding:1rem;border-radius:12px;box-shadow:0 6px 30px rgba(0,0,0,0.6)}
+    .small{color:var(--muted);font-size:0.9rem}
+    button{background:var(--accent);border:none;color:#fff;padding:.5rem .75rem;border-radius:8px;cursor:pointer}
+    input,select,textarea{width:100%;padding:.5rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    label{display:block;margin-top:.6rem;font-size:0.9rem}
+    .admin-only{border-left:3px solid rgba(255,255,255,0.03);padding-left:.75rem}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}img.logo{width:72px;height:72px}}
+    .status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:.5rem}
   </style>
 </head>
 <body>
-  <main class="card">
-    <img src="logo.png" alt="Quaker City Ghost Market logo" class="logo" />
-    <h1>Quaker City Ghost Market</h1>
-    <p>Welcome — this is a simple static site for your FiveM server market. Replace this file and logo.png with your final site files to go live.</p>
-    <a class="button" href="#" onclick="alert('Replace with your market link or script')">Open Market</a>
-    <small>Make sure index.html and logo.png are in the repository root and Pages source is set to: main → root</small>
-  </main>
+  <div class="wrap">
+    <header>
+      <img class="logo" src="logo.png" alt="Logo">
+      <div>
+        <h1>Quaker City Ghost Market</h1>
+        <div class="small">Static site with admin panel, drop weighting, Discord webhook logging, SFX, uptime indicator and live price fetch.</div>
+      </div>
+      <div style="margin-left:auto">
+        <button id="open-admin">Admin</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Market</h2>
+        <p class="small">This is a demo market area. Use the admin panel to configure drops, webhook, server check and price feed.</p>
+
+        <div style="margin-top:1rem">
+          <label for="quantity">Quantity to draw</label>
+          <input id="quantity" type="number" value="1" min="1" />
+          <button id="do-drop" style="margin-top:.6rem">Generate Drop</button>
+        </div>
+
+        <div id="drop-result" style="margin-top:1rem" class="card small"></div>
+
+        <div style="margin-top:1rem">
+          <h3>Live prices</h3>
+          <div id="prices" class="small">No price feed configured.</div>
+        </div>
+
+      </section>
+
+      <aside class="card admin-only" id="admin-panel" style="display:none">
+        <h3>Admin panel</h3>
+        <div class="small">Protected locally: set an admin password (stored in browser localStorage). This site is static — do not store production secrets here.</div>
+        <label>Admin password</label>
+        <input id="admin-pass" type="password" placeholder="Set or enter admin password" />
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button id="set-pass">Set/Unlock</button>
+          <button id="logout" style="background:#b23a3a">Lock</button>
+        </div>
+
+        <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+
+        <label>Discord webhook URL <span class="small">(optional — public if used on GitHub Pages)</span></label>
+        <input id="webhook" placeholder="https://discord.com/api/webhooks/..." />
+        <div style="display:flex;gap:.5rem;margin-top:.5rem"><button id="test-webhook">Test Webhook</button><button id="save-webhook">Save</button></div>
+
+        <label>Server Uptime URL</label>
+        <input id="server-url" placeholder="https://example.com/status or your FiveM server endpoint" />
+        <div style="display:flex;gap:.5rem;margin-top:.5rem"><button id="check-now">Check Now</button><div id="uptime" class="small" style="margin-left:auto"></div></div>
+
+        <label>Price feed URL (JSON)</label>
+        <input id="price-url" placeholder="https://example.com/prices.json" />
+        <div style="display:flex;gap:.5rem;margin-top:.5rem"><button id="fetch-prices">Fetch Now</button><button id="save-price-url">Save</button></div>
+
+        <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+
+        <h4>Drop table (item:weight)</h4>
+        <textarea id="drop-table" rows="6" placeholder="sword:10\nshield:5\npotion:85"></textarea>
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button id="save-drop">Save Drop Table</button>
+          <button id="clear-drop" style="background:#b23a3a">Clear</button>
+        </div>
+
+        <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+
+        <label>Sound effects</label>
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button id="sfx-on">Enable</button>
+          <button id="sfx-off" style="background:#b23a3a">Disable</button>
+        </div>
+
+        <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+          <button id="export-config">Export Config</button>
+          <button id="import-config">Import Config</button>
+        </div>
+
+        <div style="margin-top:1rem;font-size:.85rem;color:var(--muted)">All settings are stored locally in your browser. If you need a server-side integration (safer webhook, password storage, central config) I can provide a small server script you can host.</div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // LocalStorage keys
+    const LS_KEYS = {
+      adminHash: 'qc_admin_hash',
+      webhook: 'qc_webhook',
+      serverUrl: 'qc_server_url',
+      priceUrl: 'qc_price_url',
+      dropTable: 'qc_drop_table',
+      sfx: 'qc_sfx'
+    }
+
+    // Utilities
+    async function sha256(text){
+      const data = new TextEncoder().encode(text);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function $(id){return document.getElementById(id)}
+
+    // Admin
+    $('open-admin').addEventListener('click', ()=>{
+      $('admin-panel').style.display = 'block';
+    });
+    $('logout').addEventListener('click', ()=>{localStorage.removeItem(LS_KEYS.adminHash);alert('Locked');$('admin-panel').style.display='none'});
+
+    $('set-pass').addEventListener('click', async ()=>{
+      const pass = $('admin-pass').value.trim();
+      if(!pass){return alert('Enter a password')}
+      const h = await sha256(pass);
+      localStorage.setItem(LS_KEYS.adminHash,h);
+      alert('Admin unlocked locally');
+    });
+
+    // Webhook
+    $('save-webhook').addEventListener('click', ()=>{
+      const v = $('webhook').value.trim();
+      localStorage.setItem(LS_KEYS.webhook,v);
+      alert('Webhook saved to browser localStorage');
+    });
+    $('test-webhook').addEventListener('click', async ()=>{
+      const url = localStorage.getItem(LS_KEYS.webhook) || $('webhook').value.trim();
+      if(!url) return alert('Set webhook URL first');
+      try{
+        await fetch(url, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:'Test from Quaker City Ghost Market'})});
+        alert('Webhook test sent (if URL allowed)');
+      }catch(e){alert('Webhook failed: '+e.message)}
+    });
+
+    // Server uptime
+    async function checkServerNow(){
+      const url = localStorage.getItem(LS_KEYS.serverUrl) || $('server-url').value.trim();
+      if(!url){$('uptime').innerText='No URL';return}
+      const dot = document.createElement('span');dot.className='status-dot';
+      try{
+        const t0 = performance.now();
+        const res = await fetch(url, {method:'GET'});
+        const t1 = performance.now();
+        const ms = Math.round(t1-t0);
+        dot.style.background='lime';
+        $('uptime').innerHTML='';$('uptime').appendChild(dot);$('uptime').append('Online ('+ms+'ms)');
+      }catch(e){dot.style.background='crimson';$('uptime').innerHTML='';$('uptime').appendChild(dot);$('uptime').append('Offline')}
+    }
+    $('check-now').addEventListener('click',checkServerNow);
+
+    $('save-price-url').addEventListener('click',()=>{localStorage.setItem(LS_KEYS.priceUrl,$('price-url').value.trim());alert('Price URL saved')});
+    $('fetch-prices').addEventListener('click',fetchPrices);
+
+    async function fetchPrices(){
+      const url = localStorage.getItem(LS_KEYS.priceUrl) || $('price-url').value.trim();
+      if(!url){$('prices').innerText='No price feed configured.';return}
+      try{
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const data = await res.json();
+        // Expecting {item:price,...} or array
+        if(Array.isArray(data)){
+          $('prices').innerText = JSON.stringify(data,null,2);
+        }else{
+          $('prices').innerHTML='';
+          for(const k in data){ const el=document.createElement('div'); el.textContent = k+': '+data[k]; $('prices').appendChild(el)}
+        }
+      }catch(e){$('prices').innerText='Fetch failed: '+e.message}
+    }
+
+    // Drop table
+    function parseDrop(text){
+      const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
+      const items = [];
+      for(const l of lines){
+        const [k,v] = l.split(':').map(s=>s.trim());
+        if(!k||isNaN(parseFloat(v))) continue;
+        items.push({item:k,weight:parseFloat(v)});
+      }
+      return items;
+    }
+
+    function saveDrop(){
+      const text = $('drop-table').value;
+      const arr = parseDrop(text);
+      localStorage.setItem(LS_KEYS.dropTable, JSON.stringify(arr));
+      alert('Drop table saved ('+arr.length+' items)');
+    }
+    $('save-drop').addEventListener('click',saveDrop);
+    $('clear-drop').addEventListener('click',()=>{localStorage.removeItem(LS_KEYS.dropTable);$('drop-table').value='';alert('Drop table cleared')});
+
+    function weightedPick(arr){
+      const total = arr.reduce((s,i)=>s+i.weight,0);
+      let r = Math.random()*total; for(const i of arr){ if(r < i.weight) return i.item; r -= i.weight } return arr[0]?.item||null;
+    }
+
+    $('do-drop').addEventListener('click',()=>{
+      const qty = Math.max(1,parseInt($('quantity').value)||1);
+      const raw = localStorage.getItem(LS_KEYS.dropTable);
+      let items = raw ? JSON.parse(raw) : [];
+      if(items.length===0){$('drop-result').innerText='No drop table configured.';return}
+      const results = [];
+      for(let i=0;i<qty;i++){results.push(weightedPick(items))}
+      $('drop-result').innerText = 'Results: '+results.join(', ');
+      if(localStorage.getItem(LS_KEYS.sfx)==='on') playDropSfx();
+      sendDropWebhook(results);
+    });
+
+    // SFX (simple beep)
+    function playDropSfx(){
+      try{
+        const ctx = new (window.AudioContext||window.webkitAudioContext)();
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type='sine'; o.frequency.value=440; g.gain.value=0.08; o.connect(g); g.connect(ctx.destination);
+        o.start(); o.stop(ctx.currentTime+0.08);
+      }catch(e){console.warn('SFX failed',e)}
+    }
+    $('sfx-on').addEventListener('click',()=>{localStorage.setItem(LS_KEYS.sfx,'on');alert('SFX enabled')});
+    $('sfx-off').addEventListener('click',()=>{localStorage.setItem(LS_KEYS.sfx,'off');alert('SFX disabled')});
+
+    // Webhook on drop
+    async function sendDropWebhook(results){
+      const url = localStorage.getItem(LS_KEYS.webhook);
+      if(!url) return;
+      try{
+        await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:'Drop: '+results.join(', ')})});
+      }catch(e){console.warn('Webhook send failed',e)}
+    }
+
+    // Export/Import config
+    $('export-config').addEventListener('click',()=>{
+      const exportObj = {};
+      Object.values(LS_KEYS).forEach(k=>exportObj[k]=localStorage.getItem(k)||null);
+      const blob = new Blob([JSON.stringify(exportObj,null,2)],{type:'application/json'});
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='qc-config.json'; a.click(); URL.revokeObjectURL(url);
+    });
+    $('import-config').addEventListener('click',()=>{
+      const input = document.createElement('input'); input.type='file'; input.accept='application/json';
+      input.onchange = e=>{
+        const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = ()=>{
+          try{ const obj=JSON.parse(r.result); for(const k in obj){ if(obj[k]===null) localStorage.removeItem(k); else localStorage.setItem(k,obj[k]) } alert('Imported'); location.reload(); }catch(err){alert('Invalid file')}
+        }; r.readAsText(f);
+      }; input.click();
+    });
+
+    // Init UI
+    window.addEventListener('load', ()=>{
+      $('webhook').value = localStorage.getItem(LS_KEYS.webhook) || '';
+      $('server-url').value = localStorage.getItem(LS_KEYS.serverUrl) || '';
+      $('price-url').value = localStorage.getItem(LS_KEYS.priceUrl) || '';
+      const drop = localStorage.getItem(LS_KEYS.dropTable);
+      $('drop-table').value = drop ? JSON.parse(drop).map(i=>i.item+':'+i.weight).join('\n') : '';
+      if(localStorage.getItem(LS_KEYS.sfx)===null) localStorage.setItem(LS_KEYS.sfx,'on');
+      // Auto fetch prices if configured
+      if(localStorage.getItem(LS_KEYS.priceUrl)) fetchPrices();
+      // Periodic server check
+      setInterval(()=>{ if(localStorage.getItem(LS_KEYS.serverUrl)) checkServerNow()},30000);
+    });
+
+    // Warn about webhook exposure
+    console.log('Note: Discord webhook URLs stored in browser/localStorage are public when used with GitHub Pages. For secure logging, host a small server endpoint.' );
+  </script>
 </body>
 </html>
