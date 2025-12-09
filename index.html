@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Quaker City — Illegal Market</title>
+<title>Quaker City — Contraband System</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,44 +20,59 @@
   --kill-glow: 0 12px 44px rgba(220,20,60,0.12);
 }
 
-/* reset */
+/* base */
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:"Rajdhani",sans-serif;background:transparent;color:var(--text);-webkit-font-smoothing:antialiased;padding:28px;}
+html,body{height:100%;margin:0;font-family:"Rajdhani",sans-serif;background:transparent;color:var(--text);-webkit-font-smoothing:antialiased;padding:20px;}
 
-/* ===== background video + overlay ===== */
-.video-bg{
+/* ---------------------------
+   Background video + overlay
+   --------------------------- */
+#bgVideo {
   position:fixed;
   inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
   z-index:0;
-  filter: blur(10px) saturate(.88);
-  transform: scale(1.03);
+  filter: blur(10px) saturate(.9);
+  transform: scale(1.02);
   will-change: transform, filter;
 }
-.video-overlay{
+#bgDark {
   position:fixed;
   inset:0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.64));
+  background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.6));
   z-index:1;
 }
+#bgEmblem {
+  position:fixed;
+  top:50%;
+  left:50%;
+  width:60vw;
+  max-width:920px;
+  transform:translate(-50%,-50%);
+  opacity:0.08;
+  z-index:1;
+  pointer-events:none;
+  filter: blur(1px);
+}
 
-/* container on top of video */
+/* container */
 .wrap{ position:relative; z-index:6; width:100%; max-width:var(--maxw); margin:0 auto; }
 
-/* glass panel */
-.container{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border-radius:18px; padding:22px; border:1px solid var(--glass-border); box-shadow:0 22px 60px rgba(0,0,0,.6); backdrop-filter: blur(8px); }
+/* main panel */
+.container{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border-radius:18px; padding:18px; border:1px solid var(--glass-border); box-shadow:0 22px 60px rgba(0,0,0,.6); backdrop-filter: blur(8px); }
 
 /* header */
-.header{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:18px; }
+.header{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px; }
 .header-left{ max-width:70%; }
-.title{ font-size:44px; margin:0; line-height:1; font-weight:900; color:var(--accent); text-shadow:0 8px 24px rgba(0,0,0,.6); }
-.subtitle{ margin-top:8px; color:var(--muted); font-weight:700; }
+.title{ font-size:40px; margin:0; line-height:1; font-weight:900; color:var(--accent); text-shadow:0 8px 24px rgba(0,0,0,.6); }
+.subtitle{ margin-top:6px; color:var(--muted); font-weight:700; }
 
-/* topnav */
+/* top navigation */
 .topnav{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; align-items:center; }
-.topnav .cat{ padding:10px 14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); color:var(--muted); border:1px solid rgba(255,255,255,.03); font-weight:800; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
+.topnav .cat{ padding:10px 14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+  color:var(--muted); border:1px solid rgba(255,255,255,.03); font-weight:800; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
 .topnav .cat.active{ color:var(--text); border-color: rgba(220,20,60,.28); box-shadow: var(--kill-glow); background: linear-gradient(180deg, rgba(220,20,60,.06), rgba(0,71,171,.03)); }
 
 /* subtabs */
@@ -68,10 +83,10 @@ html,body{height:100%;margin:0;font-family:"Rajdhani",sans-serif;background:tran
 /* header right/logo */
 .header-right{ display:flex; align-items:center; gap:12px; }
 .logo { width:86px; height:86px; border-radius:999px; overflow:hidden; display:flex; align-items:center; justify-content:center; border:6px solid rgba(0,0,0,.35); background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.02), rgba(0,0,0,.12)); box-shadow: 0 8px 30px rgba(0,0,0,.6), 0 0 18px rgba(0,0,0,.45); }
-.header-logo{ width:84%; height:84%; object-fit:cover; display:block; filter: drop-shadow(0 6px 12px rgba(0,0,0,.6)); }
+.header-logo{ width:84%; height:84%; object-fit:contain; display:block; filter: drop-shadow(0 6px 12px rgba(0,0,0,.6)); }
 
 /* controls */
-.controls{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:16px; }
+.controls{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:14px; }
 .controls .left{ display:flex; gap:10px; align-items:center; }
 .choose{ color:var(--muted); font-weight:800; margin-right:6px; }
 select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); color:var(--text); padding:8px 10px; border-radius:10px; font-weight:800; }
@@ -91,9 +106,9 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
 /* cards */
 .card{ border-radius:12px; padding:10px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.04); min-height:180px; display:flex; flex-direction:column; position:relative; overflow:visible; }
 .card .top-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-.card .name{ font-weight:900; color:var(--muted); font-size:15px; }
-.img-wrap{ flex:1 1 auto; display:flex; align-items:center; justify-content:center; padding:6px; background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(255,255,255,0)); border-radius:8px; margin-bottom:8px; }
-.img-wrap img{ max-width:100%; max-height:120px; object-fit:contain; display:block; }
+.card .name{ font-weight:900; color:var(--muted); font-size:15px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; max-width:85%;}
+.img-wrap{ flex:1 1 auto; display:flex; align-items:center; justify-content:center; padding:6px; background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(255,255,255,0)); border-radius:8px; margin-bottom:8px; min-height:108px; }
+.img-wrap img{ width:100%; height:120px; object-fit:contain; display:block; }
 
 /* rarity badge */
 .badge{ position:absolute; left:10px; bottom:10px; background:linear-gradient(180deg, rgba(0,0,0,.36), rgba(255,255,255,.02)); padding:6px 8px; border-radius:8px; font-weight:900; color:var(--muted); border:1px solid rgba(255,255,255,.03); font-size:12px; }
@@ -106,24 +121,56 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
 .acquired-heading{ margin-top:18px; font-weight:900; color:var(--accent); }
 .acquired-grid{ margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; }
 
-/* modal */
+/* modals */
 .modal-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.72); z-index:9999; }
 .modal-overlay.open{ display:flex; }
 .modal{ width:920px; max-width:96%; border-radius:12px; padding:18px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.06); box-shadow: 0 22px 60px rgba(0,0,0,.6); }
 
+/* weapon popup (Killadelphia-style) */
+.weapon-popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+.weapon-popup.hidden { display:none; }
+.weapon-popup-inner {
+  width: 80%;
+  max-width: 980px;
+  background: linear-gradient(180deg, rgba(20,20,25,0.95), rgba(10,10,12,0.92));
+  border-radius: 14px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 0 50px rgba(0,0,0,0.5);
+}
+.weapon-popup-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.weapon-popup-header h2 { font-size:24px; margin:0; font-weight:900; color:var(--accent); }
+.rarity-tag { padding:6px 12px; border-radius:999px; font-weight:900; font-size:13px; color:#fff; background:rgba(255,255,255,0.06); }
+.weapon-popup-body { display:flex; gap:16px; align-items:flex-start; }
+.weapon-popup-image { width:300px; height:300px; object-fit:contain; background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(255,255,255,0)); border-radius:12px; padding:12px; }
+.weapon-stats-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; flex:1; }
+.stat-card { background:rgba(0,0,0,0.35); padding:14px; border-radius:10px; }
+.stat-title { color:var(--muted); font-weight:800; font-size:12px; }
+.stat-value { font-weight:900; font-size:18px; margin-top:6px; color:#fff; }
+
 /* responsive */
-@media(max-width:980px){ .title{ font-size:34px } .grid{ grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); } .img-wrap img{ max-height:90px; } .modal{ width:92% } }
-@media(max-width:640px){ .title{ font-size:26px } .grid{ grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); } .img-wrap img{ max-height:76px; } }
+@media(max-width:980px){ .weapon-popup-body{flex-direction:column; align-items:center;} .weapon-popup-image{width:220px;height:220px;} .title{font-size:34px;} .grid{grid-template-columns: repeat(auto-fill, minmax(150px,1fr));} }
+@media(max-width:640px){ .weapon-popup-inner{width:96%;} .weapon-popup-image{width:180px;height:180px;} .title{font-size:26px} .grid{grid-template-columns: repeat(auto-fill, minmax(120px,1fr));} }
 
 </style>
 </head>
 <body>
-  <!-- video background (muted, looped) -->
-  <video class="video-bg" id="bgVideo" autoplay muted loop playsinline>
-    <source src="background.mp4" type="video/mp4">
-    <!-- fallback: user-hosted remote URL can be put here -->
+  <!-- Background video (muted) -->
+  <video id="bgVideo" autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4">
   </video>
-  <div class="video-overlay" aria-hidden="true"></div>
+  <div id="bgDark" aria-hidden="true"></div>
+  <img id="bgEmblem" src="Quaker.png" alt="" aria-hidden="true">
 
   <div class="wrap">
     <div class="header">
@@ -215,7 +262,43 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
     </div>
   </div>
 
-  <!-- stats modal -->
+  <!-- weapon popup -->
+  <div id="weaponPopup" class="weapon-popup hidden" aria-hidden="true">
+    <div class="weapon-popup-inner" role="dialog" aria-modal="true">
+      <div class="weapon-popup-header">
+        <h2 id="weaponPopupName">Weapon</h2>
+        <div id="weaponPopupRarity" class="rarity-tag">COMMON</div>
+      </div>
+
+      <div class="weapon-popup-body">
+        <img id="weaponPopupImage" class="weapon-popup-image" src="" alt="weapon image">
+        <div class="weapon-stats-grid">
+          <div class="stat-card stat-card-1 stat-card-large">
+            <div class="stat-title">Damage</div>
+            <div id="statDamage" class="stat-value">-</div>
+          </div>
+          <div class="stat-card stat-card-2 stat-card-large">
+            <div class="stat-title">Fire Rate</div>
+            <div id="statFire" class="stat-value">-</div>
+          </div>
+          <div class="stat-card stat-card-3">
+            <div class="stat-title">Ammo</div>
+            <div id="statAmmo" class="stat-value">-</div>
+          </div>
+          <div class="stat-card stat-card-4">
+            <div class="stat-title">Magazine</div>
+            <div id="statMagazine" class="stat-value">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+        <button class="btn" onclick="closeWeaponPopup()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- stats modal (fallback) -->
   <div class="modal-overlay" id="statsModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -251,43 +334,37 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
     <div style="color:var(--muted); margin-top:10px; font-size:13px;">Admin password (client-side): <b>Qacti</b></div>
   </div>
 
-  <!-- audio (extracted from video) -->
+  <!-- background audio (extracted) -->
   <audio id="bgm" src="background_audio.mp3" loop preload="auto"></audio>
 
 <script>
-/* Final Quaker City — video background + extracted audio; Killadelphia-style UI */
+/* Single-file Quaker City (Option B) */
 
-/* ---------- IMAGES mapping (put your images in /images/) ---------- */
+/* ---------------- IMAGE MAP (fixed) ---------------- */
 const IMAGES = {
-  '.38 Special': 'https://media.discordapp.net/attachments/1442278653823156367/1447814120631042150/832A4CE9-FD8F-4AC0-AD33-A17573FB6678.png?ex=6938fd79&is=6937abf9&hm=16aec57bccd0f7cd1175588d39da6c823d174cb0efc253dcd8a63dfd87a832ac&=&format=webp&quality=lossless&width=1409&height=1409',
-
-  'Ghost Glock 17': 'https://media.discordapp.net/attachments/1442278653823156367/1447814120631042150/832A4CE9-FD8F-4AC0-AD33-A17573FB6678.png?ex=6938fd79&is=6937abf9&hm=16aec57bccd0f7cd1175588d39da6c823d174cb0efc253dcd8a63dfd87a832ac&=&format=webp&quality=lossless&width=1409&height=1409',
-
-  'Glock 20 Switch': 'https://media.discordapp.net/attachments/1442278653823156367/1447814332317696166/35DA8A73-BFE3-44FB-A322-4639CCF67A20.png?ex=6938fdab&is=6937ac2b&hm=6644d393db7d29e770b205701c80883aacbd346c8535bb9eb459bf6981216e49&=&format=webp&quality=lossless&width=938&height=1407',
-  'FNX -45': 'https://media.discordapp.net/attachments/1442278653823156367/1447814330769870858/343542AE-DE5C-4B32-B0D6-7423317739F8.png?ex=6938fdab&is=6937ac2b&hm=55ec25ecf1870d70cd9e7eaeab3ed41f0fe330a0f5de81d6c00a85c91077cd85&=&format=webp&quality=lossless&width=938&height=1407',
-  'Beretta M9': 'https://media.discordapp.net/attachments/1442278653823156367/1447814119729401876/3528B8D0-0ECC-40C1-B78E-9F4782A78B85.png?ex=6938fd79&is=6937abf9&hm=976919ed8fe548b39448559015fdada5b779a738b3eadb74a668264972b9f15f&=&format=webp&quality=lossless&width=1174&height=1174',
-  'G23': 'https://media.discordapp.net/attachments/1442278653823156367/1447814176234934442/E29B517E-6328-4E2A-92FE-FD9A53E3E99A.png?ex=6938fd86&is=6937ac06&hm=c609222cccdcd0277828ebd4f5e882fde73c5abdca1fcaa96c436de37ccb02b4&=&format=webp&quality=lossless&width=1174&height=1174',
-
-  'Tec-9': 'data:image/png;base64,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',
-  'MAC-10': 'https://media.discordapp.net/attachments/1442278653823156367/1447814331390492773/E16A3CE7-8E47-47AF-A70C-28F47AD0B33D.png?ex=6938fdab&is=6937ac2b&hm=ac47f5f2451546001cd21a8bab4738559f77a58e1bdc87f79fc153bf1e275716&=&format=webp&quality=lossless&width=938&height=1407',
+  '.38 Special': 'https://media.discordapp.net/attachments/1442278653823156367/1447814120631042150/832A4CE9-FD8F-4AC0-AD33-A17573FB6678.png',
+  'Ghost Glock 17': 'https://media.discordapp.net/attachments/1442278653823156367/1447814120631042150/832A4CE9-FD8F-4AC0-AD33-A17573FB6678.png',
+  'Glock 20 Switch': 'images/glock_19.png',
+  'FNX -45': 'images/glock_20.png',
+  'Beretta M9': 'images/beretta_m9.png',
+  'G23': 'images/cz_75.png',
+  'Tec-9': 'images/tec9.png',
+  'MAC-10': 'images/mac10.png',
   'Micro UZI': 'images/micro_uzi.png',
-
-  'G22': 'https://media.discordapp.net/attachments/1442278653823156367/1447814249622540350/5BAD6250-1F8C-4E52-8766-BB69AB786D03.png?ex=6938fd98&is=6937ac18&hm=1ce06218616e557386fe729e05366fe621d714f977a9d34831eed564dbac33f8&=&format=webp&quality=lossless&width=938&height=1407',
-  'G41': 'https://media.discordapp.net/attachments/1442278653823156367/1447814248481685504/45E3D0D9-2795-4872-BA5A-67D04AD1BDF1.png?ex=6938fd97&is=6937ac17&hm=0f0113c505728a7abb2b63968feef4259e323a13932fff1d67c2c6eb788a8855&=&format=webp&quality=lossless&width=938&height=1407',
-  'G43': 'https://media.discordapp.net/attachments/1442278653823156367/1447814177744752844/D4D67B4A-0819-45AD-B9CE-9ED587FDBCFD.png?ex=6938fd87&is=6937ac07&hm=d4188a4c45f722ca271158bc7f65c51d10e222acc8ddf994585a0a8a3c4f6911&=&format=webp&quality=lossless&width=1174&height=1174',
-
-  'MP9': 'https://media.discordapp.net/attachments/1442278653823156367/1447814119045464155/8D2F58DD-9AEC-4C7C-8D2D-47CCC9376227.png?ex=6938fd79&is=6937abf9&hm=aeebc48af0277cf9ae276786af3d2d03f53580019b21902fa971435199a67d15&=&format=webp&quality=lossless&width=1174&height=1174',
-  'G19 MOS': 'https://media.discordapp.net/attachments/1442278653823156367/1447814247525646497/F3AE3066-EFE9-41CB-B578-5EC03C6A2D7A.png?ex=6938fd97&is=6937ac17&hm=b2ca9fe16355feb412525d74e3258ee78e70b5d3319f43e80658c6ab763defe7&=&format=webp&quality=lossless&width=938&height=1407',
-
-  'AK-47': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAgCAYAAAD5VeO1AAAMRklEQVR4AQBdAKL/AJZpFf+WaRX/lmkV/5ZqFf+WahX/lmsV/5ZrFP+WbBT/lmwU/5ZtFP+WbRT/l20U/5dtFP+YbRT/mG0U/5lsFP+abBT/mmwU/5trFP+baxT/nGsU/5xqFP+cahT/AF0Aov8AlmkV/5ZpFf+WaRX/lmoV/5ZqFf+WaxX/lWsV/5ZsFP+WbBT/lm0U/5ZtFP+WbRT/l20U/5dtFP+YbRT/mWwU/5lsFP+abBT/m2sU/5trFP+caxT/nGoU/5xqFP8AXQCi/wCVaRb/lWkW/5VpFv+VahX/lWoV/5VrFf+VaxX/lWwV/5VsFf+VbRX/lW0U/5ZtFP+WbRT/l20U/5dtFP+YbRT/mWwU/5lsFP+aaxX/m2sV/5trFf+baxX/m2oV/wBdAKL/AJVpFv+UaRb/lGoW/5RqFv+Uahb/lGsW/5RrFv+UbBb/lGwV/5RtFf+VbRX/lW0V/5ZtFf+WbRX/l20V/5dtFf+YbBX/mWwV/5lsFf+aaxX/mmsV/5trFf+baxX/AF0Aov8Ak2kX/5NpF/+Tahf/k2oX/5NrF/+Taxf/k2wW/5NsFv+TbRb/k20W/5RtFv+UbRb/lG0W/5VtFv+WbRb/lm0W/5dtFv+YbBb/mGwW/5lrFv+Zaxb/mmsW/5prFv8AXQCi/wCSaRj/kmoY/5JqGP+Sahj/kmsY/5JrGP+SbBf/kmwX/5JtF/+SbRf/km0X/5NuF/+Tbhf/lG4X/5RtF/+VbRf/lm0X/5ZsF/+XbBf/mGwX/5hrF/+Yaxf/mGsX/wBdAKL/AJFqGf+Rahn/kWoZ/5FqGf+Raxn/kWsZ/5BsGP+RbRj/kW0Y/5FtGP+Rbhj/kW4Y/5JuGP+Sbhj/k24Y/5RtGP+UbRj/lW0Y/5ZsGP+WbBj/l2wY/5dsGP+Xaxj/AF0Aov8Aj2oa/49qGv+Pahr/j2sa/49rGv+PbBr/j2wZ/49tGf+PbRn/j24Z/5BuGf+Qbhn/kW4Z/5FuGf+Sbhn/km4Z/5NtGf+UbRn/lG0Z/5VsGf+VbBn/lmwZ/5ZsGf8AXQCi/wCOahv/jmob/45qG/+Oaxv/jmsb/45sG/+ObBv/jm0a/45tGv+Obhr/jm4a/49uGv+Pbhr/kG4a/5BuGv+Rbhr/km4a/5JtGv+TbRr/k20a/5RsGv+UbBr/lGwa/wBdAKL/AIxqHP+Mahz/jGsc/4xrHP+Maxz/jGwc/4xtHP+MbRv/jG4b/4xuG/+Nbhv/jW8b/45vG/+Obxv/j28b/5BuG/+Qbhv/kW4b/5JtG/+SbRv/km0b/5NsG/+TbBv/AF0Aov8Ai2od/4tqHf+Lax3/i2sd/4tsHf+LbB3/i20d/4ttHP+Lbhz/i24c/4tvHP+Mbxz/jG8c/41vHP+Obxz/jm8c/49uHP+Qbhz/kG4c/5FtHP+RbRz/kW0c/5JtHP8AXQCi/wCKah7/imse/4prHv+Kax7/imwe/4psHv+JbR3/im0d/4puHf+Kbh3/im8d/4tvHf+Lbx3/jG8d/4xvHf+Nbx3/jm4d/45uHf+Pbh3/kG4d/5BtHf+QbR3/kG0d/wBdAKL/AIlqH/+Jax//iWsf/4lrH/+IbB7/iGwe/4htHv+Ibh7/iW4e/4lvHv+Jbx7/im8e/4pvHv+Lbx7/i28e/4xvHv+Nbx7/jW4e/45uHv+Pbh7/j20e/49tHv+PbR7/AF0Aov8AiGof/4hrH/+Iax//iGsf/4hsH/+IbB//iG0f/4huH/+Ibh7/iG8e/4hvHv+Jbx7/iW8e/4pvHv+Kbx7/i28e/4xvHv+Nbx7/jW4e/45uHv+Obh//j20f/49tH/8AXQCi/wCHaiD/h2sg/4drIP+Hax//h2wf/4dsH/+HbR//h24f/4duH/+Hbx//iG8f/4hvH/+Jbx//iW8f/4pvH/+Lbx//i28f/4xvH/+Nbh//jW4f/45uH/+Obh//jm4f/wBdAKL/AIdqIP+HaiD/h2sg/4drIP+HbCD/h2wf/4dtH/+Hbh//h24f/4dvH/+Hbx//iG8f/4hvH/+JcB//im8f/4pvH/+Lbx//jG8f/4xuH/+Nbh//jW4f/45uH/+Obh//AF0Aov8Ah2og/4dqIP+HayD/h2sg/4dsH/+HbB//h20f/4dtH/+Hbh//h28f/4dvH/+Ibx//iG8f/4lvH/+Kbx//im8f/4tvH/+Mbx//jG4f/41uH/+Nbh//jm4f/45uH/8AXQCi/wCHah//h2of/4dqH/+Hax//h2sf/4dsH/+HbR//h20f/4duH/+Hbh7/iG8e/4hvHv+Jbx7/iW8e/4pvHv+Lbx7/i28e/4xvHv+Nbh//jW4f/45uH/+Obh//jm4f/wBdAKL/AIhqH/+Iah//iGof/4drH/+Hax//h2we/4dsHv+IbR7/iG4e/4huHv+Ibx7/iW8e/4lvHv+Kbx7/i28e/4tvHv+Mbx7/jW8e/41uHv+Obh7/jm4e/49uHv+Pbh7/AF0Aov8AiGke/4hpHv+Iah7/iGoe/4hrHv+Iax7/iGwe/4htHf+IbR3/iW4d/4luHf+Jbx3/im8d/4tvHf+Lbx3/jG8d/41vHf+Obh3/jm4d/49uHf+Pbh3/kG4d/5BtHv8AXQCi/wCJaR3/iWkd/4lpHf+Jah3/iWod/4lrHf+JbB3/iWwc/4ltHP+Kbhz/im4c/4tuHP+Lbxz/jG8c/4xvHP+Nbxz/jm8c/49uHP+Pbhz/kG4c/5BuHf+RbR3/kW0d/wBdAKL/AItpHP+LaRz/imkc/4ppHP+Kahz/imsc/4prHP+KbBv/i20b/4ttG/+Lbhv/jG4b/4xuG/+Nbxv/jm8b/45uG/+Pbhv/kG4b/5FuG/+Rbhv/km0c/5JtHP+SbRz/AF0Aov8AjGgb/4xoG/+MaRv/jGkb/4xqG/+Mahv/jGsa/4xsGv+MbBr/jG0a/41tGv+Nbhr/jm4a/45uGv+Pbhr/kG4a/5BuGv+Rbhr/km4a/5JtGv+TbRr/k20a/5NtGv8AXQCi/wCNaBr/jWga/41oGv+NaRr/jWkZ/41qGf+Naxn/jWsZ/41sGf+ObRn/jm0Z/45uGf+Pbhn/kG4Z/5BuGf+Rbhn/km4Z/5NtGf+TbRn/lG0Z/5RtGf+VbRn/lW0Z/wBdAKL/AI9nGP+PZxj/j2gY/49oGP+PaRj/jmoY/49qGP+Paxj/j2wY/49sGP+PbRj/kG0X/5FtF/+Rbhf/km4X/5NuGP+TbRj/lG0Y/5VtGP+VbRj/lm0Y/5ZsGP+WbBj/AF0Aov8AkGcX/5BnF/+QZxf/kGgX/5BoF/+QaRf/kGoX/5BrF/+Qaxb/kWwW/5FsFv+RbRb/km0W/5NtFv+TbRb/lG0W/5VtFv+WbRf/lm0X/5dsF/+XbBf/mGwX/5hsF/8AXQCi/wCRZxb/kWcW/5FnFv+RaBb/kWgW/5FpFv+Rahb/kWoV/5JrFf+SbBX/kmwV/5NtFf+TbRX/lG0V/5VtFf+VbRX/lm0V/5dtFf+YbBX/mGwW/5lsFv+ZbBb/mWwW/wBdAKL/AJNmFf+TZhX/kmcV/5JnFf+SaBX/kmkV/5JpFf+TahT/k2sU/5NrFP+TbBT/lGwU/5RtFP+VbRT/lm0U/5dtFP+XbRT/mGwU/5lsFP+ZbBX/mmwV/5psFf+abBX/AF0Aov8AlGYU/5RmFP+UZhT/k2cU/5NoFP+TaBT/k2kU/5RqFP+UahP/lGsT/5RsE/+VbBP/lmwT/5ZtE/+XbRP/mG0T/5hsE/+ZbBT/mmwU/5psFP+bbBT/m2sU/5trFP8AXQCi/wCUZhT/lGYU/5RmE/+UZxP/lGcT/5RoE/+UaRP/lGoT/5VqE/+VaxP/lWsT/5ZsE/+WbBP/l2wT/5hsE/+YbBP/mWwT/5psE/+bbBP/m2wT/5xrE/+caxP/nGsT/wBdAKL/AJVmE/+VZhP/lWYT/5VnE/+VZxP/lWgT/5VpE/+VaRL/lWoS/5VrEv+WaxL/lmwS/5dsEv+YbBL/mGwS/5lsEv+abBL/m2wS/5tsE/+cbBP/nGsT/51rE/+daxP/AV0Aov8AlWYT/5VmE/+VZhP/lWcT/5VnE/+VaBL/lWkS/5VpEv+VahL/lmsS/5ZrEv+XbBL/l2wS/5hsEv+ZbBL/mWwS/5psEv+bbBL/nGwS/5xrEv+daxL/nWsS/51rEv/ZxfwA+rjcTgAAAABJRU5ErkJggg==',
-  'HELLPUP DRACO': 'https://media.discordapp.net/attachments/1442278653823156367/1447814499363983380/F0D2E6C6-183F-4CC9-904C-9F87B960B06C.png?ex=6938fdd3&is=6937ac53&hm=c40b2fff419247c3224f930075728d431f1626c69d13192a3dab2e7b41b09801&=&format=webp&quality=lossless&width=938&height=1407',
-  'Black ARP': 'https://media.discordapp.net/attachments/1442278653823156367/1447814373601972285/C4FE017E-B958-42C2-9C74-6268A11CD25A.png?ex=6938fdb5&is=6937ac35&hm=ad76540e38b64398d91474fbb80cd023862a4a3e42c420b93c19f71fa499830a&=&format=webp&quality=lossless&width=938&height=1407',
-  'KEL-TEC PLR': 'https://media.discordapp.net/attachments/1442278653823156367/1447814331868774410/37DC7D8A-3EA6-4F01-9436-D5E736E13C4A.png?ex=6938fdab&is=6937ac2b&hm=c233af0b74069b5196ee10448b44ec96c8a10322285015ab58daf74bc9603bcd&=&format=webp&quality=lossless&width=938&height=1407'
+  'G22': 'images/skorpion.png',
+  'G41': 'images/mp5.png',
+  'G43': 'images/ump45.png',
+  'MP9': 'images/p90.png',
+  'G19 MOS': 'images/p90.png',
+  'AK-47': 'images/ak47.png',
+  'HELLPUP DRACO': 'images/ar15.png',
+  'Black ARP': 'images/m4a1.png',
+  'KEL-TEC PLR': 'images/kriss_vector.png',
+  'Draco': 'images/acr.png'
 };
-
 const FALLBACK = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="240"%3E%3Crect fill="%23333" width="400" height="240"/%3E%3Ctext x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23999"%3ENo Image%3C/text%3E%3C/svg%3E';
 
-/* weapon stats (modal only) */
+/* ---------------- WEAPON STATS (updated damage by rarity) ---------------- */
 const WEAPON_STATS = {
   '.38 Special': { damage: 25, fire: 750, ammo: '9mm', magStd: 15, magExt: 33 },                  // Common
   'Ghost Glock 17': { damage: 25, fire: 750, ammo: '9mm', magStd: 15, magExt: 33 },               // Common
@@ -307,30 +384,33 @@ const WEAPON_STATS = {
   'HELLPUP DRACO': { damage: 36, fire: 750, ammo: '5.56x45', magStd: 30, magExt: 60 },            // Legendary
   'Black ARP': { damage: 35, fire: 800, ammo: '5.56x45', magStd: 30, magExt: 60 },                // Epic
   'KEL-TEC PLR': { damage: 35, fire: 1200, ammo: '.45 ACP', magStd: 25, magExt: 50 },             // Epic
-  'HELLPUP Draco': { damage: 36, fire: 750, ammo: '5.56x45', magStd: 30, magExt: 60 }             // Legendary
+  'Draco': { damage: 36, fire: 750, ammo: '5.56x45', magStd: 30, magExt: 60 }                     // Legendary
 };
 
-
-/* items */
+/* ---------------- ITEMS dataset ---------------- */
 const ITEMS = {
   tier1: [
+    { name:'.38 Special', rarity:'common', category:'Pistols', img:IMAGES['.38 Special'] || FALLBACK },
     { name:'Ghost Glock 17', rarity:'common', category:'Pistols', img:IMAGES['Ghost Glock 17'] || FALLBACK },
-    { name:'MP9', rarity:'common', category:'Pistols', img:IMAGES['MP9'] || FALLBACK },
     { name:'Glock 20 Switch', rarity:'epic', category:'Pistols', img:IMAGES['Glock 20 Switch'] || FALLBACK },
-    { name:'Beretta M9', rarity:'uncommon', category:'Pistols', img:IMAGES['Beretta M9'] || FALLBACK },
-    { name:'MAC-10', rarity:'rare', category:'SMG', img:IMAGES['MAC-10'] || FALLBACK },
+    { name:'FNX -45', rarity:'epic', category:'Pistols', img:IMAGES['FNX -45'] || FALLBACK },
+    { name:'Beretta M9', rarity:'common', category:'Pistols', img:IMAGES['Beretta M9'] || FALLBACK },
+    { name:'G23', rarity:'uncommon', category:'Pistols', img:IMAGES['G23'] || FALLBACK },
+    { name:'Tec-9', rarity:'epic', category:'Pistols', img:IMAGES['Tec-9'] || FALLBACK },
+    { name:'MAC-10', rarity:'epic', category:'SMG', img:IMAGES['MAC-10'] || FALLBACK },
+    { name:'Micro UZI', rarity:'epic', category:'SMG', img:IMAGES['Micro UZI'] || FALLBACK },
     { name:'G22', rarity:'rare', category:'SMG', img:IMAGES['G22'] || FALLBACK },
     { name:'G41', rarity:'rare', category:'SMG', img:IMAGES['G41'] || FALLBACK },
-    { name:'Micro UZI', rarity:'rare', category:'SMG', img:IMAGES['Micro UZI'] || FALLBACK },
-    { name:'G19 MOS', rarity:'rare', category:'SMG', img:IMAGES['G19 MOS'] || FALLBACK },
-    { name:'P90', rarity:'epic', category:'SMG', img:IMAGES['P90'] || FALLBACK },
-    { name:'FNX-45', rarity:'epic', category:'Pistols', img:FALLBACK }
+    { name:'G43', rarity:'uncommon', category:'Pistols', img:IMAGES['G43'] || FALLBACK },
+    { name:'MP9', rarity:'common', category:'SMG', img:IMAGES['MP9'] || FALLBACK },
+    { name:'G19 MOS', rarity:'rare', category:'Pistols', img:IMAGES['G19 MOS'] || FALLBACK }
   ],
   tier2: [
     { name:'AK-47', rarity:'legendary', category:'ARs', img:IMAGES['AK-47'] || FALLBACK },
+    { name:'HELLPUP DRACO', rarity:'legendary', category:'ARs', img:IMAGES['HELLPUP DRACO'] || FALLBACK },
     { name:'Black ARP', rarity:'epic', category:'ARs', img:IMAGES['Black ARP'] || FALLBACK },
-    { name:'KEL-TEC PLR', rarity:'epic', category:'ARs', img:IMAGES['KEL-TEC PLR'] || FALLBACK },
-    { name:'HELLPUP DRACO', rarity:'legendary', category:'ARs', img:IMAGES['HELLPUP DRACO'] || FALLBACK }
+    { name:'KEL-TEC PLR', rarity:'epic', category:'Pistols', img:IMAGES['KEL-TEC PLR'] || FALLBACK },
+    { name:'Draco', rarity:'legendary', category:'ARs', img:IMAGES['Draco'] || FALLBACK }
   ],
   attachments: [
     { name:'Extended Magazine', rarity:'rare', category:'Mags', img:FALLBACK },
@@ -342,15 +422,16 @@ const ITEMS = {
   ]
 };
 
+/* weights */
 const DEFAULT_WEIGHTS = {
-  tier1: { common:40, uncommon:45, rare:15, epic:10 },
+  tier1: { common:35, uncommon:40, rare:25, epic:10 },
   tier2: { rare:50, epic:40, legendary:10 },
   attachments: { uncommon:50, rare:30, epic:15, legendary:5 },
   drugs: { common:35, uncommon:25, rare:25, epic:15 }
 };
 
-/* refs (mutables) */
-let itemGrid = document.getElementById('itemGrid');
+/* ---------- DOM refs ---------- */
+let itemGrid = document.getElementById('itemGrid'); // let so can rebind
 const contentArea = document.getElementById('contentArea');
 const subtabsEl = document.getElementById('subtabs');
 const filterSelect = document.getElementById('filterSelect');
@@ -361,6 +442,7 @@ const spinModal = document.getElementById('spinModal');
 const spinStrip = document.getElementById('spinStrip');
 const spinStartBtn = document.getElementById('spinStartBtn');
 const closeSpin = document.getElementById('closeSpin');
+
 const musicToggle = document.getElementById('musicToggle');
 const musicLabel = document.getElementById('musicLabel');
 const bgm = document.getElementById('bgm');
@@ -380,12 +462,21 @@ const statsRarity = document.getElementById('statsRarity');
 const statsDetails = document.getElementById('statsDetails');
 const closeStats = document.getElementById('closeStats');
 
+const weaponPopup = document.getElementById('weaponPopup');
+const weaponPopupName = document.getElementById('weaponPopupName');
+const weaponPopupRarity = document.getElementById('weaponPopupRarity');
+const weaponPopupImage = document.getElementById('weaponPopupImage');
+const statDamage = document.getElementById('statDamage');
+const statFire = document.getElementById('statFire');
+const statAmmo = document.getElementById('statAmmo');
+const statMagazine = document.getElementById('statMagazine');
+
 let activeTab = 'tier1';
 let activeSub = 'All';
 let acquired = [];
 let spinning = false;
 
-/* helpers */
+/* ---------- helpers ---------- */
 function tick(ms){ return new Promise(r=> setTimeout(r,ms)); }
 function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function loadCfg(){ try{return JSON.parse(localStorage.getItem('qc_cfg')||'{}')}catch(e){return{}} }
@@ -393,7 +484,7 @@ function saveCfg(c){ localStorage.setItem('qc_cfg', JSON.stringify(c)); }
 function getWeights(){ const c = loadCfg(); return c.weights || DEFAULT_WEIGHTS; }
 function setWeights(w){ const c = loadCfg(); c.weights = w; saveCfg(c); }
 
-/* admin */
+/* ---------- admin (client-side) ---------- */
 const ADMIN_PASS = 'Qacti';
 function isAdmin(){ return sessionStorage.getItem('qc_admin') === '1'; }
 function setAdmin(flag){ if(flag) sessionStorage.setItem('qc_admin','1'); else sessionStorage.removeItem('qc_admin'); adminPanel.style.display = flag ? 'block':'none'; }
@@ -408,7 +499,7 @@ saveAdminBtn.addEventListener('click', ()=> {
 });
 function loadAdmin(){ const cfg = loadCfg(); adminWebhook.value = cfg.webhook||''; adminUptime.value = cfg.uptime||''; adminPrices.value = cfg.prices||''; }
 
-/* subtabs */
+/* ---------- subtabs sets ---------- */
 const SUBTABS = {
   tier1: ['All','Pistols','SMG','ARs','Specials'],
   tier2: ['All','ARs','Snipers','LMGs'],
@@ -434,7 +525,7 @@ function renderSubtabs(tab){
   activeSub = arr[0];
 }
 
-/* filtering */
+/* ---------- filtering ---------- */
 function itemsForTab(tab){
   const all = (ITEMS[tab] || []).slice();
   const filter = filterSelect.value;
@@ -452,7 +543,7 @@ function itemsForTab(tab){
   return res;
 }
 
-/* create card (clean, no stats) */
+/* create card (clean) */
 function createCard(item){
   const el = document.createElement('div');
   el.className = 'card';
@@ -462,11 +553,11 @@ function createCard(item){
     <div style="height:8px"></div>
     <div class="badge">${(item.rarity||'common').toUpperCase()}</div>
   `;
-  el.addEventListener('click', ()=> openCardDetails(item));
+  el.addEventListener('click', ()=> openWeaponPopupFromCard(item));
   return el;
 }
 
-/* render grid (handles turf tab) */
+/* render grid (handles turf) */
 function renderGrid(){
   const nodes = itemsForTab(activeTab);
   if(activeTab === 'turf'){
@@ -486,27 +577,36 @@ function renderGrid(){
   nodes.forEach(it => itemGrid.appendChild(createCard(it)));
 }
 
-/* card details modal */
-function openCardDetails(item){
-  statsTitle.textContent = item.name;
-  statsRarity.textContent = (item.rarity||'common').toUpperCase();
-  statsImg.src = item.img || FALLBACK;
-  const s = WEAPON_STATS[item.name] || {};
-  statsDetails.innerHTML = `
-    <div style="font-weight:900">${item.name}</div>
-    <div style="color:var(--muted); margin-top:8px;">
-      Damage: ${s.damage ?? '-'}<br>
-      Fire Rate: ${s.fire ? s.fire + ' RPM' : '-'}<br>
-      Ammo: ${s.ammo ?? '-'}<br>
-      Magazine: ${s.magStd ?? '-'} (Ext ${s.magExt ?? '-'})
-    </div>
-  `;
-  statsModal.classList.add('open'); statsModal.style.display = 'flex';
+/* open popup from card */
+function openWeaponPopupFromCard(item){
+  const name = item.name;
+  const rarity = item.rarity || 'common';
+  const stats = WEAPON_STATS[name] || {};
+  openWeaponPopup(name, rarity, stats, item.img || FALLBACK);
 }
+
+/* open popup generic */
+function openWeaponPopup(name, rarity, stats, img){
+  weaponPopupName.textContent = name;
+  weaponPopupRarity.textContent = (rarity||'common').toUpperCase();
+  weaponPopupImage.src = img || FALLBACK;
+  statDamage.textContent = stats.damage ?? '-';
+  statFire.textContent = stats.fire ? (stats.fire + ' RPM') : '-';
+  statAmmo.textContent = stats.ammo ?? '-';
+  statMagazine.textContent = (stats.magStd ? ('Reg: ' + stats.magStd) : '-') + (stats.magExt ? (' | Ext: ' + stats.magExt) : '');
+  weaponPopup.classList.remove('hidden');
+  weaponPopup.setAttribute('aria-hidden','false');
+}
+function closeWeaponPopup(){
+  weaponPopup.classList.add('hidden');
+  weaponPopup.setAttribute('aria-hidden','true');
+}
+
+/* fallback stats modal close */
 closeStats.addEventListener('click', ()=> { statsModal.classList.remove('open'); statsModal.style.display = 'none'; });
 document.getElementById('statsModal').addEventListener('click', (e)=> { if(e.target.id === 'statsModal'){ statsModal.classList.remove('open'); statsModal.style.display = 'none'; } });
 
-/* topnav click (robust) */
+/* topnav click handler (robust) */
 document.querySelectorAll('.topnav .cat').forEach(el=>{
   el.addEventListener('click', ()=> {
     document.querySelectorAll('.topnav .cat').forEach(x=> x.classList.remove('active'));
@@ -521,7 +621,7 @@ document.querySelectorAll('.topnav .cat').forEach(el=>{
 /* filter */
 filterSelect.addEventListener('change', ()=> renderGrid());
 
-/* music toggle logic */
+/* music toggle */
 function setMusicOn(on){
   localStorage.setItem('qc_music_on', on ? '1':'0');
   if(on){ musicToggle.classList.add('on'); musicLabel.textContent = 'Music: On'; musicToggle.querySelector('i').className='fa-solid fa-volume-high'; bgm.play().catch(()=>{}); }
@@ -535,12 +635,12 @@ function enableBGM(){ function start(){ if(bgm){ bgm.play().catch(()=>{}); } doc
 enableBGM();
 setTimeout(()=> { const mp = localStorage.getItem('qc_music_on'); setMusicOn(mp !== '0'); }, 100);
 
-/* spinner modal */
+/* spinner modal logic: 5 second spin with easing */
 function renderSpinStrip(){
   spinStrip.innerHTML = '';
   const pool = (ITEMS[activeTab]||[]).slice();
   if(pool.length === 0){ spinStrip.innerHTML = '<div style="color:var(--muted)">No items in this category.</div>'; return; }
-  for(let i=0;i<40;i++){
+  for(let i=0;i<60;i++){
     const it = rand(pool);
     const tile = document.createElement('div');
     tile.style.minWidth='140px'; tile.style.height='120px'; tile.style.borderRadius='10px'; tile.style.overflow='hidden';
@@ -550,11 +650,43 @@ function renderSpinStrip(){
     spinStrip.appendChild(tile);
   }
 }
+
+function computeDelays(durationMs, steps){
+  // produce delays (ms) per step using easing (i/n)^2 weights and normalize to duration
+  const weights = [];
+  let sum = 0;
+  for(let i=1;i<=steps;i++){
+    const w = Math.pow(i/steps, 2); // quadratic easing (accelerating weight -> decelerating delays)
+    weights.push(w); sum += w;
+  }
+  return weights.map(w => (w / sum) * durationMs);
+}
+
+spinStartBtn.addEventListener('click', async ()=>{
+  if(spinning) return;
+  spinning = true;
+  playSFX('spin');
+  renderSpinStrip();
+  const steps = 60;
+  const duration = 5000; // 5 seconds total
+  const delays = computeDelays(duration, steps);
+  for (let i=0;i<steps;i++){
+    if(spinStrip.firstElementChild) spinStrip.appendChild(spinStrip.firstElementChild);
+    await tick(delays[i]);
+  }
+  const picked = pickWeightedItem(activeTab);
+  addAcquired(picked);
+  sendWebhook({ action:'spin', tier:activeTab, result:picked.name, rarity:picked.rarity, ts:new Date().toISOString() });
+  playSFX('win');
+  setTimeout(()=> { closeSpinModal(); spinning = false; }, 700);
+});
+
 function openSpinModal(){ spinModal.classList.add('open'); spinModal.style.display='flex'; renderSpinStrip(); }
 function closeSpinModal(){ spinModal.classList.remove('open'); spinModal.style.display='none'; }
 dropBtn.addEventListener('click', openSpinModal);
 closeSpin.addEventListener('click', closeSpinModal);
 
+/* weighting picker */
 function pickRarity(weights){
   const entries = Object.entries(weights).filter(([k,v])=> Number(v) > 0);
   const total = entries.reduce((s,[_k,v])=> s + Number(v), 0);
@@ -571,23 +703,6 @@ function pickWeightedItem(tabKey){
   const all = [].concat(...Object.values(ITEMS));
   return rand(all);
 }
-spinStartBtn.addEventListener('click', async ()=>{
-  if(spinning) return;
-  spinning = true;
-  playSFX('spin');
-  const shifts = 48 + Math.floor(Math.random()*46);
-  for(let i=0;i<shifts;i++){
-    if(spinStrip.firstElementChild) spinStrip.appendChild(spinStrip.firstElementChild);
-    const progress = i/shifts;
-    const delay = 18 + Math.pow(progress,2)*520;
-    await tick(delay);
-  }
-  const picked = pickWeightedItem(activeTab);
-  addAcquired(picked);
-  sendWebhook({ action:'spin', tier:activeTab, result:picked.name, rarity:picked.rarity, ts:new Date().toISOString() });
-  playSFX('win');
-  setTimeout(()=> { closeSpinModal(); spinning = false; }, 1200);
-});
 
 /* acquired */
 function addAcquired(item){
@@ -597,7 +712,7 @@ function addAcquired(item){
   card.style.display='flex'; card.style.gap='10px'; card.style.alignItems='center'; card.style.padding='8px'; card.style.borderRadius='10px';
   card.style.border='1px solid rgba(255,255,255,.04)'; card.style.background='linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0))';
   card.innerHTML = `<img src="${item.img}" style="width:56px;height:56px;object-fit:contain;border-radius:8px;" onerror="this.src='${FALLBACK}'"><div><div style="font-weight:900">${item.name}</div><div style="color:var(--muted);font-size:12px">${(item.rarity||'common').toUpperCase()}</div></div>`;
-  card.addEventListener('click', ()=> openCardDetails(item));
+  card.addEventListener('click', ()=> openWeaponPopupFromCard(item));
   acquiredGrid.prepend(card);
   while(acquiredGrid.children.length > 120) acquiredGrid.removeChild(acquiredGrid.lastChild);
 }
@@ -637,14 +752,14 @@ function init(){
   // music pref
   const mp = localStorage.getItem('qc_music_on');
   setTimeout(()=> setMusicOn(mp !== '0'), 60);
-  // enable audio context resume
+  // allow audio context resume on first interaction
   document.addEventListener('click', ()=> { if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{}); });
-  console.log('Quaker City final (video bg + audio) ready. Admin password (client-side):', ADMIN_PASS);
+  console.log('Quaker City Option B final build ready. Admin password (client-side):', ADMIN_PASS);
 }
 init();
 
-/* ESC close modals */
-document.addEventListener('keydown', (e)=> { if(e.key === 'Escape'){ document.querySelectorAll('.modal-overlay.open').forEach(m=>{ m.classList.remove('open'); m.style.display='none'; }); } });
+/* ESC closes modals */
+document.addEventListener('keydown', (e)=> { if(e.key === 'Escape'){ document.querySelectorAll('.modal-overlay.open').forEach(m=>{ m.classList.remove('open'); m.style.display='none'; }); weaponPopup.classList.add('hidden'); } });
 /* backdrop close */
 document.querySelectorAll('.modal-overlay').forEach(m=> m.addEventListener('click', (e)=> { if(e.target === m){ m.classList.remove('open'); m.style.display='none'; } }));
 
