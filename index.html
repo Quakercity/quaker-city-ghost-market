@@ -3,108 +3,128 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Quaker City Roleplay — Contraband System</title>
+  <title>Quaker City Roleplay — Contraband Spinner</title>
+  <meta name="description" content="Quaker City Roleplay — Enter the underground market. Built exclusively for Quaker City Roleplay." />
   <link rel="stylesheet" href="style.css" />
-  <meta name="description" content="Quaker City Roleplay Contraband System — buy, sell, and manage contraband with live prices and admin tools." />
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <img src="assets/logo.png" alt="Quaker City Roleplay Logo" class="logo" />
+  <div class="page-bg">
+    <!-- heavy dark gradient background with subtle vignette -->
+    <div class="bg-overlay"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
       <div class="title-wrap">
-        <h1>Quaker City Roleplay</h1>
-        <p class="subtitle">Contraband Market • Inventory • Drop System</p>
+        <h1 class="glow-title">Quaker City Roleplay</h1>
+        <p class="subtitle">Enter the underground market. Built exclusively for Quaker City Roleplay.</p>
       </div>
-    </div>
-    <div class="header-actions">
-      <button id="btn-settings" class="btn ghost">Settings</button>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-cat="t1">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L15 8l6 .5-4.5 3.5L18 20l-6-3-6 3 .5-8L2 8.5 8 8z" fill="currentColor"/></svg>
+          <span>Tier 1 Weaponry</span>
+        </button>
+        <button class="nav-item" data-cat="t2">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18v2H3V3zm2 4h14v2H5V7zm0 4h10v2H5v-2z" fill="currentColor"/></svg>
+          <span>Tier 2 Weaponry</span>
+        </button>
+        <button class="nav-item" data-cat="atts">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16 4.5 20l2-7L1 9h7z" fill="currentColor"/></svg>
+          <span>Attachments</span>
+        </button>
+        <button class="nav-item" data-cat="drugs">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9v3H3v7h18v-7h-2V9c0-3.9-3.1-7-7-7z" fill="currentColor"/></svg>
+          <span>Drugs</span>
+        </button>
+        <button class="nav-item" data-cat="drops">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C7 8 5 10 5 13a7 7 0 0 0 14 0c0-3-2-5-7-11z" fill="currentColor"/></svg>
+          <span>Weapon Drops</span>
+        </button>
+        <button class="nav-item" data-cat="turf">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h8V3H3v10zm10 8h8v-6h-8v6zM3 21h8v-6H3v6zm10-18v6h8V3h-8z" fill="currentColor"/></svg>
+          <span>Turf Map</span>
+        </button>
+        <button class="nav-item" data-cat="prices">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1L3 5v6c0 5 3.8 9.7 9 11 5.2-1.3 9-6 9-11V5l-9-4z" fill="currentColor"/></svg>
+          <span>Prices</span>
+        </button>
+        <button class="nav-item" data-cat="music" id="music-toggle">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" fill="currentColor"/></svg>
+          <span>Music</span>
+        </button>
+      </nav>
+
+      <div class="logo-wrap">
+        <img src="assets/logo.png" alt="Quaker City Roleplay logo" class="site-logo"/>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    <section class="left-column">
-      <div class="controls">
-        <div class="control-left">
-          <button id="btn-refresh-prices" class="btn red">Refresh Prices</button>
-          <button id="btn-simulate-drop" class="btn">Simulate Drop</button>
+  <main class="main-area">
+    <section class="center-panel">
+      <div class="panel-controls">
+        <div class="category-select">
+          <label for="category">Category</label>
+          <select id="category" class="select">
+            <option value="all">All Categories</option>
+            <option value="t1">Tier 1 Weaponry</option>
+            <option value="t2">Tier 2 Weaponry</option>
+            <option value="atts">Attachments</option>
+            <option value="drugs">Drugs</option>
+            <option value="drops">Weapon Drops</option>
+            <option value="turf">Turf Map</option>
+            <option value="prices">Prices</option>
+          </select>
         </div>
-        <div class="control-right">
-          <div class="uptime" title="Server uptime">
-            Uptime: <span id="uptime">--</span>s
-          </div>
+
+        <div class="spin-area">
+          <button id="spin-btn" class="spin-btn" title="Spin!">
+            <svg viewBox="0 0 24 24" class="dice"><path d="M3 3v18h18V3H3zm9 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm4-8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" fill="currentColor"/></svg>
+            <span>Spin!</span>
+          </button>
         </div>
       </div>
 
-      <div class="market">
-        <h2>Market</h2>
-        <div id="items-grid" class="items-grid">
-          <!-- Items populated by script.js -->
+      <div class="slider-wrap">
+        <div id="items-slider" class="items-slider">
+          <!-- Cards inserted by script.js -->
+        </div>
+
+        <div class="slider-right">
+          <!-- duplicate Spin button fixed on right (for layout parity with screenshot) -->
+          <button id="spin-btn-right" class="spin-btn glow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="dice"><path d="M3 3v18h18V3H3zm9 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm4-8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" fill="currentColor"/></svg>
+            <span>Spin!</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="acquired">
+        <div class="acquired-header">
+          <h3>Acquired Items</h3>
+          <div class="acquired-actions">
+            <button id="clear-acquired" class="small ghost">Clear</button>
+          </div>
+        </div>
+        <div id="acquired-list" class="acquired-list">
+          <!-- filled by script.js -->
         </div>
       </div>
     </section>
-
-    <aside class="right-column">
-      <div class="panel prices">
-        <h3>Live Prices</h3>
-        <div id="prices-list" class="prices-list">
-          <!-- Price rows -->
-        </div>
-        <div class="prices-foot">
-          Updated: <span id="prices-updated">--</span>
-        </div>
-      </div>
-
-      <div class="panel logs">
-        <h3>Activity Log</h3>
-        <div id="log-list" class="log-list">
-          <!-- Logs appended here -->
-        </div>
-      </div>
-
-      <div class="panel admin-panel" id="admin-panel">
-        <h3>Admin</h3>
-        <div class="admin-row">
-          <label for="backend-url">Backend URL</label>
-          <input id="backend-url" type="url" placeholder="https://your-render-backend.onrender.com" />
-        </div>
-
-        <div class="admin-row">
-          <label for="api-key-input">API Key</label>
-          <input id="api-key-input" type="text" placeholder="Enter API key or login below" />
-        </div>
-
-        <div class="admin-row">
-          <button id="btn-login" class="btn">Login (Admin)</button>
-          <button id="btn-unlock" class="btn ghost">Unlock Features</button>
-        </div>
-
-        <div id="admin-only" class="admin-only hidden">
-          <hr />
-          <h4>Weights Editor</h4>
-          <div id="weights-editor" class="weights-editor">
-            <!-- Editable weights loaded from backend -->
-          </div>
-          <div class="editor-actions">
-            <button id="btn-save-weights" class="btn red">Save Weights</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel about">
-        <h3>About</h3>
-        <p>Quaker City Roleplay contraband dashboard. Mimics the Killadelphia-Contraband-System layout, re-themed and rebranded.</p>
-      </div>
-    </aside>
   </main>
 
-  <footer class="site-footer">
-    <div>© <span id="year"></span> Quaker City Roleplay</div>
-    <div class="credits">Built for community management • Theme: Dark Blue & Red</div>
+  <footer class="page-footer">
+    <div class="footer-inner">
+      <div class="footer-left">© <span id="year"></span> Quaker City Roleplay</div>
+      <div class="footer-right">Contraband UI • Red glow theme</div>
+    </div>
   </footer>
 
-  <!-- Audio assets (preloaded) -->
+  <!-- Sounds / music -->
   <audio id="audio-click" src="assets/click.mp3" preload="auto"></audio>
-  <audio id="audio-notify" src="assets/notify.mp3" preload="auto"></audio>
+  <audio id="audio-spin" src="assets/spin.mp3" preload="auto"></audio>
+  <audio id="audio-music" src="assets/music.mp3" preload="auto" loop></audio>
 
   <script src="script.js"></script>
 </body>

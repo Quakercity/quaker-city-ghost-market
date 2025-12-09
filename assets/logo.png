@@ -1,8 +1,1 @@
-[PLACEHOLDER IMAGE]
-This file is a placeholder for /assets/logo.png.
-
-Instructions:
-- Replace this placeholder with your actual logo image (PNG) at the path /assets/logo.png.
-- For quick testing you may use any 512x512 PNG named logo.png.
-
-(If you need a simple sample logo, create a 512x512 PNG with "QCR" letters and save as assets/logo.png)
+[PLACEHOLDER IMAGE - assets/logo.png]\nThis is a placeholder for the site logo. Replace with a PNG at:\n  /assets/logo.png\n

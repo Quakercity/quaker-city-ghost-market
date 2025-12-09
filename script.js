@@ -1,373 +1,164 @@
-/*
-  Frontend behavior for Quaker City Roleplay Contraband System
-  - Fetches prices, uptime, drops from backend
-  - Provides admin login to retrieve API key
-  - Allows editing drop weights when admin unlocked
-  - Plays sounds on button clicks
-*/
+// script.js — populate cards, filtering, music toggle, spin animation
+(() => {
+  const items = [
+    {id:1,title:'Pistol — Tier 1',desc:'Reliable sidearm',cat:'t1',price:'$200',rarity:'Common'},
+    {id:2,title:'Knife — Tier 1',desc:'Concealable blade',cat:'t1',price:'$150',rarity:'Common'},
+    {id:3,title:'SMG — Tier 2',desc:'Compact submachine gun',cat:'t2',price:'$1200',rarity:'Uncommon'},
+    {id:4,title:'Assault Rifle — Tier 2',desc:'Standard AR',cat:'t2',price:'$2500',rarity:'Rare'},
+    {id:5,title:'Suppressor',desc:'Reduces noise',cat:'atts',price:'$450',rarity:'Uncommon'},
+    {id:6,title:'Extended Mag',desc:'Higher capacity magazine',cat:'atts',price:'$300',rarity:'Uncommon'},
+    {id:7,title:'Cocaine (1g)',desc:'Street drug',cat:'drugs',price:'$120',rarity:'Common'},
+    {id:8,title:'Heroin (1g)',desc:'Street drug',cat:'drugs',price:'$160',rarity:'Uncommon'},
+    {id:9,title:'Weapon Drop Crate',desc:'Random weapon drop',cat:'drops',price:'Varies',rarity:'Rare'},
+    {id:10,title:'Turf Map (Sector A)',desc:'Map of Sector A',cat:'turf',price:'$50',rarity:'Common'},
+    {id:11,title:'Price List (Wholesale)',desc:'Bulk pricing overview',cat:'prices',price:'$10',rarity:'Common'}
+  ];
 
-const DEFAULT_BACKEND = ''; // empty default: user should set backend URL in settings
+  const slider = document.getElementById('items-slider');
+  const categorySelect = document.getElementById('category');
+  const navItems = Array.from(document.querySelectorAll('.nav-item'));
+  const spinBtn = document.getElementById('spin-btn');
+  const spinBtnRight = document.getElementById('spin-btn-right');
+  const audioClick = document.getElementById('audio-click');
+  const audioSpin = document.getElementById('audio-spin');
+  const audioMusic = document.getElementById('audio-music');
+  const musicToggle = document.getElementById('music-toggle');
+  const acquiredList = document.getElementById('acquired-list');
+  const clearBtn = document.getElementById('clear-acquired');
+  const yearSpan = document.getElementById('year');
 
-// ---------- Utilities ----------
-const qs = sel => document.querySelector(sel);
-const qsa = sel => document.querySelectorAll(sel);
+  yearSpan.textContent = new Date().getFullYear();
 
-const playSound = (elId) => {
-  const el = qs(`#${elId}`);
-  if (!el) return;
-  el.currentTime = 0;
-  const promise = el.play();
-  if (promise && promise.catch) promise.catch(() => {
-    // if audio can't play (autoplay policy), ignore
-  });
-};
+  function playClick(){ if(audioClick && audioClick.play) { audioClick.currentTime = 0; audioClick.play().catch(()=>{}); } }
+  function playSpin(){ if(audioSpin && audioSpin.play){ audioSpin.currentTime = 0; audioSpin.play().catch(()=>{}); } }
 
-const el = id => qs(id);
-
-// ---------- State ----------
-let backendUrl = localStorage.getItem('qcr_backend') || DEFAULT_BACKEND;
-let apiKey = localStorage.getItem('qcr_api_key') || '';
-let prices = {};
-let drops = [];
-let items = [
-  { id: "cigs", name: "Contraband Cigarettes", thumb: "CIG" },
-  { id: "weed", name: "Street Weed", thumb: "WEED" },
-  { id: "pills", name: "Prescription Pills", thumb: "PILL" },
-  { id: "weap", name: "Illegal Firearm", thumb: "GUN" },
-  { id: "chips", name: "Counterfeit Chips", thumb: "CHP" },
-  { id: "gold", name: "Illicit Gold", thumb: "GOLD" }
-];
-
-// ---------- DOM Elements ----------
-const itemsGrid = el('#items-grid');
-const pricesList = el('#prices-list');
-const pricesUpdated = el('#prices-updated');
-const uptimeEl = el('#uptime');
-const logList = el('#log-list');
-const backendInput = el('#backend-url');
-const apiKeyInput = el('#api-key-input');
-const btnLogin = el('#btn-login');
-const btnUnlock = el('#btn-unlock');
-const adminOnly = el('#admin-only');
-const weightsEditor = el('#weights-editor');
-const btnSaveWeights = el('#btn-save-weights');
-const btnSimulateDrop = el('#btn-simulate-drop');
-const btnRefreshPrices = el('#btn-refresh-prices');
-const btnSettings = el('#btn-settings');
-const yearEl = el('#year');
-
-yearEl.textContent = new Date().getFullYear();
-backendInput.value = backendUrl;
-apiKeyInput.value = apiKey;
-if (apiKey) showAdmin(true);
-
-// ---------- Helper functions ----------
-function logActivity(text, kind='info'){
-  const node = document.createElement('div');
-  node.className = 'log-item';
-  node.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
-  logList.prepend(node);
-  // send to backend webhook (non-blocking)
-  if (backendUrl) {
-    fetch(`${backendUrl.replace(/\/$/, '')}/log`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ message: text })
-    }).catch(()=>{});
+  function createCard(item){
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.dataset.cat = item.cat;
+    el.dataset.id = item.id;
+    el.innerHTML = `<h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.desc)}</p><div class="meta"><div class="price">${escapeHtml(item.price)}</div><div class="rarity">${escapeHtml(item.rarity)}</div></div>`;
+    return el;
   }
-}
 
-function backend(path){
-  const base = (backendInput.value || backendUrl || '').replace(/\/$/, '');
-  if (!base) return null;
-  return `${base}${path}`;
-}
+  function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
 
-// ---------- Rendering ----------
-function renderItems(){
-  itemsGrid.innerHTML = '';
-  items.forEach(it => {
-    const node = document.createElement('div');
-    node.className = 'item';
-    node.innerHTML = `
-      <div class="thumb">${it.thumb}</div>
-      <div class="meta">
-        <h4>${it.name}</h4>
-        <p>Market price: <span class="price-val" data-id="${it.id}">--</span></p>
-      </div>
-      <div class="actions">
-        <button class="small btn buy" data-id="${it.id}">Buy</button>
-        <button class="small btn ghost drop" data-id="${it.id}">Drop</button>
-      </div>
-    `;
-    itemsGrid.appendChild(node);
-  });
+  function renderItems(filter='all'){
+    slider.innerHTML='';
+    const toShow = items.filter(i => filter==='all' ? true : i.cat===filter);
+    toShow.forEach(i => slider.appendChild(createCard(i)));
+  }
 
-  // attach listeners
-  qsa('.buy').forEach(b=>{
-    b.addEventListener('click', (e)=>{
-      playSound('audio-click');
-      const id = e.currentTarget.dataset.id;
-      const price = prices[id]?.toFixed?.(2) ?? 'N/A';
-      logActivity(`Bought ${id} for $${price}`);
-      playSound('audio-notify');
+  // initial render
+  renderItems('t1');
+
+  // nav clicks
+  navItems.forEach(btn => {
+    btn.addEventListener('click', e=>{
+      const cat = btn.dataset.cat;
+      playClick();
+      navItems.forEach(n=>n.classList.remove('active'));
+      btn.classList.add('active');
+      if(cat==='music'){
+        // toggle music
+        toggleMusic();
+        return;
+      }
+      categorySelect.value = cat==='all' ? 'all' : cat;
+      renderItems(cat==='all' ? 'all' : cat);
     });
   });
-  qsa('.drop').forEach(b=>{
-    b.addEventListener('click', async (e)=>{
-      playSound('audio-click');
-      const id = e.currentTarget.dataset.id;
-      await simulateDrop(); // also triggers logs
-    });
+
+  categorySelect.addEventListener('change', e=>{
+    playClick();
+    renderItems(e.target.value);
+    navItems.forEach(n=>n.classList.remove('active'));
   });
-}
 
-function renderPrices(){
-  pricesList.innerHTML = '';
-  Object.keys(prices).forEach(key=>{
-    const val = prices[key];
-    const row = document.createElement('div');
-    row.className = 'price-row';
-    row.innerHTML = `<div class="price-name">${key.toUpperCase()}</div><div class="price-value">$${val.toFixed(2)}</div>`;
-    pricesList.appendChild(row);
-  });
-  // update price in items grid
-  qsa('.price-val').forEach(el=>{
-    const id = el.dataset.id;
-    if (prices[id]) el.textContent = `$${prices[id].toFixed(2)}`;
-  });
-  pricesUpdated.textContent = new Date().toLocaleTimeString();
-}
-
-// ---------- API Calls ----------
-async function fetchPrices(){
-  const url = backend('/prices');
-  if (!url) return;
-  try{
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to fetch prices');
-    const data = await res.json();
-    // data expected: { prices: { id: value, ... }, timestamp }
-    prices = data.prices || {};
-    renderPrices();
-  }catch(err){
-    logActivity('Unable to fetch prices: '+err.message);
-  }
-}
-
-async function fetchUptime(){
-  const url = backend('/uptime');
-  if (!url) return;
-  try{
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('uptime failed');
-    const data = await res.json();
-    uptimeEl.textContent = Math.floor(data.uptime || 0);
-  }catch(err){
-    uptimeEl.textContent = '--';
-  }
-}
-
-async function fetchDrops(){
-  const url = backend('/drops');
-  if (!url) {
-    // fallback: local default
-    drops = [
-      { id: 'cigs', weight: 30 },
-      { id: 'weed', weight: 25 },
-      { id: 'pills', weight: 18 },
-      { id: 'weap', weight: 10 },
-      { id: 'chips', weight: 10 },
-      { id: 'gold', weight: 7 }
-    ];
-    renderWeightsEditor();
-    return;
-  }
-  try{
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('drops fetch failed');
-    const data = await res.json();
-    drops = data.drops || [];
-    renderWeightsEditor();
-  }catch(err){
-    logActivity('Unable to fetch drops: '+err.message);
-  }
-}
-
-// Simulate drop using weights returned from backend
-async function simulateDrop(){
-  await fetchDrops();
-  if (!drops || !drops.length) {
-    logActivity('No drops configured.');
-    return;
-  }
-  const total = drops.reduce((s,i)=>s+(i.weight||0),0);
-  let r = Math.random()*total;
-  let chosen = drops[0];
-  for (const d of drops){
-    r -= (d.weight||0);
-    if (r <= 0){
-      chosen = d;
-      break;
+  function toggleMusic(){
+    if(!audioMusic) return;
+    if(audioMusic.paused){
+      audioMusic.play().catch(()=>{});
+      musicToggle.classList.add('active');
+      musicToggle.style.color = 'var(--accent)';
+    } else {
+      audioMusic.pause();
+      musicToggle.classList.remove('active');
+      musicToggle.style.color = '';
     }
+    playClick();
   }
-  logActivity(`Simulated Drop -> ${chosen.id} (weight ${chosen.weight})`);
-  playSound('audio-notify');
-}
 
-// Admin login
-async function adminLogin(){
-  const url = backend('/admin/login');
-  if (!url) {
-    alert('Set backend URL in Admin panel first.');
-    return;
+  musicToggle.addEventListener('click', e=>{ e.preventDefault(); toggleMusic(); });
+
+  // Spin logic: pick a random visible card
+  function pickRandomVisibleCard(){
+    const cards = Array.from(slider.querySelectorAll('.card'));
+    if(!cards.length) return null;
+    return cards[Math.floor(Math.random()*cards.length)];
   }
-  const username = prompt('Admin username (hint: admin)');
-  const password = prompt('Admin password (hint: quakerfm)');
-  if (!username || !password) return;
-  try{
-    const res = await fetch(url, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ username, password })
+
+  function addAcquired(item){
+    const list = JSON.parse(localStorage.getItem('acquired')||'[]');
+    list.unshift({id:item.id,title:item.title,ts:Date.now()});
+    localStorage.setItem('acquired', JSON.stringify(list.slice(0,25)));
+    renderAcquired();
+  }
+
+  function renderAcquired(){
+    const list = JSON.parse(localStorage.getItem('acquired')||'[]');
+    acquiredList.innerHTML='';
+    list.forEach(entry=>{
+      const el = document.createElement('div');
+      el.className='acquired-item';
+      const d = new Date(entry.ts);
+      el.innerHTML = `<div>${escapeHtml(entry.title)}</div><div style="color:var(--muted);font-size:12px">${d.toLocaleString()}</div>`;
+      acquiredList.appendChild(el);
     });
-    if (!res.ok){
-      const txt = await res.text();
-      throw new Error(txt || 'Login failed');
-    }
-    const data = await res.json();
-    apiKey = data.apiKey;
-    localStorage.setItem('qcr_api_key', apiKey);
-    apiKeyInput.value = apiKey;
-    showAdmin(true);
-    logActivity('Admin logged in and API key stored locally.');
-  }catch(err){
-    alert('Login failed: '+err.message);
   }
-}
 
-// Save weights (admin)
-async function saveWeights(){
-  if (!apiKey) {
-    alert('Unlock admin features first.');
-    return;
-  }
-  const payload = { drops: drops };
-  const url = backend('/drops/update');
-  if (!url) {
-    alert('Backend URL is required.');
-    return;
-  }
-  try{
-    const res = await fetch(url, {
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': apiKey
-      },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok){
-      const txt = await res.text();
-      throw new Error(txt || 'save failed');
-    }
-    const data = await res.json();
-    logActivity('Weights saved to backend.');
-    await fetchDrops();
-  }catch(err){
-    alert('Failed to save weights: '+err.message);
-  }
-}
-
-// Render the editable weights in admin panel
-function renderWeightsEditor(){
-  weightsEditor.innerHTML = '';
-  drops.forEach(d=>{
-    const row = document.createElement('div');
-    row.className = 'weight-row';
-    row.innerHTML = `
-      <div class="w-name">${d.id.toUpperCase()}</div>
-      <input type="number" min="0" step="1" class="w-input" data-id="${d.id}" value="${d.weight}" />
-    `;
-    weightsEditor.appendChild(row);
+  clearBtn.addEventListener('click', e=>{
+    playClick();
+    localStorage.removeItem('acquired');
+    renderAcquired();
   });
-  // attach change events
-  qsa('.w-input').forEach(inp=>{
-    inp.addEventListener('change', (e)=>{
-      const id = e.currentTarget.dataset.id;
-      const val = Number(e.currentTarget.value) || 0;
-      const idx = drops.findIndex(x=>x.id===id);
-      if (idx>=0) drops[idx].weight = val;
-    });
-  });
-}
 
-// Unlock admin features by entering API key
-function showAdmin(force=false){
-  const key = apiKeyInput.value || apiKey || localStorage.getItem('qcr_api_key');
-  if (force) apiKey = key;
-  if (key){
-    apiKey = key;
-    localStorage.setItem('qcr_api_key', apiKey);
-    adminOnly.classList.remove('hidden');
-    renderWeightsEditor();
-  } else {
-    adminOnly.classList.add('hidden');
+  function animateSpin(targetCard){
+    if(!targetCard) return;
+    document.body.classList.add('spin-active');
+    // temporarily mark
+    targetCard.classList.add('spin-target');
+    playSpin();
+    // simple timing to simulate wheel
+    setTimeout(()=>{
+      targetCard.classList.remove('spin-target');
+      document.body.classList.remove('spin-active');
+      const id = Number(targetCard.dataset.id);
+      const item = items.find(i=>i.id===id);
+      if(item) addAcquired(item);
+    }, 1400);
   }
-}
 
-// ---------- Events ----------
-btnSettings.addEventListener('click', ()=>{
-  document.querySelector('.admin-panel').scrollIntoView({behavior:'smooth', block:'center'});
-  playSound('audio-click');
-});
+  function doSpin(){
+    playClick();
+    const target = pickRandomVisibleCard();
+    if(!target) return;
+    // quick button animation
+    spinBtn.classList.add('glow');
+    spinBtnRight.classList.add('glow');
+    animateSpin(target);
+    setTimeout(()=>{ spinBtn.classList.remove('glow'); spinBtnRight.classList.remove('glow'); }, 1600);
+  }
 
-btnRefreshPrices.addEventListener('click', async ()=>{
-  playSound('audio-click');
-  await fetchPrices();
-});
+  spinBtn.addEventListener('click', e=>{ playClick(); doSpin(); });
+  spinBtnRight.addEventListener('click', e=>{ playClick(); doSpin(); });
 
-btnSimulateDrop.addEventListener('click', async ()=>{
-  playSound('audio-click');
-  await simulateDrop();
-});
+  // initial acquired render
+  renderAcquired();
 
-btnLogin.addEventListener('click', async ()=>{
-  playSound('audio-click');
-  await adminLogin();
-});
+  // keyboard accessibility: spacebar to spin when focused on spin button
+  [spinBtn, spinBtnRight].forEach(b=>{
+    b.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); doSpin(); } });
+  });
 
-btnUnlock.addEventListener('click', ()=>{
-  playSound('audio-click');
-  showAdmin(true);
-});
-
-btnSaveWeights.addEventListener('click', async ()=>{
-  playSound('audio-click');
-  await saveWeights();
-});
-
-// update backend url when changed
-backendInput.addEventListener('change', ()=>{
-  backendUrl = backendInput.value;
-  localStorage.setItem('qcr_backend', backendUrl);
-  logActivity('Backend URL updated.');
-});
-
-// manual api key input store
-apiKeyInput.addEventListener('change', ()=>{
-  apiKey = apiKeyInput.value;
-  localStorage.setItem('qcr_api_key', apiKey);
-  showAdmin(true);
-});
-
-// ---------- Init ----------
-renderItems();
-fetchDrops();
-fetchPrices();
-fetchUptime();
-setInterval(fetchPrices, 5000); // live price updates every 5 seconds
-setInterval(fetchUptime, 5000);
-
-// initial logs
-logActivity('Frontend initialized.');
+})();

@@ -1,6 +1,1 @@
-[PLACEHOLDER AUDIO - CLICK]
-This is a placeholder for the click sound (assets/click.mp3).
-
-Instructions:
-- Replace with a short click sound (MP3) to enable UI click feedback.
-- If the audio file is not replaced, the app will attempt to play it but may silently fail due to browser autostart rules.
+[PLACEHOLDER AUDIO - assets/click.mp3]\nA short click sound (20-120ms). Replace with an MP3 at this path for UI click feedback.
