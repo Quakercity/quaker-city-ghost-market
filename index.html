@@ -9,177 +9,139 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-/* ---------- Theme variables ---------- */
 :root{
-  --bg:#0a1428;
+  --bg:#071027;
   --panel:#0f1a2a;
   --accent:#dc143c;
   --accent-2:#0047ab;
   --muted:#b0b8c0;
-  --text:#fff;
+  --text:#ffffff;
   --glass: rgba(255,255,255,.03);
   --glass-border: rgba(255,255,255,.04);
   --card-radius:14px;
-  --maxw:1280px;
-  --glow: 0 10px 30px rgba(220,20,60,0.14);
+  --maxw:1300px;
+  --kill-glow: 0 12px 40px rgba(220,20,60,0.12);
 }
 
-/* ---------- Base ---------- */
+/* base */
 *{box-sizing:border-box}
-html,body{height:100%; margin:0; font-family:"Rajdhani", system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif; color:var(--text);}
-body{
-  background:
-    radial-gradient(900px 450px at 10% -10%, rgba(220,20,60,.06), transparent 60%),
-    radial-gradient(900px 450px at 110% 10%, rgba(0,71,171,.06), transparent 60%),
-    linear-gradient(180deg, var(--bg), #041125 120%);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  padding:28px;
-  display:flex;
-  justify-content:center;
-  min-height:100vh;
-}
+html,body{height:100%;margin:0;font-family:"Rajdhani",sans-serif;background:
+  radial-gradient(900px 420px at 10% -10%, rgba(220,20,60,.06), transparent 60%),
+  radial-gradient(900px 420px at 110% 10%, rgba(0,71,171,.06), transparent 60%),
+  linear-gradient(180deg,var(--bg),#031022 120%);
+color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;padding:28px;display:flex;justify-content:center;}
 
-/* background blurred emblem */
 .background-logo{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:900px; height:900px;
-  background:url('Quaker.png') no-repeat center/contain;
-  filter: blur(20px) saturate(.8);
-  opacity:.10;
-  pointer-events:none;
-  z-index:1;
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:900px; height:900px; background:url('Quaker.png') no-repeat center/contain;
+  filter: blur(20px) saturate(.9); opacity:.10; pointer-events:none; z-index:1;
 }
-@media(max-width:1024px){ .background-logo{ width:700px;height:700px; blur:16px; opacity:.08 } }
+@media(max-width:1024px){ .background-logo{ width:700px;height:700px; filter:blur(16px); opacity:.08 } }
 @media(max-width:640px){ .background-logo{ width:480px;height:480px; filter:blur(12px); opacity:.06 } }
 
-/* container */
 .wrap{ width:100%; max-width:var(--maxw); margin:0 auto; position:relative; z-index:6; }
-.container{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border-radius:18px; padding:22px; border:1px solid var(--glass-border); box-shadow: 0 22px 60px rgba(0,0,0,.6); backdrop-filter: blur(8px) saturate(1.05); }
+.container{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+  border-radius:18px; padding:22px; border:1px solid var(--glass-border); box-shadow:0 22px 60px rgba(0,0,0,.6); backdrop-filter: blur(8px); }
 
 /* header */
 .header{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:18px; }
 .header-left{ max-width:70%; }
-.title{ font-size:44px; margin:0; line-height:1; font-weight:900; color:var(--accent); text-shadow: 0 8px 24px rgba(0,0,0,.6); }
+.title{ font-size:44px; margin:0; line-height:1; font-weight:900; color:var(--accent); text-shadow:0 8px 24px rgba(0,0,0,.6); }
 .subtitle{ margin-top:8px; color:var(--muted); font-weight:700; }
 
-/* top nav main */
+/* topnav */
 .topnav{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; align-items:center; }
-.topnav .cat{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); color:var(--muted); padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.03); font-weight:800; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
-.topnav .cat.active{ color:var(--text); border-color: rgba(220,20,60,.28); box-shadow: 0 10px 40px rgba(220,20,60,0.08); background: linear-gradient(180deg, rgba(220,20,60,.06), rgba(0,71,171,.03)); }
+.topnav .cat{ padding:10px 14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+  color:var(--muted); border:1px solid rgba(255,255,255,.03); font-weight:800; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
+.topnav .cat.active{ color:var(--text); border-color: rgba(220,20,60,.28); box-shadow: var(--kill-glow); background: linear-gradient(180deg, rgba(220,20,60,.06), rgba(0,71,171,.03)); }
 
-/* sub-tabs (Killadelphia-style second row) */
+/* subtabs row */
 .subtabs{ margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.subtabs .sub{ padding:8px 12px; border-radius:999px; background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0)); border:1px solid rgba(255,255,255,.03); color:var(--muted); font-weight:800; cursor:pointer; transition: all .18s ease; }
-.subtabs .sub:hover{ transform:translateY(-2px); }
-.subtabs .sub.active{ color:var(--text); background: linear-gradient(180deg, rgba(220,20,60,.12), rgba(0,71,171,.06)); box-shadow: 0 10px 40px rgba(220,20,60,0.08); border-color: rgba(220,20,60,.28); }
+.subtabs .sub{ padding:8px 12px; border-radius:999px; background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0)); border:1px solid rgba(255,255,255,.03); color:var(--muted); font-weight:800; cursor:pointer; transition:all .16s ease; }
+.subtabs .sub.active{ color:var(--text); background: linear-gradient(180deg, rgba(220,20,60,.12), rgba(0,71,171,.06)); box-shadow: var(--kill-glow); border-color: rgba(220,20,60,.28); transform:translateY(-2px); }
 
-/* header-right */
+/* header right */
 .header-right{ display:flex; align-items:center; gap:12px; }
 .logo{ width:86px; height:86px; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)); }
 .header-logo{ width:72px; height:72px; object-fit:contain; }
 
-/* controls (drop button area) */
+/* controls */
 .controls{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:16px; }
 .controls .left{ display:flex; gap:10px; align-items:center; }
 .choose{ color:var(--muted); font-weight:800; margin-right:6px; }
 select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); color:var(--text); padding:8px 10px; border-radius:10px; font-weight:800; }
 
-/* drop button group */
 .drop-actions{ display:flex; gap:10px; align-items:center; }
 .btn{ padding:10px 14px; border-radius:10px; font-weight:900; cursor:pointer; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.06); color:var(--text); }
-.btn.drop{ background: linear-gradient(180deg, rgba(220,20,60,.95), rgba(160,10,40,.85)); box-shadow: var(--glow); color:white; }
+.btn.drop{ background: linear-gradient(180deg, rgba(220,20,60,.95), rgba(160,10,40,.85)); box-shadow: var(--kill-glow); color:white; }
 
-/* reel / grid area */
+/* music toggle (right aligned) */
+.music-toggle{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; background:linear-gradient(180deg, rgba(0,0,0,.14), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.04); color:var(--muted); font-weight:800; cursor:pointer; }
+.music-toggle.on{ color:var(--accent); box-shadow: 0 10px 30px rgba(220,20,60,.09); }
+
+/* grid */
 .grid-wrap{ margin-top:16px; border-radius:12px; padding:18px; border:1px solid rgba(255,255,255,.03); background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0)); box-shadow: inset 0 6px 20px rgba(0,0,0,.3); }
-.grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:14px; align-items:stretch; }
+.grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap:14px; align-items:stretch; }
 
 /* card */
-.card{ border-radius:12px; padding:8px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.04); min-height:150px; display:flex; flex-direction:column; justify-content:flex-start; position:relative; overflow:visible; }
-.card .name{ font-weight:900; margin-bottom:8px; color:var(--muted); font-size:14px; }
-.card .img-wrap{ flex:1 1 auto; display:flex; align-items:center; justify-content:center; padding:8px; }
-.card .img-wrap img{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
+.card{ border-radius:12px; padding:10px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.04); min-height:220px; display:flex; flex-direction:column; position:relative; overflow:visible; }
+.card .top-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.card .name{ font-weight:900; color:var(--muted); font-size:15px; }
+.img-wrap{ flex:1 1 auto; display:flex; align-items:center; justify-content:center; padding:6px; background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(255,255,255,0)); border-radius:8px; margin-bottom:8px; }
+.img-wrap img{ max-width:100%; max-height:110px; object-fit:contain; display:block; }
+
+/* stats area inside card */
+.stats-row{ display:flex; justify-content:space-between; gap:8px; font-size:12px; color:var(--muted); font-weight:800; }
+.stats-block{ display:flex; flex-direction:column; align-items:flex-start; gap:4px; }
 
 /* rarity badge */
-.badge{ position:absolute; right:10px; bottom:10px; background:rgba(0,0,0,.36); padding:6px 8px; border-radius:8px; font-weight:900; color:var(--muted); border:1px solid rgba(255,255,255,.03); font-size:12px; }
+.badge{ position:absolute; left:10px; bottom:10px; background:linear-gradient(180deg, rgba(0,0,0,.36), rgba(255,255,255,.02)); padding:6px 8px; border-radius:8px; font-weight:900; color:var(--muted); border:1px solid rgba(255,255,255,.03); font-size:12px; }
 
-/* center drop overlay (modal spinner) */
-.modal-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.72); z-index:9999; }
-.modal-overlay.open{ display:flex; }
-.modal{ width:920px; max-width:96%; border-radius:12px; padding:18px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.06); box-shadow: 0 22px 60px rgba(0,0,0,.6); }
-.modal .strip{ display:flex; gap:12px; overflow:hidden; align-items:center; padding:10px; }
+/* turf map placeholder */
+.turf-map{ width:100%; height:420px; border-radius:12px; overflow:hidden; background:linear-gradient(180deg, rgba(0,0,0,.16), rgba(255,255,255,0)); display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.04); }
 
-/* winner indicator */
-.modal .center-indicator{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:6px; height:120px; border-radius:6px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow: 0 0 24px rgba(255,200,0,.08); pointer-events:none; }
-
-/* acquired area */
+/* acquired list */
 .acquired-heading{ margin-top:18px; font-weight:900; color:var(--accent); }
 .acquired-grid{ margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; }
 
-/* small info panels */
-.info-row{ display:flex; gap:12px; margin-top:14px; align-items:flex-start; flex-wrap:wrap; }
-.info-panel{ flex:1; min-width:240px; border-radius:12px; padding:12px; background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0)); border:1px solid rgba(255,255,255,.04); }
+/* modals */
+.modal-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.72); z-index:9999; }
+.modal-overlay.open{ display:flex; }
+.modal{ width:920px; max-width:96%; border-radius:12px; padding:18px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.06); box-shadow: 0 22px 60px rgba(0,0,0,.6); }
 
-/* admin */
-.admin-flag{ padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,.03); color:var(--muted); cursor:pointer; }
-.admin-panel{ position:fixed; right:18px; top:18px; width:360px; max-width:94%; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,.05); box-shadow: 0 18px 60px rgba(0,0,0,.6); display:none; z-index:10000; }
-.admin-panel.open{ display:block; }
-
-/* footer */
-.footer{ margin-top:20px; display:flex; justify-content:space-between; gap:12px; color:var(--muted); font-size:12px; }
-
-/* responsive */
-@media(max-width:1100px){
-  .title{ font-size:34px; }
-}
-@media(max-width:720px){
-  .title{ font-size:26px; }
-  .grid{ grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); }
-  .modal{ width:92%; padding:12px; }
-  .modal .center-indicator{ height:90px; }
-}
+/* small screens */
+@media(max-width:980px){ .title{ font-size:34px } .grid{ grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); } .img-wrap img{ max-height:90px; } .modal{ width:92% } }
+@media(max-width:640px){ .title{ font-size:26px } .grid{ grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); } .img-wrap img{ max-height:76px; } }
 </style>
 </head>
 <body>
-  <!-- blurred emblem -->
   <div class="background-logo" aria-hidden="true"></div>
 
   <div class="wrap">
-    <!-- header -->
     <div class="header">
       <div class="header-left">
         <h1 class="title">Quaker City</h1>
         <div class="subtitle">Contraband System</div>
 
-        <!-- main nav -->
         <div class="topnav" id="mainNav">
           <div class="cat active" data-tab="tier1"><i class="fa-solid fa-gun"></i>&nbsp;Tier 1 Weaponry</div>
           <div class="cat" data-tab="tier2"><i class="fa-solid fa-shield"></i>&nbsp;Tier 2 Weaponry</div>
           <div class="cat" data-tab="attachments"><i class="fa-solid fa-wrench"></i>&nbsp;Attachments</div>
           <div class="cat" data-tab="drugs"><i class="fa-solid fa-capsules"></i>&nbsp;Drugs</div>
-          <div class="cat" data-tab="drops"><i class="fa-solid fa-box"></i>&nbsp;Weapon Drops</div>
           <div class="cat" data-tab="turf"><i class="fa-solid fa-map"></i>&nbsp;Turf Map</div>
         </div>
 
-        <!-- subtabs (changes depending on main tab) -->
-        <div class="subtabs" id="subtabs">
-          <!-- filled dynamically -->
-        </div>
+        <div class="subtabs" id="subtabs"></div>
       </div>
 
       <div class="header-right">
-        <div class="admin-flag" id="adminToggle" title="Admin"><i class="fa-solid fa-user-lock"></i></div>
+        <div id="musicToggle" class="music-toggle" title="Toggle Music"><i class="fa-solid fa-volume-high"></i>&nbsp;<span id="musicLabel">Music: On</span></div>
+        <div id="adminToggle" class="admin-flag" title="Admin"><i class="fa-solid fa-user-lock"></i></div>
         <div class="logo"><img src="Quaker.png" class="header-logo" alt="Quaker logo"></div>
       </div>
     </div>
 
-    <!-- main container -->
-    <div class="container" id="appContainer">
-
-      <!-- controls -->
+    <div class="container">
       <div class="controls">
         <div class="left">
           <div class="choose">Filter</div>
@@ -194,48 +156,46 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
         </div>
 
         <div class="drop-actions">
-          <button class="btn" id="viewDropListBtn"><i class="fa-solid fa-list"></i> Drops</button>
-          <button class="btn drop" id="dropBtn"><i class="fa-solid fa-dice"></i> DROP</button>
+          <button class="btn" id="viewDropsBtn"><i class="fa-solid fa-list"></i>&nbsp;Drops</button>
+          <button class="btn drop" id="dropBtn"><i class="fa-solid fa-dice"></i>&nbsp;DROP</button>
         </div>
       </div>
 
-      <!-- grid -->
-      <div class="grid-wrap">
-        <div class="grid" id="itemGrid" aria-live="polite">
-          <!-- cards injected here -->
-        </div>
+      <div class="grid-wrap" id="contentArea">
+        <div class="grid" id="itemGrid" aria-live="polite"></div>
       </div>
 
-      <!-- acquired items -->
       <div class="acquired-heading">Acquired Items</div>
       <div class="acquired-grid" id="acquiredGrid"></div>
 
-      <div class="info-row">
-        <div class="info-panel" id="infoPanel">Click a card for details. Use DROP to open the spinner and receive a weighted drop.</div>
-        <div class="info-panel">
-          <div style="font-weight:900;">Made By Route</div>
-          <div style="color:var(--muted); margin-top:6px;" id="lastUpdated">Last updated: —</div>
+      <div style="display:flex; gap:12px; margin-top:14px; align-items:flex-start; flex-wrap:wrap;">
+        <div style="flex:1; min-width:260px;">
+          <div class="info-panel" id="infoPanel">Click a card to preview more info. Use DROP to open the spin modal and receive a weighted drop.</div>
+        </div>
+        <div style="width:320px;">
+          <div class="info-panel">
+            <div style="font-weight:900">Made By Route</div>
+            <div style="color:var(--muted); margin-top:8px;" id="lastUpdated">Last updated: —</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="footer">
-      <div>© Quaker City Roleplay</div>
-      <div style="color:var(--muted)">Built with ❤️</div>
-    </div>
+    <div style="height:18px"></div>
+    <div class="footer"><div>© Quaker City Roleplay</div><div style="color:var(--muted)">Built with ❤️</div></div>
   </div>
 
-  <!-- modal spinner (opens when clicking DROP) -->
+  <!-- Spin modal -->
   <div class="modal-overlay" id="spinModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Spin modal">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
         <div style="font-weight:900; font-size:18px;">Spin Wheel</div>
         <div style="color:var(--muted); font-weight:800;">Click SPIN to start</div>
       </div>
 
       <div style="position:relative; margin-top:12px;">
-        <div class="strip" id="spinStrip" style="height:140px; display:flex; gap:12px; align-items:center; overflow:hidden;"></div>
-        <div class="center-indicator" aria-hidden="true"></div>
+        <div id="spinStrip" style="height:140px; display:flex; gap:12px; align-items:center; overflow:hidden; padding:10px;"></div>
+        <div style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:6px; height:120px; border-radius:6px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow: 0 0 24px rgba(255,200,0,.08); pointer-events:none;"></div>
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
@@ -245,11 +205,11 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
     </div>
   </div>
 
-  <!-- stats modal for clicking a card -->
+  <!-- stats modal (card click will also show small details modal if needed, but per your choice we show stats in card) -->
   <div class="modal-overlay" id="statsModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-weight:900;" id="statsTitle">Item</div>
+        <div id="statsTitle" style="font-weight:900;"></div>
         <button class="btn" id="closeStats"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div style="display:flex; gap:12px; margin-top:12px;">
@@ -264,12 +224,12 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
     </div>
   </div>
 
-  <!-- Admin panel -->
+  <!-- admin panel -->
   <div class="admin-panel" id="adminPanel" aria-hidden="true">
     <h3 style="margin:6px 0 12px;">Admin Panel</h3>
     <label>Discord Webhook</label>
     <input id="adminWebhook" type="text" placeholder="https://discord.com/api/webhooks/..." style="width:100%; margin-bottom:8px;">
-    <label>Server Uptime URL</label>
+    <label>Server Uptime</label>
     <input id="adminUptime" type="text" placeholder="http://example.com/health" style="width:100%; margin-bottom:8px;">
     <label>Price JSON URL</label>
     <input id="adminPrices" type="text" placeholder="https://raw.githubusercontent.com/.../prices.json" style="width:100%; margin-bottom:8px;">
@@ -281,74 +241,99 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
     <div style="color:var(--muted); margin-top:10px; font-size:13px;">Admin password (client-side): <b>Qacti</b></div>
   </div>
 
-  <!-- audio (mp3 must be uploaded) -->
+  <!-- turf image placeholder (hidden until Turf tab) -->
+  <div id="turfPlaceHolder" style="display:none">
+    <!-- shown inside content area when Turf tab active -->
+  </div>
+
+  <!-- audio -->
   <audio id="bgm" src="OceanEyes.mp3" loop preload="auto"></audio>
 
 <script>
-/* -------------------------------
-   Quaker City — Combined single-file app
-   Features:
-     - One-page tab + subtabs
-     - Grid view for items
-     - DROP button opens spinner modal
-     - Spinner selects weighted drop
-     - Images shown contained (no cropping)
-     - Admin panel (client-side)
-     - Music + SFX
-----------------------------------*/
+/* =============================
+   Quaker City — Single-file app
+   ============================= */
 
-/* ---------- Data (items) ---------- */
-/* You can replace these with your image filenames or a more complete dataset */
+/* ---------- IMAGES - point to your images/ folder if you uploaded real images ---------- */
+/* If you uploaded images into repo root or images/ folder, adjust these paths to match filenames exactly.
+   E.g. 'images/ghost_glock_17.png' */
 const IMAGES = {
-  '.38 Special': 'https://media.discordapp.net/attachments/1442278653823156367/1447814118647140403/25CE001F-484F-4FDF-BF4A-FC4774C95BCD.png?ex=6938fd78&is=6937abf8&hm=650ac7176eb502bd0a8f89a30f687df7740376b27875c134da94415c8ca8583e&=&format=webp&quality=lossless&width=1409&height=1409',
-  'Ghost Glock 17': 'https://media.discordapp.net/attachments/1442278653823156367/1447814120631042150/832A4CE9-FD8F-4AC0-AD33-A17573FB6678.png?ex=6938fd79&is=6937abf9&hm=16aec57bccd0f7cd1175588d39da6c823d174cb0efc253dcd8a63dfd87a832ac&=&format=webp&quality=lossless&width=1409&height=1409',
-  'Glock 20 Switch': 'https://media.discordapp.net/attachments/1442278653823156367/1447814332317696166/35DA8A73-BFE3-44FB-A322-4639CCF67A20.png?ex=6938fdab&is=6937ac2b&hm=6644d393db7d29e770b205701c80883aacbd346c8535bb9eb459bf6981216e49&=&format=webp&quality=lossless&width=938&height=1409',
-  'FNX -45': 'https://media.discordapp.net/attachments/1442278653823156367/1447814330769870858/343542AE-DE5C-4B32-B0D6-7423317739F8.png?ex=6938fdab&is=6937ac2b&hm=55ec25ecf1870d70cd9e7eaeab3ed41f0fe330a0f5de81d6c00a85c91077cd85&=&format=webp&quality=lossless&width=938&height=1409',
-  'Beretta M9': 'https://media.discordapp.net/attachments/1442278653823156367/1447814119729401876/3528B8D0-0ECC-40C1-B78E-9F4782A78B85.png?ex=6938fd79&is=6937abf9&hm=976919ed8fe548b39448559015fdada5b779a738b3eadb74a668264972b9f15f&=&format=webp&quality=lossless&width=1409&height=1409',
-  'G23': 'https://media.discordapp.net/attachments/1442278653823156367/1447814176234934442/E29B517E-6328-4E2A-92FE-FD9A53E3E99A.png?ex=6938fd86&is=6937ac06&hm=c609222cccdcd0277828ebd4f5e882fde73c5abdca1fcaa96c436de37ccb02b4&=&format=webp&quality=lossless&width=1409&height=1409',
-  'Hellcat': 'https://media.discordapp.net/attachments/1442278653823156367/1447814121537146910/42B203F6-78E4-4288-A0DF-77BCFBFC8491.png?ex=6938fd79&is=6937abf9&hm=899f048ac69f7bd97d234e06e1440467f8eee00cf76dce63bc92f379f7311e08&=&format=webp&quality=lossless&width=1409&height=1409',
-  'Tec-9': 'https://media.discordapp.net/attachments/1442278653823156367/1447814333710078053/9A1825B7-AD94-48B5-AB47-83C94F02B819.png?ex=6938fdac&is=6937ac2c&hm=d790cd2e72173627bde30dc9fd83641c7108e6fa7ab49b70620255984ec5ec80&=&format=webp&quality=lossless&width=938&height=1409',
-  'MAC-10': 'https://media.discordapp.net/attachments/1442278653823156367/1447814331390492773/E16A3CE7-8E47-47AF-A70C-28F47AD0B33D.png?ex=6938fdab&is=6937ac2b&hm=ac47f5f2451546001cd21a8bab4738559f77a58e1bdc87f79fc153bf1e275716&=&format=webp&quality=lossless&width=938&height=1409',
-  'Tactical UZI': 'https://media.discordapp.net/attachments/1442278653823156367/1447814375309054043/1C5C28F1-9747-4DE1-88BE-28292005B41F.png?ex=6938fdb6&is=6937ac36&hm=fa9fdd2e4d6fff3f06c1e2f29d3a5ee8c821d07cdc4e11447af6ddee53c14d1d&=&format=webp&quality=lossless&width=938&height=1409',
-  'G41': 'https://media.discordapp.net/attachments/1442278653823156367/1447814248481685504/45E3D0D9-2795-4872-BA5A-67D04AD1BDF1.png?ex=6938fd97&is=6937ac17&hm=0f0113c505728a7abb2b63968feef4259e323a13932fff1d67c2c6eb788a8855&=&format=webp&quality=lossless&width=938&height=1409',
-  'MP9': 'https://media.discordapp.net/attachments/1442278653823156367/1447814119045464155/8D2F58DD-9AEC-4C7C-8D2D-47CCC9376227.png?ex=6938fd79&is=6937abf9&hm=aeebc48af0277cf9ae276786af3d2d03f53580019b21902fa971435199a67d15&=&format=webp&quality=lossless&width=1409&height=1409',
-  'G19 MOS': 'https://media.discordapp.net/attachments/1442278653823156367/1447814247525646497/F3AE3066-EFE9-41CB-B578-5EC03C6A2D7A.png?ex=6938fd97&is=6937ac17&hm=b2ca9fe16355feb412525d74e3258ee78e70b5d3319f43e80658c6ab763defe7&=&format=webp&quality=lossless&width=938&height=1409',
-  'P90': 'https://media.discordapp.net/attachments/1442278653823156367/1447814500354097243/EEF50C44-F770-443A-8F78-201EA7DD9944.png?ex=6938fdd3&is=6937ac53&hm=35ee06a59543f1a5337fc7510b7d0e46c057ae937cfa4b7850a3ecae4576ed62&=&format=webp&quality=lossless&width=938&height=1409',
-  'HELLPUP DRACO': 'https://cdn.discordapp.com/attachments/1442278653823156367/1447814499363983380/F0D2E6C6-183F-4CC9-904C-9F87B960B06C.png?ex=6938fdd3&is=6937ac53&hm=c40b2fff419247c3224f930075728d431f1626c69d13192a3dab2e7b41b09801&',
-  'AK-47': 'https://media.discordapp.net/attachments/1442278653823156367/1447814499695460513/DC2C73DE-7FDD-46D4-898E-E7203EF9C070.png?ex=6938fdd3&is=6937ac53&hm=32b6543af236003ee2dd96d10cd6979af10e8672a6743d8cbb9da68ae8dd5125&=&format=webp&quality=lossless&width=938&height=1409',
-  'Black ARP': 'https://media.discordapp.net/attachments/1442278653823156367/1447814373601972285/C4FE017E-B958-42C2-9C74-6268A11CD25A.png?ex=6938fdb5&is=6937ac35&hm=ad76540e38b64398d91474fbb80cd023862a4a3e42c420b93c19f71fa499830a&=&format=webp&quality=lossless&width=938&height=1409',
-  'KEL-TEC PLR': 'https://media.discordapp.net/attachments/1442278653823156367/1447814331868774410/37DC7D8A-3EA6-4F01-9436-D5E736E13C4A.png?ex=6938fdab&is=6937ac2b&hm=c233af0b74069b5196ee10448b44ec96c8a10322285015ab58daf74bc9603bcd&=&format=webp&quality=lossless&width=938&height=1409',
-  'Draco': 'https://media.discordapp.net/attachments/1442278653823156367/1447814332862824469/E7E6F61C-2D83-425C-B230-AF4EEF446C3A.png?ex=6938fdac&is=6937ac2c&hm=0fa109d9c32d00a2e01443055de8dd0e16d035963b9fbe87f6f434b3a09b951c&=&format=webp&quality=lossless&width=938&height=1409'
+  'Ghost Glock 17': 'images/ghost_glock_17.png',
+  'Glock 19': 'images/glock_19.png',
+  'Glock 20': 'images/glock_20.png',
+  'Beretta M9': 'images/beretta_m9.png',
+  'CZ 75': 'images/cz_75.png',
+  'Hi-Point': 'images/hi_point.png',
+  'Tec-9': 'images/tec9.png',
+  'MAC-10': 'images/mac10.png',
+  'Micro UZI': 'images/micro_uzi.png',
+  'Skorpion': 'images/skorpion.png',
+  'MP5': 'images/mp5.png',
+  'UMP45': 'images/ump45.png',
+  'P90': 'images/p90.png',
+  'AK-47': 'images/ak47.png',
+  'AR-15': 'images/ar15.png',
+  'M4A1': 'images/m4a1.png',
+  'Kriss Vector': 'images/kriss_vector.png',
+  'ACR': 'images/acr.png'
 };
+/* fallback placeholder */
 const FALLBACK = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="240"%3E%3Crect fill="%23333" width="400" height="240"/%3E%3Ctext x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23999"%3ENo Image%3C/text%3E%3C/svg%3E';
 
-/* master item lists grouped by tier */
+/* ---------- weapon stats (as you provided) ---------- */
+const WEAPON_STATS = {
+  'Ghost Glock 17': { damage: 28, fire: 750, ammo: '9mm', magStd: 15, magExt: 33 },
+  'Glock 19': { damage: 28, fire: 750, ammo: '9mm', magStd: 15, magExt: 33 },
+  'Glock 20': { damage: 35, fire: 600, ammo: '.45 ACP', magStd: 10, magExt: 21 },
+  'Beretta M9': { damage: 28, fire: 750, ammo: '9mm', magStd: 15, magExt: 30 },
+  'CZ 75': { damage: 30, fire: 750, ammo: '9mm', magStd: 16, magExt: 32 },
+  'Hi-Point': { damage: 32, fire: 400, ammo: '.45 ACP', magStd: 8, magExt: 16 },
+  'Tec-9': { damage: 25, fire: 1000, ammo: '9mm', magStd: 20, magExt: 40 },
+  'MAC-10': { damage: 27, fire: 1090, ammo: '.45 ACP', magStd: 30, magExt: 50 },
+  'Micro UZI': { damage: 25, fire: 1200, ammo: '9mm', magStd: 25, magExt: 50 },
+  'Skorpion': { damage: 23, fire: 1100, ammo: '.32 ACP', magStd: 20, magExt: 40 },
+  'MP5': { damage: 26, fire: 800, ammo: '9mm', magStd: 30, magExt: 60 },
+  'UMP45': { damage: 30, fire: 600, ammo: '.45 ACP', magStd: 25, magExt: 50 },
+  'P90': { damage: 22, fire: 900, ammo: '5.7x28', magStd: 50, magExt: 100 },
+  'AK-47': { damage: 36, fire: 600, ammo: '7.62x39', magStd: 30, magExt: 75 },
+  'AR-15': { damage: 38, fire: 700, ammo: '5.56x45', magStd: 30, magExt: 60 },
+  'M4A1': { damage: 36, fire: 800, ammo: '5.56x45', magStd: 30, magExt: 60 },
+  'Kriss Vector': { damage: 34, fire: 1200, ammo: '.45 ACP', magStd: 25, magExt: 50 },
+  'ACR': { damage: 40, fire: 750, ammo: '5.56x45', magStd: 30, magExt: 60 }
+};
+
+/* ---------- Item lists with categories (Option 2: simple categories) ---------- */
 const ITEMS = {
   tier1: [
-    {name:'Ghost Glock 17', rarity:'common', img:IMAGES['Ghost Glock 17']},
-    {name:'Glock 19', rarity:'common', img:IMAGES['Glock 19']},
-    {name:'Glock 20', rarity:'common', img:IMAGES['Glock 20']},
-    {name:'Beretta M9', rarity:'uncommon', img:IMAGES['Beretta M9']},
-    {name:'MAC-10', rarity:'rare', img:IMAGES['MAC-10']},
-    {name:'MP9', rarity:'common', img:IMAGES['MP9']},
-    {name:'G23', rarity:'uncommon', img:IMAGES['G23']},
-    {name:'FNX-45', rarity:'epic', img:IMAGES['FNX-45']}
+    { name:'Ghost Glock 17', rarity:'common', category:'Pistols', img:IMAGES['Ghost Glock 17'] || FALLBACK },
+    { name:'Glock 19', rarity:'common', category:'Pistols', img:IMAGES['Glock 19'] || FALLBACK },
+    { name:'Glock 20', rarity:'common', category:'Pistols', img:IMAGES['Glock 20'] || FALLBACK },
+    { name:'Beretta M9', rarity:'uncommon', category:'Pistols', img:IMAGES['Beretta M9'] || FALLBACK },
+    { name:'MAC-10', rarity:'rare', category:'SMG', img:IMAGES['MAC-10'] || FALLBACK },
+    { name:'MP5', rarity:'rare', category:'SMG', img:IMAGES['MP5'] || FALLBACK },
+    { name:'UMP45', rarity:'rare', category:'SMG', img:IMAGES['UMP45'] || FALLBACK },
+    { name:'Micro UZI', rarity:'rare', category:'SMG', img:IMAGES['Micro UZI'] || FALLBACK },
+    { name:'Skorpion', rarity:'rare', category:'SMG', img:IMAGES['Skorpion'] || FALLBACK },
+    { name:'P90', rarity:'epic', category:'SMG', img:IMAGES['P90'] || FALLBACK },
+    { name:'FNX-45', rarity:'epic', category:'Pistols', img:FALLBACK }
   ],
   tier2: [
-    {name:'AK-47', rarity:'epic', img:IMAGES['AK-47']},
-    {name:'M4A1', rarity:'epic', img:IMAGES['M4A1']}
+    { name:'AK-47', rarity:'epic', category:'ARs', img:IMAGES['AK-47'] || FALLBACK },
+    { name:'M4A1', rarity:'epic', category:'ARs', img:IMAGES['M4A1'] || FALLBACK },
+    { name:'AR-15', rarity:'rare', category:'ARs', img:IMAGES['AR-15'] || FALLBACK },
+    { name:'ACR', rarity:'legendary', category:'ARs', img:IMAGES['ACR'] || FALLBACK }
   ],
   attachments: [
-    {name:'Extended Mag', rarity:'rare', img:FALLBACK},
-    {name:'Flashlight', rarity:'uncommon', img:FALLBACK}
+    { name:'Extended Magazine', rarity:'rare', category:'Mags', img:FALLBACK },
+    { name:'Flashlight', rarity:'uncommon', category:'Mags', img:FALLBACK }
   ],
   drugs: [
-    {name:'RP 10', rarity:'common', img:FALLBACK},
-    {name:'RP 20', rarity:'rare', img:FALLBACK}
+    { name:'RP 10', rarity:'common', category:'Common', img:FALLBACK },
+    { name:'RP 20', rarity:'rare', category:'Rare', img:FALLBACK }
   ]
 };
 
-/* default weights from your config earlier */
+/* ---------- weights (from your config earlier) ---------- */
 const DEFAULT_WEIGHTS = {
   tier1: { common:35, uncommon:40, rare:25, epic:10 },
   tier2: { rare:50, epic:40, legendary:10 },
@@ -356,27 +341,22 @@ const DEFAULT_WEIGHTS = {
   drugs: { common:35, uncommon:25, rare:25, epic:15 }
 };
 
-/* ---------- State & refs ---------- */
-let activeTab = 'tier1';
-let selectedSub = null;
-const itemGrid = document.getElementById('itemGrid');
-const acquiredGrid = document.getElementById('acquiredGrid');
+/* ---------- DOM refs ---------- */
+const mainNav = document.getElementById('mainNav');
 const subtabsEl = document.getElementById('subtabs');
+const itemGrid = document.getElementById('itemGrid');
+const filterSelect = document.getElementById('filterSelect');
 const dropBtn = document.getElementById('dropBtn');
+const viewDropsBtn = document.getElementById('viewDropsBtn');
+const acquiredGrid = document.getElementById('acquiredGrid');
 const spinModal = document.getElementById('spinModal');
 const spinStrip = document.getElementById('spinStrip');
 const spinStartBtn = document.getElementById('spinStartBtn');
 const closeSpin = document.getElementById('closeSpin');
-const statsModal = document.getElementById('statsModal');
-const closeStats = document.getElementById('closeStats');
-const statsTitle = document.getElementById('statsTitle');
-const statsRarity = document.getElementById('statsRarity');
-const statsImg = document.getElementById('statsImg');
-const statsDetails = document.getElementById('statsDetails');
-const filterSelect = document.getElementById('filterSelect');
-const mainNavCats = document.querySelectorAll('.topnav .cat');
+const musicToggle = document.getElementById('musicToggle');
+const musicLabel = document.getElementById('musicLabel');
+const bgm = document.getElementById('bgm');
 
-/* admin */
 const adminToggle = document.getElementById('adminToggle');
 const adminPanel = document.getElementById('adminPanel');
 const saveAdminBtn = document.getElementById('saveAdminBtn');
@@ -385,316 +365,324 @@ const adminWebhook = document.getElementById('adminWebhook');
 const adminUptime = document.getElementById('adminUptime');
 const adminPrices = document.getElementById('adminPrices');
 
-const bgm = document.getElementById('bgm');
+const statsModal = document.getElementById('statsModal');
+const statsTitle = document.getElementById('statsTitle');
+const statsImg = document.getElementById('statsImg');
+const statsRarity = document.getElementById('statsRarity');
+const statsDetails = document.getElementById('statsDetails');
+const closeStats = document.getElementById('closeStats');
 
-/* audio context for SFX */
-const audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext||window.webkitAudioContext)() : null;
+let activeTab = 'tier1';
+let activeSub = 'Pistols';
+let acquired = [];
+let spinning = false;
 
-/* ---------- Utilities ---------- */
-function tick(ms){ return new Promise(res => setTimeout(res, ms)); }
+/* ---------- small helpers ---------- */
+function tick(ms){ return new Promise(r=> setTimeout(r,ms)); }
 function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+function clamp(n,a,b){ return Math.max(a,Math.min(b,n)); }
 
-/* ---------- Storage helpers ---------- */
-function loadConfig(){
-  try{ return JSON.parse(localStorage.getItem('qc_cfg')) || {}; }catch(e){return {}}
-}
-function saveConfig(cfg){
-  localStorage.setItem('qc_cfg', JSON.stringify(cfg));
-}
-function getWeights(){ const cfg = loadConfig(); return cfg.weights || DEFAULT_WEIGHTS; }
-function setWeights(w){ const cfg = loadConfig(); cfg.weights = w; saveConfig(cfg); }
+/* ---------- config storage ---------- */
+function loadCfg(){ try{ return JSON.parse(localStorage.getItem('qc_cfg')||'{}')}catch(e){return{}} }
+function saveCfg(c){ localStorage.setItem('qc_cfg', JSON.stringify(c)); }
+function getWeights(){ const c = loadCfg(); return c.weights || DEFAULT_WEIGHTS; }
+function setWeights(w){ const c = loadCfg(); c.weights = w; saveCfg(c); }
 
-/* ---------- Admin logic (simple password from user) ---------- */
+/* ---------- admin (client-side) ---------- */
 const ADMIN_PASS = 'Qacti';
 function isAdmin(){ return sessionStorage.getItem('qc_admin') === '1'; }
-function setAdmin(flag){ if(flag) sessionStorage.setItem('qc_admin','1'); else sessionStorage.removeItem('qc_admin'); adminPanel.style.display = flag ? 'block' : 'none'; }
+function setAdmin(flag){ if(flag) sessionStorage.setItem('qc_admin','1'); else sessionStorage.removeItem('qc_admin'); adminPanel.style.display = flag ? 'block':'none'; }
 adminToggle.addEventListener('click', ()=>{
-  if(isAdmin()){ adminPanel.classList.toggle('open'); adminPanel.style.display = adminPanel.style.display === 'block' ? 'none':'block'; return; }
-  const p = prompt('Enter admin password:'); if(p === ADMIN_PASS){ setAdmin(true); alert('Admin granted'); loadAdmin(); } else alert('Wrong password'); 
+  if(isAdmin()){ adminPanel.style.display = adminPanel.style.display === 'block' ? 'none':'block'; return; }
+  const p = prompt('Enter admin password:'); if(p === ADMIN_PASS){ setAdmin(true); loadAdmin(); alert('Admin ON'); } else alert('Wrong password');
 });
 logoutAdminBtn.addEventListener('click', ()=> { setAdmin(false); adminPanel.style.display = 'none'; alert('Logged out'); });
-
-function loadAdmin(){
-  const cfg = loadConfig();
-  adminWebhook.value = cfg.webhook || '';
-  adminUptime.value = cfg.uptime || '';
-  adminPrices.value = cfg.prices || '';
-}
-saveAdminBtn.addEventListener('click', ()=>{
+saveAdminBtn.addEventListener('click', ()=> {
   if(!isAdmin()){ alert('Admin only'); return; }
-  const cfg = loadConfig();
-  cfg.webhook = adminWebhook.value.trim();
-  cfg.uptime = adminUptime.value.trim();
-  cfg.prices = adminPrices.value.trim();
-  saveConfig(cfg);
-  alert('Saved');
-  loadAdmin();
+  const cfg = loadCfg(); cfg.webhook = adminWebhook.value.trim(); cfg.uptime = adminUptime.value.trim(); cfg.prices = adminPrices.value.trim(); saveCfg(cfg); alert('Saved');
 });
 
-/* ---------- Rendering functions ---------- */
-function clearActiveMain(){
-  mainNavCats.forEach(c=> c.classList.remove('active'));
-}
-function renderSubtabsFor(tab){
+/* ---------- subtab sets for Option 2 (simple categories) ---------- */
+const SUBTABS = {
+  tier1: ['All','Pistols','SMG','ARs','Specials'],
+  tier2: ['All','ARs','Snipers','LMGs'],
+  attachments: ['All','Mags','Optics','Other'],
+  drugs: ['All','Common','Rare']
+};
+
+/* ---------- rendering subtabs ---------- */
+function renderSubtabs(tab){
   subtabsEl.innerHTML = '';
-  // Example subtabs per category (customize as needed)
-  const data = {
-    tier1: ['All','Pistols','SMG','Special'],
-    tier2: ['All','Rifles','Snipers'],
-    attachments: ['All','Mags','Bars','Optics'],
-    drugs: ['All','Common','Rare']
-  };
-  const arr = data[tab] || ['All'];
+  const arr = SUBTABS[tab] || ['All'];
   arr.forEach((s,i)=>{
     const el = document.createElement('div');
-    el.className = 'sub' + (i===0 ? ' active' : '');
+    el.className = 'sub' + (i===0 ? ' active':'' );
     el.textContent = s;
-    el.dataset.sub = s.toLowerCase().replace(/\s+/g,'_');
-    el.addEventListener('click', ()=> {
+    el.dataset.sub = s;
+    el.addEventListener('click', ()=>{
       document.querySelectorAll('.subtabs .sub').forEach(x=> x.classList.remove('active'));
       el.classList.add('active');
-      selectedSub = el.dataset.sub;
+      activeSub = s;
       renderGrid();
     });
     subtabsEl.appendChild(el);
   });
-  selectedSub = arr[0].toLowerCase().replace(/\s+/g,'_');
+  activeSub = arr[0];
 }
 
-/* return items for activeTab filtered by rarity/subtab */
-function itemsForActive(){
-  const all = ITEMS[activeTab] || [];
+/* ---------- items filtering ---------- */
+function itemsForTab(tab){
+  const arr = (ITEMS[tab]||[]).slice();
   const filter = filterSelect.value;
-  let res = all.slice();
-  if(filter && filter !== 'all') res = res.filter(i=> i.rarity === filter);
-  // subtab filter (basic demo — user may customize)
-  if(selectedSub && selectedSub !== 'all' && selectedSub !== 'all'){
-    // for example sub names like 'pistols' - we do not have categories on items, skip advanced filtering
-    // keep as-is (future: add category fields to ITEMS)
+  let res = arr;
+  if(filter !== 'all') res = res.filter(i=> i.rarity === filter);
+  if(activeSub && activeSub !== 'All'){
+    // match by category (some items might have different category strings)
+    res = res.filter(i=> {
+      if(!i.category) return true;
+      const cat = i.category.toLowerCase();
+      return (activeSub.toLowerCase() === cat) || (activeSub.toLowerCase() === 'smg' && cat.includes('smg')) || (activeSub.toLowerCase() === 'pistols' && cat.includes('pist'));
+    });
   }
   return res;
 }
 
+/* ---------- create card (with stats inside) ---------- */
 function createCard(item){
-  const c = document.createElement('div');
-  c.className = 'card';
-  c.innerHTML = `
-    <div class="name">${item.name}</div>
-    <div class="img-wrap"><img src="${item.img || FALLBACK}" alt="${item.name}"></div>
-    <div class="badge">${(item.rarity || 'COMMON').toUpperCase()}</div>
+  const s = WEAPON_STATS[item.name] || {};
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    <div class="top-row"><div class="name">${item.name}</div></div>
+    <div class="img-wrap"><img loading="lazy" src="${item.img}" alt="${item.name}" onerror="this.src='${FALLBACK}'"></div>
+    <div class="stats-row">
+      <div class="stats-block"><div style="font-size:11px;color:var(--muted)">DMG</div><div style="font-weight:900">${s.damage ?? '-'}</div></div>
+      <div class="stats-block"><div style="font-size:11px;color:var(--muted)">FIRE</div><div style="font-weight:900">${s.fire ?? '-'}</div></div>
+      <div class="stats-block"><div style="font-size:11px;color:var(--muted)">AMMO</div><div style="font-weight:900">${s.ammo ?? '-'}</div></div>
+      <div class="stats-block"><div style="font-size:11px;color:var(--muted)">MAG</div><div style="font-weight:900">${s.magStd ?? '-'} / ${s.magExt ?? '-'}</div></div>
+    </div>
+    <div class="badge">${(item.rarity||'common').toUpperCase()}</div>
   `;
-  c.addEventListener('click', ()=> openItemModal(item));
-  return c;
+  el.addEventListener('click', ()=> openCardDetails(item));
+  return el;
 }
 
+/* ---------- render weapon grid ---------- */
 function renderGrid(){
+  const nodes = itemsForTab(activeTab);
   itemGrid.innerHTML = '';
-  const arr = itemsForActive();
-  arr.forEach(it=> {
-    itemGrid.appendChild(createCard(it));
-  });
+  if(activeTab === 'turf'){
+    // show turf placeholder
+    itemGrid.innerHTML = `<div style="grid-column:1/-1"><div class="turf-map" id="turfMapArea"><div style="text-align:center;color:var(--muted);font-weight:900">Turf Map Placeholder</div></div></div>`;
+    return;
+  }
+  nodes.forEach(it => itemGrid.appendChild(createCard(it)));
 }
 
-/* ---------- Modals ---------- */
-function openItemModal(item){
+/* ---------- open card details (small modal) ---------- */
+function openCardDetails(item){
   statsTitle.textContent = item.name;
-  statsRarity.textContent = (item.rarity || 'common').toUpperCase();
+  statsRarity.textContent = (item.rarity||'common').toUpperCase();
   statsImg.src = item.img || FALLBACK;
-  statsDetails.innerHTML = `<div style="color:var(--muted)">Rarity: ${(item.rarity||'common').toUpperCase()}</div>`;
-  statsModal.classList.add('open');
-  statsModal.style.display = 'flex';
+  const s = WEAPON_STATS[item.name] || {};
+  statsDetails.innerHTML = `
+    <div style="font-weight:900">${item.name}</div>
+    <div style="color:var(--muted); margin-top:8px;">
+      Damage: ${s.damage ?? '-'}<br>
+      Fire Rate: ${s.fire ? s.fire + ' RPM' : '-'}<br>
+      Ammo: ${s.ammo ?? '-'}<br>
+      Magazine: ${s.magStd ?? '-'} (Ext ${s.magExt ?? '-'})
+    </div>
+  `;
+  statsModal.classList.add('open'); statsModal.style.display = 'flex';
 }
-closeStats.addEventListener('click', ()=> { statsModal.classList.remove('open'); statsModal.style.display = 'none'; });
-document.getElementById('statsModal').addEventListener('click', (e)=> { if(e.target.id === 'statsModal'){ statsModal.classList.remove('open'); statsModal.style.display = 'none'; } });
+closeStats.addEventListener('click', ()=> { statsModal.classList.remove('open'); statsModal.style.display='none'; });
+document.getElementById('statsModal').addEventListener('click', (e)=> { if(e.target.id === 'statsModal'){ statsModal.classList.remove('open'); statsModal.style.display='none'; } });
 
-/* ---------- Spinner modal (DROP) ---------- */
-function openSpinModal(){
-  spinStrip.innerHTML = '';
-  spinModal.classList.add('open');
-  spinModal.style.display = 'flex';
-  renderSpinStrip(activeTab);
-}
-function closeSpinModal(){ spinModal.classList.remove('open'); spinModal.style.display = 'none'; }
-
-dropBtn.addEventListener('click', ()=> openSpinModal());
-document.getElementById('viewDropListBtn').addEventListener('click', ()=> {
-  if(acquiredGrid.children.length === 0) alert('No drops yet'); else window.scrollTo({ top: document.querySelector('.acquired-heading').offsetTop - 60, behavior:'smooth' });
+/* ---------- navigation wiring ---------- */
+document.querySelectorAll('.topnav .cat').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.topnav .cat').forEach(x=> x.classList.remove('active'));
+    el.classList.add('active');
+    activeTab = el.dataset.tab;
+    renderSubtabs(activeTab);
+    renderGrid();
+    // show turf content differently
+    if(activeTab === 'turf'){
+      document.getElementById('contentArea').innerHTML = `<div class="turf-map"><img src="images/turf_placeholder.png" onerror="this.style.filter='grayscale(.3)'; this.alt='Upload turf image to images/turf_placeholder.png';" style="max-width:100%; max-height:100%; object-fit:cover;"></div>`;
+    } else {
+      document.getElementById('contentArea').innerHTML = `<div class="grid-wrap"><div class="grid" id="itemGrid"></div></div>`;
+      // rebind itemGrid ref
+      window.requestAnimationFrame(()=> {
+        if(document.getElementById('itemGrid')) {
+          // update ref & re-render
+          itemGrid = document.getElementById('itemGrid');
+          renderGrid();
+        }
+      });
+    }
+  });
 });
 
-closeSpin.addEventListener('click', ()=> closeSpinModal());
+/* ---------- filter wiring ---------- */
+filterSelect.addEventListener('change', ()=> renderGrid());
 
-/* build visual spinner strip (pool for chosen tier) */
-function renderSpinStrip(tier){
-  spinStrip.innerHTML = '';
-  const pool = ITEMS[tier] ? ITEMS[tier].slice() : [];
-  // duplicate pool so there are many tiles
-  for(let i=0;i<40;i++){
-    const item = rand(pool) || { name:'Unknown', rarity:'common', img:FALLBACK };
-    const el = document.createElement('div');
-    el.style.minWidth = '140px';
-    el.style.height = '120px';
-    el.style.borderRadius = '12px';
-    el.style.overflow = 'hidden';
-    el.style.background = 'linear-gradient(180deg, rgba(0,0,0,.16), rgba(255,255,255,0))';
-    el.style.border = '1px solid rgba(255,255,255,.04)';
-    el.style.display = 'flex';
-    el.style.alignItems = 'center';
-    el.style.justifyContent = 'center';
-    el.style.flexDirection = 'column';
-    el.style.padding = '8px';
-    el.innerHTML = `<div style="font-weight:900; color:var(--muted); font-size:13px; margin-bottom:6px;">${item.name}</div><img src="${item.img || FALLBACK}" style="max-width:100%; max-height:64px; object-fit:contain;">`;
-    spinStrip.appendChild(el);
+/* ---------- music toggle functionality ---------- */
+function setMusicOn(on){
+  localStorage.setItem('qc_music_on', on ? '1' : '0');
+  if(on){
+    musicToggle.classList.add('on'); musicLabel.textContent = 'Music: On'; musicToggle.querySelector('i').className='fa-solid fa-volume-high';
+    bgm.play().catch(()=>{});
+  } else {
+    musicToggle.classList.remove('on'); musicLabel.textContent = 'Music: Off'; musicToggle.querySelector('i').className='fa-solid fa-volume-xmark';
+    bgm.pause();
   }
 }
+musicToggle.addEventListener('click', ()=>{
+  const on = localStorage.getItem('qc_music_on') === '1';
+  setMusicOn(!on);
+});
+// start music after user interacts (autoplay rules)
+function enableBGM(){
+  function start(){ if(bgm){ bgm.play().catch(()=>{}); } document.removeEventListener('click', start); document.removeEventListener('touchstart', start); }
+  document.addEventListener('click', start); document.addEventListener('touchstart', start);
+}
+enableBGM();
+const musicPref = localStorage.getItem('qc_music_on');
+setTimeout(()=> setMusicOn(musicPref !== '0'), 120);
 
-/* pick rarity using weights */
+/* ---------- spinner modal (DROP) ---------- */
+function openSpinModal(){
+  spinStrip.innerHTML = '';
+  spinModal.classList.add('open'); spinModal.style.display='flex';
+  // build visual strip from current activeTab pool
+  const pool = (ITEMS[activeTab]||[]).slice();
+  if(pool.length === 0){ spinStrip.innerHTML = '<div style="color:var(--muted)">No items in this category.</div>'; return; }
+  for(let i=0;i<40;i++){
+    const it = rand(pool);
+    const tile = document.createElement('div');
+    tile.style.minWidth='140px'; tile.style.height='120px'; tile.style.borderRadius='10px'; tile.style.overflow='hidden';
+    tile.style.background='linear-gradient(180deg, rgba(0,0,0,.16), rgba(255,255,255,0))'; tile.style.border='1px solid rgba(255,255,255,.04)';
+    tile.style.display='flex'; tile.style.flexDirection='column'; tile.style.alignItems='center'; tile.style.justifyContent='center';
+    tile.style.padding='8px'; tile.innerHTML = `<div style="font-weight:900;color:var(--muted);margin-bottom:6px;">${it.name}</div><img src="${it.img}" style="max-width:100%; max-height:64px; object-fit:contain" onerror="this.src='${FALLBACK}'">`;
+    spinStrip.appendChild(tile);
+  }
+}
+dropBtn.addEventListener('click', openSpinModal);
+viewDropsBtn.addEventListener('click', ()=> {
+  if(acquired.length===0) alert('No drops yet'); else window.scrollTo({ top: document.querySelector('.acquired-heading').offsetTop - 60, behavior:'smooth' });
+});
+closeSpin.addEventListener('click', ()=> { spinModal.classList.remove('open'); spinModal.style.display='none'; });
+
 function pickRarity(weights){
   const entries = Object.entries(weights).filter(([k,v])=> Number(v) > 0);
   const total = entries.reduce((s,[_k,v])=> s + Number(v), 0);
-  const r = Math.random() * total;
-  let acc = 0;
+  const r = Math.random() * total; let acc = 0;
   for(const [k,v] of entries){ acc += Number(v); if(r <= acc) return k; }
   return entries[entries.length-1][0];
 }
-
-/* pick item based on configured weights */
-function pickWeightedItem(tierKey){
+function pickWeightedItem(tabKey){
   const w = getWeights();
-  const weights = w[tierKey] || DEFAULT_WEIGHTS[tierKey] || DEFAULT_WEIGHTS.tier1;
+  const weights = w[tabKey] || DEFAULT_WEIGHTS[tabKey] || DEFAULT_WEIGHTS.tier1;
   const rarity = pickRarity(weights);
-  const pool = (ITEMS[tierKey] || []).filter(i=> i.rarity === rarity);
+  const pool = (ITEMS[tabKey]||[]).filter(i=> i.rarity === rarity);
   if(pool.length) return rand(pool);
-  // fallback pick from any
   const all = [].concat(...Object.values(ITEMS));
   return rand(all);
 }
 
-/* run spin animation by moving first child to end repeatedly (visual) */
-let spinning = false;
 spinStartBtn.addEventListener('click', async ()=>{
   if(spinning) return;
   spinning = true;
-  playSFX('spin');
-  // determine shift count
+  // simple visual shift animation
   const shifts = 48 + Math.floor(Math.random()*46);
   for(let i=0;i<shifts;i++){
     if(spinStrip.firstElementChild) spinStrip.appendChild(spinStrip.firstElementChild);
-    const progress = i / shifts;
-    const delay = 20 + Math.pow(progress,2) * 520;
+    const progress = i/shifts;
+    const delay = 18 + Math.pow(progress,2)*520;
     await tick(delay);
   }
-  // determine weighted pick then add to acquired list
   const picked = pickWeightedItem(activeTab);
   addAcquired(picked);
-  // display picked in modal briefly using the center element
+  sendWebhook({ action:'spin', tier: activeTab, result: picked.name, rarity: picked.rarity, ts: new Date().toISOString() });
+  // highlight audible feedback
   playSFX('win');
-  sendWebhookLog({ action:'spin', tier:activeTab, result:picked.name, rarity:picked.rarity, ts:new Date().toISOString() });
-  spinning = false;
-  // close modal after a short delay
-  setTimeout(()=> closeSpinModal(), 1400);
+  // close modal after short pause
+  setTimeout(()=> { spinModal.classList.remove('open'); spinModal.style.display='none'; spinning = false; }, 1200);
 });
 
-/* add acquired to list */
+/* ---------- add acquired to UI ---------- */
 function addAcquired(item){
+  acquired.unshift(item);
   const card = document.createElement('div');
   card.className = 'drop-card';
-  card.style.display = 'flex';
-  card.style.alignItems = 'center';
-  card.style.gap = '10px';
-  card.style.padding = '8px';
-  card.style.borderRadius = '10px';
-  card.style.border = '1px solid rgba(255,255,255,.04)';
-  card.style.background = 'linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0))';
-  card.innerHTML = `<img src="${item.img || FALLBACK}" style="width:56px;height:56px;object-fit:contain;border-radius:8px;"><div><div style="font-weight:900">${item.name}</div><div style="color:var(--muted);font-size:12px;">${(item.rarity||'common').toUpperCase()}</div></div>`;
-  card.addEventListener('click', ()=> openItemModal(item));
+  card.style.display='flex'; card.style.gap='10px'; card.style.alignItems='center'; card.style.padding='8px'; card.style.borderRadius='10px';
+  card.style.border='1px solid rgba(255,255,255,.04)'; card.style.background='linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0))';
+  card.innerHTML = `<img src="${item.img}" style="width:56px;height:56px;object-fit:contain;border-radius:8px;" onerror="this.src='${FALLBACK}'"><div><div style="font-weight:900">${item.name}</div><div style="color:var(--muted);font-size:12px">${(item.rarity||'common').toUpperCase()}</div></div>`;
+  card.addEventListener('click', ()=> openCardDetails(item));
   acquiredGrid.prepend(card);
+  while(acquiredGrid.children.length > 120) acquiredGrid.removeChild(acquiredGrid.lastChild);
 }
 
-/* ---------- filter and tab wiring ---------- */
-filterSelect.addEventListener('change', ()=> renderGrid());
-
-document.querySelectorAll('.topnav .cat').forEach(el => {
-  el.addEventListener('click', ()=> {
-    document.querySelectorAll('.topnav .cat').forEach(x=> x.classList.remove('active'));
-    el.classList.add('active');
-    activeTab = el.dataset.tab;
-    renderSubtabsFor(activeTab);
-    renderGrid();
-  });
-});
-
-/* initialize default */
-renderSubtabsFor(activeTab);
-renderGrid();
-
-/* ---------- Sound / BGM ---------- */
-function playTone(freq,len=0.1,type='sine',gain=0.06){
+/* ---------- sound effects ---------- */
+const audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext||window.webkitAudioContext)() : null;
+function playTone(freq,len=0.08,type='sine',gain=0.06){
   if(!audioCtx) return;
   try{
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
-    o.type = type; o.frequency.value = freq;
-    o.connect(g); g.connect(audioCtx.destination);
-    g.gain.value = 0; const now = audioCtx.currentTime;
-    g.gain.linearRampToValueAtTime(gain, now + 0.01);
-    o.start(now);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + len);
-    o.stop(now + len + 0.02);
-  }catch(e){}
+    o.type = type; o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination);
+    const now = audioCtx.currentTime; g.gain.value = 0; g.gain.linearRampToValueAtTime(gain, now + 0.01);
+    o.start(now); g.gain.exponentialRampToValueAtTime(0.0001, now + len); o.stop(now + len + 0.02);
+  } catch(e){}
 }
 function playSFX(name){
   if(!audioCtx) return;
   if(audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
   if(name === 'click') playTone(880,0.06,'square',0.05);
-  if(name === 'spin') playTone(240,0.14,'sawtooth',0.12);
+  if(name === 'spin') playTone(240,0.12,'sawtooth',0.12);
   if(name === 'win'){ playTone(880,0.08,'sine',0.12); setTimeout(()=>playTone(1320,0.12,'sine',0.11),120); setTimeout(()=>playTone(1760,0.16,'sine',0.09),260); }
 }
 
-/* enable bgm after first user gesture (autoplay rules) */
-function enableBGM(){
-  function start(){
-    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-    bgm.play().catch(()=>{});
-    document.removeEventListener('click', start); document.removeEventListener('touchstart', start);
-  }
-  document.addEventListener('click', start);
-  document.addEventListener('touchstart', start);
-}
-enableBGM();
-
-/* ---------- Webhook logging (client-side) ---------- */
-function sendWebhookLog(payload){
-  const cfg = loadConfig();
+/* ---------- webhooks ---------- */
+function sendWebhook(payload){
+  const cfg = loadCfg();
   const webhook = cfg.webhook || '';
   if(!webhook) return;
-  fetch(webhook, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ content: `Quaker | ${payload.action} → ${payload.result||''} (${payload.rarity||''}) — ${payload.ts||''}` })
-  }).catch(e=> console.warn('webhook fail', e));
+  fetch(webhook, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ content: `Quaker | ${payload.action} → ${payload.result||''} (${payload.rarity||''}) — ${payload.ts||''}` }) })
+    .catch(e=> console.warn('webhook fail', e));
 }
 
-/* ---------- load/save config on startup ---------- */
-function loadStartup(){
-  const cfg = loadConfig();
+/* ---------- startup ---------- */
+function init(){
+  renderSubtabs(activeTab);
+  renderGrid();
+  const cfg = loadCfg();
   if(cfg.webhook) adminWebhook.value = cfg.webhook;
   if(cfg.uptime) adminUptime.value = cfg.uptime;
   if(cfg.prices) adminPrices.value = cfg.prices;
   document.getElementById('lastUpdated').textContent = 'Last updated: ' + new Date().toLocaleString();
+  // music preference
+  const mp = localStorage.getItem('qc_music_on');
+  setTimeout(()=> setMusicOn(mp !== '0'), 60);
+  console.log('Quaker City UI ready. Admin password (client-side):', ADMIN_PASS);
 }
-loadStartup();
+function setMusicOn(on){
+  localStorage.setItem('qc_music_on', on ? '1':'0');
+  if(on){ musicToggle.classList.add('on'); musicLabel.textContent = 'Music: On'; musicToggle.querySelector('i').className='fa-solid fa-volume-high'; bgm.play().catch(()=>{}); }
+  else { musicToggle.classList.remove('on'); musicLabel.textContent = 'Music: Off'; musicToggle.querySelector('i').className='fa-solid fa-volume-xmark'; bgm.pause(); }
+}
 
-/* ---------- small accessibility & debug ---------- */
-console.log('Quaker City contraband UI loaded. Admin password (client-side):', ADMIN_PASS);
+/* ensure first user gesture allows audio context */
+document.addEventListener('click', ()=> { if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{}); });
+init();
 
-/* allow closing spin modal by clicking overlay */
-document.getElementById('spinModal').addEventListener('click', (e)=> { if(e.target.id === 'spinModal') closeSpinModal(); });
+/* allow closing modals with ESC */
+document.addEventListener('keydown', (e)=> { if(e.key === 'Escape'){ document.querySelectorAll('.modal-overlay.open').forEach(m=>{ m.classList.remove('open'); m.style.display='none'; }); } });
 
-/* allow ESC to close modals */
-document.addEventListener('keydown', (e)=> {
-  if(e.key === 'Escape'){ if(document.getElementById('spinModal').classList.contains('open')) closeSpinModal(); if(document.getElementById('statsModal').classList.contains('open')) { statsModal.classList.remove('open'); statsModal.style.display='none'; } }
-});
+// small accessibility: close modals by clicking backdrop
+document.querySelectorAll('.modal-overlay').forEach(m=> m.addEventListener('click', (e)=> { if(e.target === m){ m.classList.remove('open'); m.style.display='none'; } }));
+
 </script>
 </body>
 </html>
