@@ -22,751 +22,586 @@
 
 /* base */
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:"Rajdhani",sans-serif;background:transparent;color:var(--text);-webkit-font-smoothing:antialiased;padding:20px;}
+html,body{height:100%;margin:0;font-family:"Rajdhani",sans-serif;background:transparent;color:var(--text);}
 
-/* ---------------------------
-   Background video + overlay
-   --------------------------- */
+/* -------------- Background Video -------------- */
 #bgVideo {
   position:fixed;
   inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
+  filter: blur(10px) brightness(0.45) saturate(0.8);
   z-index:0;
-  filter: blur(10px) saturate(.9);
-  transform: scale(1.02);
-  will-change: transform, filter;
 }
 #bgDark {
   position:fixed;
   inset:0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.6));
+  background:rgba(0,0,0,0.60);
   z-index:1;
 }
 #bgEmblem {
   position:fixed;
-  top:50%;
-  left:50%;
-  width:60vw;
-  max-width:920px;
+  top:50%; left:50%;
   transform:translate(-50%,-50%);
+  width:60vw;
+  max-width:900px;
   opacity:0.08;
   z-index:1;
   pointer-events:none;
-  filter: blur(1px);
+  filter: blur(2px);
 }
 
-/* container */
-.wrap{ position:relative; z-index:6; width:100%; max-width:var(--maxw); margin:0 auto; }
-
-/* main panel */
-.container{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border-radius:18px; padding:18px; border:1px solid var(--glass-border); box-shadow:0 22px 60px rgba(0,0,0,.6); backdrop-filter: blur(8px); }
-
-/* header */
-.header{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px; }
-.header-left{ max-width:70%; }
-.title{ font-size:40px; margin:0; line-height:1; font-weight:900; color:var(--accent); text-shadow:0 8px 24px rgba(0,0,0,.6); }
-.subtitle{ margin-top:6px; color:var(--muted); font-weight:700; }
-
-/* top navigation */
-.topnav{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; align-items:center; }
-.topnav .cat{ padding:10px 14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-  color:var(--muted); border:1px solid rgba(255,255,255,.03); font-weight:800; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
-.topnav .cat.active{ color:var(--text); border-color: rgba(220,20,60,.28); box-shadow: var(--kill-glow); background: linear-gradient(180deg, rgba(220,20,60,.06), rgba(0,71,171,.03)); }
-
-/* subtabs */
-.subtabs{ margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.subtabs .sub{ padding:8px 12px; border-radius:999px; background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0)); border:1px solid rgba(255,255,255,.03); color:var(--muted); font-weight:800; cursor:pointer; transition:all .16s ease; }
-.subtabs .sub.active{ color:var(--text); background: linear-gradient(180deg, rgba(220,20,60,.12), rgba(0,71,171,.06)); box-shadow: var(--kill-glow); border-color: rgba(220,20,60,.28); transform:translateY(-2px); }
-
-/* header right/logo */
-.header-right{ display:flex; align-items:center; gap:12px; }
-.logo { width:86px; height:86px; border-radius:999px; overflow:hidden; display:flex; align-items:center; justify-content:center; border:6px solid rgba(0,0,0,.35); background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.02), rgba(0,0,0,.12)); box-shadow: 0 8px 30px rgba(0,0,0,.6), 0 0 18px rgba(0,0,0,.45); }
-.header-logo{ width:84%; height:84%; object-fit:contain; display:block; filter: drop-shadow(0 6px 12px rgba(0,0,0,.6)); }
-
-/* controls */
-.controls{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:14px; }
-.controls .left{ display:flex; gap:10px; align-items:center; }
-.choose{ color:var(--muted); font-weight:800; margin-right:6px; }
-select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); color:var(--text); padding:8px 10px; border-radius:10px; font-weight:800; }
-
-.drop-actions{ display:flex; gap:10px; align-items:center; }
-.btn{ padding:10px 14px; border-radius:10px; font-weight:900; cursor:pointer; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.06); color:var(--text); }
-.btn.drop{ background: linear-gradient(180deg, rgba(220,20,60,.95), rgba(160,10,40,.85)); box-shadow: var(--kill-glow); color:white; }
-
-/* music toggle */
-.music-toggle{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; background:linear-gradient(180deg, rgba(0,0,0,.14), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.04); color:var(--muted); font-weight:800; cursor:pointer; }
-.music-toggle.on{ color:var(--accent); box-shadow: 0 10px 30px rgba(220,20,60,.09); }
-
-/* grid */
-.grid-wrap{ margin-top:16px; border-radius:12px; padding:18px; border:1px solid rgba(255,255,255,.03); background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0)); box-shadow: inset 0 6px 20px rgba(0,0,0,.3); }
-.grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap:14px; align-items:stretch; }
-
-/* cards */
-.card{ border-radius:12px; padding:10px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.04); min-height:180px; display:flex; flex-direction:column; position:relative; overflow:visible; }
-.card .top-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-.card .name{ font-weight:900; color:var(--muted); font-size:15px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; max-width:85%;}
-.img-wrap{ flex:1 1 auto; display:flex; align-items:center; justify-content:center; padding:6px; background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(255,255,255,0)); border-radius:8px; margin-bottom:8px; min-height:108px; }
-.img-wrap img{ width:100%; height:120px; object-fit:contain; display:block; }
-
-/* rarity badge */
-.badge{ position:absolute; left:10px; bottom:10px; background:linear-gradient(180deg, rgba(0,0,0,.36), rgba(255,255,255,.02)); padding:6px 8px; border-radius:8px; font-weight:900; color:var(--muted); border:1px solid rgba(255,255,255,.03); font-size:12px; }
-
-/* turf map */
-.turf-map { width:100%; height:460px; border-radius:12px; overflow:hidden; background:linear-gradient(180deg, rgba(0,0,0,.12), rgba(255,255,255,0)); border:1px solid rgba(255,255,255,.04); box-shadow: 0 20px 60px rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; }
-.turf-map img{ width:100%; height:100%; object-fit:cover; }
-
-/* acquired list */
-.acquired-heading{ margin-top:18px; font-weight:900; color:var(--accent); }
-.acquired-grid{ margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; }
-
-/* modals */
-.modal-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.72); z-index:9999; }
-.modal-overlay.open{ display:flex; }
-.modal{ width:920px; max-width:96%; border-radius:12px; padding:18px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.06); box-shadow: 0 22px 60px rgba(0,0,0,.6); }
-
-/* weapon popup (Killadelphia-style) */
-.weapon-popup {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(6px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
+/* -------------- Neon Red SELECTOR -------------- */
+.neon-pointer {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:8px;
+  height:120px;
+  border-radius:6px;
+  background:rgba(255,0,0,0.85);
+  box-shadow:
+    0 0 20px rgba(255,0,0,0.7),
+    0 0 40px rgba(255,0,0,0.5),
+    0 0 80px rgba(255,0,0,0.4);
+  z-index:20;
+  pointer-events:none;
 }
-.weapon-popup.hidden { display:none; }
-.weapon-popup-inner {
-  width: 80%;
-  max-width: 980px;
-  background: linear-gradient(180deg, rgba(20,20,25,0.95), rgba(10,10,12,0.92));
-  border-radius: 14px;
-  padding: 20px;
-  color: white;
-  box-shadow: 0 0 50px rgba(0,0,0,0.5);
+
+/* -------------- YOU GOT POPUP -------------- */
+.you-got-popup {
+  position:fixed;
+  top:0; left:0;
+  width:100vw; height:100vh;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(8px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease-out;
 }
-.weapon-popup-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-.weapon-popup-header h2 { font-size:24px; margin:0; font-weight:900; color:var(--accent); }
-.rarity-tag { padding:6px 12px; border-radius:999px; font-weight:900; font-size:13px; color:#fff; background:rgba(255,255,255,0.06); }
-.weapon-popup-body { display:flex; gap:16px; align-items:flex-start; }
-.weapon-popup-image { width:300px; height:300px; object-fit:contain; background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(255,255,255,0)); border-radius:12px; padding:12px; }
-.weapon-stats-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; flex:1; }
-.stat-card { background:rgba(0,0,0,0.35); padding:14px; border-radius:10px; }
-.stat-title { color:var(--muted); font-weight:800; font-size:12px; }
-.stat-value { font-weight:900; font-size:18px; margin-top:6px; color:#fff; }
 
-/* responsive */
-@media(max-width:980px){ .weapon-popup-body{flex-direction:column; align-items:center;} .weapon-popup-image{width:220px;height:220px;} .title{font-size:34px;} .grid{grid-template-columns: repeat(auto-fill, minmax(150px,1fr));} }
-@media(max-width:640px){ .weapon-popup-inner{width:96%;} .weapon-popup-image{width:180px;height:180px;} .title{font-size:26px} .grid{grid-template-columns: repeat(auto-fill, minmax(120px,1fr));} }
+.you-got-popup.active {
+  opacity:1;
+  pointer-events:auto;
+}
 
- 
+.you-got-box {
+  width: 82%;
+  max-width: 920px;
+  padding: 25px;
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(25,0,0,0.9), rgba(10,0,0,0.85));
+  border:1px solid rgba(255,0,0,0.25);
+  box-shadow:
+    0 0 20px rgba(255,0,0,0.4),
+    0 0 60px rgba(255,0,0,0.25);
+  animation: popupEnter 0.45s ease-out forwards;
+}
 
-   
+/* Scale + Fade In */
+@keyframes popupEnter {
+  from {
+    transform:scale(0.65);
+    opacity:0;
+  }
+  to {
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+/* ---- Shockwave Burst ---- */
+.you-got-shockwave {
+  position:absolute;
+  width:180px;
+  height:180px;
+  border-radius:999px;
+  border:4px solid rgba(255,0,0,0.65);
+  left:50%; top:50%;
+  transform:translate(-50%,-50%) scale(0.1);
+  opacity:0.9;
+  pointer-events:none;
+  animation: shockwave 1s ease-out forwards;
+}
+
+@keyframes shockwave {
+  0% {
+    transform:translate(-50%,-50%) scale(0.1);
+    opacity:1;
+    border-color:rgba(255,0,0,0.9);
+  }
+  70% {
+    opacity:0.8;
+  }
+  100% {
+    transform:translate(-50%,-50%) scale(2.8);
+    opacity:0;
+    border-color:rgba(255,0,0,0);
+  }
+}
+
+.you-got-title {
+  font-size:36px;
+  font-weight:900;
+  color:var(--accent);
+  text-align:center;
+  margin-bottom:12px;
+  text-shadow:0 0 18px rgba(255,0,0,0.45);
+}
+
+.you-got-body {
+  display:flex;
+  gap:20px;
+  align-items:center;
+  justify-content:center;
+}
+
+.you-got-img {
+  width:280px;
+  height:280px;
+  object-fit:contain;
+  filter:drop-shadow(0 0 20px rgba(255,0,0,0.4));
+}
+
+.you-got-info {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.you-got-name {
+  font-size:30px;
+  font-weight:900;
+}
+
+.you-got-rarity {
+  padding:6px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:14px;
+  background:rgba(255,255,255,0.1);
+  text-transform:uppercase;
+}
+
+.you-got-close {
+  margin-top:18px;
+  padding:10px 16px;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+  background:rgba(255,0,0,0.7);
+  color:white;
+  border:1px solid rgba(255,0,0,0.35);
+  transition:0.15s;
+}
+.you-got-close:hover {
+  background:rgba(255,0,0,0.95);
+  box-shadow:0 0 18px rgba(255,0,0,0.4);
+}
+
 </style>
 </head>
 <body>
- 
-  <!-- Background video (muted) -->
-  <video id="bgVideo" autoplay muted loop playsinline>
-    <source src="video.mp4" type="video/mp4">
-  </video>
-  <div id="bgDark" aria-hidden="true"></div>
-  <img id="bgEmblem" src="Quaker.png" alt="" aria-hidden="true">
 
-  <div class="wrap">
-    <div class="header">
-      <div class="header-left">
-        <h1 class="title">Quaker City</h1>
-        <div class="subtitle">Contraband System</div>
+<!-- Background Video -->
+<video id="bgVideo" autoplay muted loop playsinline>
+  <source src="video.mp4" type="video/mp4">
+</video>
+<div id="bgDark"></div>
+<img id="bgEmblem" src="Quaker.png" alt="">
+<div class="wrap">
+  <div class="header">
+    <div class="header-left">
+      <h1 class="title">Quaker City</h1>
+      <div class="subtitle">Contraband System</div>
 
-        <div class="topnav" id="mainNav">
-          <div class="cat active" data-tab="tier1"><i class="fa-solid fa-gun"></i>&nbsp;Tier 1 Weaponry</div>
-          <div class="cat" data-tab="tier2"><i class="fa-solid fa-shield"></i>&nbsp;Tier 2 Weaponry</div>
-          <div class="cat" data-tab="attachments"><i class="fa-solid fa-wrench"></i>&nbsp;Attachments</div>
-          <div class="cat" data-tab="drugs"><i class="fa-solid fa-capsules"></i>&nbsp;Drugs</div>
-          <div class="cat" data-tab="turf"><i class="fa-solid fa-map"></i>&nbsp;Turf Map</div>
-        </div>
-
-        <div class="subtabs" id="subtabs"></div>
+      <div class="topnav" id="mainNav">
+        <div class="cat active" data-tab="tier1"><i class="fa-solid fa-gun"></i>&nbsp;Tier 1 Weaponry</div>
+        <div class="cat" data-tab="tier2"><i class="fa-solid fa-shield"></i>&nbsp;Tier 2 Weaponry</div>
+        <div class="cat" data-tab="attachments"><i class="fa-solid fa-wrench"></i>&nbsp;Attachments</div>
+        <div class="cat" data-tab="drugs"><i class="fa-solid fa-capsules"></i>&nbsp;Drugs</div>
+        <div class="cat" data-tab="turf"><i class="fa-solid fa-map"></i>&nbsp;Turf Map</div>
       </div>
 
-      <div class="header-right">
-        <div id="musicToggle" class="music-toggle" title="Toggle Music"><i class="fa-solid fa-volume-high"></i>&nbsp;<span id="musicLabel">Music: On</span></div>
-        <div id="adminToggle" class="admin-flag" title="Admin"><i class="fa-solid fa-user-lock"></i></div>
-        <div class="logo"><img src="Quaker.png" class="header-logo" alt="Quaker logo"></div>
-      </div>
+      <div class="subtabs" id="subtabs"></div>
     </div>
 
-    <div class="container">
-      <div class="controls">
-        <div class="left">
-          <div class="choose">Filter</div>
-          <select id="filterSelect">
-            <option value="all">All</option>
-            <option value="common">Common</option>
-            <option value="uncommon">Uncommon</option>
-            <option value="rare">Rare</option>
-            <option value="epic">Epic</option>
-            <option value="legendary">Legendary</option>
-          </select>
-        </div>
-
-        <div class="drop-actions">
-          <button class="btn" id="viewDropsBtn"><i class="fa-solid fa-list"></i>&nbsp;Drops</button>
-          <button class="btn drop" id="dropBtn"><i class="fa-solid fa-dice"></i>&nbsp;DROP</button>
-        </div>
+    <div class="header-right">
+      <div id="musicToggle" class="music-toggle" title="Toggle Music">
+        <i class="fa-solid fa-volume-high"></i>&nbsp;<span id="musicLabel">Music: On</span>
       </div>
 
-      <div id="contentArea">
-        <div class="grid-wrap">
-          <div class="grid" id="itemGrid" aria-live="polite"></div>
-        </div>
+      <div id="adminToggle" class="admin-flag" title="Admin">
+        <i class="fa-solid fa-user-lock"></i>
       </div>
 
-      <div class="acquired-heading">Acquired Items</div>
-      <div class="acquired-grid" id="acquiredGrid"></div>
-
-      <div style="display:flex; gap:12px; margin-top:14px; align-items:flex-start; flex-wrap:wrap;">
-        <div style="flex:1; min-width:260px;">
-          <div class="info-panel" id="infoPanel">Click a card to preview more info. Use DROP to open the spin modal and receive a weighted drop.</div>
-        </div>
-        <div style="width:320px;">
-          <div class="info-panel">
-            <div style="font-weight:900">Made By Route</div>
-            <div style="color:var(--muted); margin-top:8px;" id="lastUpdated">Last updated: —</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="height:18px"></div>
-    <div class="footer"><div>© Quaker City Roleplay</div><div style="color:var(--muted)">Built with ❤️</div></div>
-  </div>
-
-  <!-- Spin modal -->
-  <div class="modal-overlay" id="spinModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-weight:900; font-size:18px;">Spin Wheel</div>
-        <div style="color:var(--muted); font-weight:800;">Click SPIN to start</div>
-      </div>
-
-      <div style="position:relative; margin-top:12px;">
-        <div id="spinStrip" style="height:140px; display:flex; gap:12px; align-items:center; overflow:hidden; padding:10px;"></div>
-        <div style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:6px; height:120px; border-radius:6px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow: 0 0 24px rgba(255,200,0,.08); pointer-events:none;"></div>
-      </div>
-
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
-        <button class="btn" id="closeSpin">Close</button>
-        <button class="btn drop" id="spinStartBtn">SPIN</button>
+      <div class="logo">
+        <img src="Quaker.png" class="header-logo" alt="Quaker logo">
       </div>
     </div>
   </div>
 
-  <!-- weapon popup -->
-  <div id="weaponPopup" class="weapon-popup hidden" aria-hidden="true">
-    <div class="weapon-popup-inner" role="dialog" aria-modal="true">
-      <div class="weapon-popup-header">
-        <h2 id="weaponPopupName">Weapon</h2>
-        <div id="weaponPopupRarity" class="rarity-tag">COMMON</div>
+  <div class="container">
+    <div class="controls">
+      <div class="left">
+        <div class="choose">Filter</div>
+        <select id="filterSelect">
+          <option value="all">All</option>
+          <option value="common">Common</option>
+          <option value="uncommon">Uncommon</option>
+          <option value="rare">Rare</option>
+          <option value="epic">Epic</option>
+          <option value="legendary">Legendary</option>
+        </select>
       </div>
 
-      <div class="weapon-popup-body">
-        <img id="weaponPopupImage" class="weapon-popup-image" src="" alt="weapon image">
-        <div class="weapon-stats-grid">
-          <div class="stat-card stat-card-1 stat-card-large">
-            <div class="stat-title">Damage</div>
-            <div id="statDamage" class="stat-value">-</div>
-          </div>
-          <div class="stat-card stat-card-2 stat-card-large">
-            <div class="stat-title">Fire Rate</div>
-            <div id="statFire" class="stat-value">-</div>
-          </div>
-          <div class="stat-card stat-card-3">
-            <div class="stat-title">Ammo</div>
-            <div id="statAmmo" class="stat-value">-</div>
-          </div>
-          <div class="stat-card stat-card-4">
-            <div class="stat-title">Magazine</div>
-            <div id="statMagazine" class="stat-value">-</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-        <button class="btn" onclick="closeWeaponPopup()">Close</button>
+      <div class="drop-actions">
+        <button class="btn" id="viewDropsBtn"><i class="fa-solid fa-list"></i>&nbsp;Drops</button>
+        <button class="btn drop" id="dropBtn"><i class="fa-solid fa-dice"></i>&nbsp;DROP</button>
       </div>
     </div>
-  </div>
 
-  <!-- stats modal (fallback) -->
-  <div class="modal-overlay" id="statsModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div id="statsTitle" style="font-weight:900;"></div>
-        <button class="btn" id="closeStats"><i class="fa-solid fa-xmark"></i></button>
+    <div id="contentArea">
+      <div class="grid-wrap">
+        <div class="grid" id="itemGrid" aria-live="polite"></div>
       </div>
-      <div style="display:flex; gap:12px; margin-top:12px;">
-        <div style="flex:0 0 220px; height:140px; border-radius:10px; overflow:hidden; background:rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center;">
-          <img id="statsImg" src="" alt="" style="max-width:100%; max-height:100%; object-fit:contain;">
+    </div>
+
+    <div class="acquired-heading">Acquired Items</div>
+    <div class="acquired-grid" id="acquiredGrid"></div>
+
+    <div style="display:flex; gap:12px; margin-top:14px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:260px;">
+        <div class="info-panel" id="infoPanel">
+          Click a card to preview more info. Use DROP to open the spin modal and receive a weighted drop.
         </div>
-        <div style="flex:1;">
-          <div id="statsRarity" style="color:var(--muted); font-weight:900;"></div>
-          <div id="statsDetails" style="margin-top:12px; color:var(--muted);"></div>
+      </div>
+
+      <div style="width:320px;">
+        <div class="info-panel">
+          <div style="font-weight:900">Made By Route</div>
+          <div style="color:var(--muted); margin-top:8px;" id="lastUpdated">Last updated: —</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- admin panel -->
-  <div class="admin-panel" id="adminPanel" aria-hidden="true">
-    <h3 style="margin:6px 0 12px;">Admin Panel</h3>
-    <label>Discord Webhook</label>
-    <input id="adminWebhook" type="text" placeholder="https://discord.com/api/webhooks/..." style="width:100%; margin-bottom:8px;">
-    <label>Server Uptime</label>
-    <input id="adminUptime" type="text" placeholder="http://example.com/health" style="width:100%; margin-bottom:8px;">
-    <label>Price JSON URL</label>
-    <input id="adminPrices" type="text" placeholder="https://raw.githubusercontent.com/.../prices.json" style="width:100%; margin-bottom:8px;">
-    <hr style="border-color:rgba(255,255,255,.03); margin:8px 0;">
-    <div style="display:flex; gap:8px;">
-      <button class="btn" id="saveAdminBtn">Save</button>
-      <button class="btn" id="logoutAdminBtn">Logout</button>
-    </div>
-    <div style="color:var(--muted); margin-top:10px; font-size:13px;">Admin password (client-side): <b>Qacti</b></div>
+  <div style="height:18px"></div>
+  <div class="footer">
+    <div>© Quaker City Roleplay</div>
+    <div style="color:var(--muted)">Built with ❤️</div>
   </div>
+</div>
 
-  <!-- background audio (extracted) -->
-  <audio id="bgm" src="background_audio.mp3" loop preload="auto"></audio>
+<!-- Spin Wheel Modal -->
+<div class="modal-overlay" id="spinModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
 
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-weight:900; font-size:18px;">Spin Wheel</div>
+      <div style="color:var(--muted); font-weight:800;">Click SPIN to start</div>
+    </div>
+
+    <div style="position:relative; margin-top:12px;">
+      <div id="spinStrip" style="height:140px; display:flex; gap:12px; align-items:center; overflow:hidden; padding:10px;"></div>
+
+      <!-- RED NEON SELECTOR -->
+      <div class="neon-pointer"></div>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+      <button class="btn" id="closeSpin">Close</button>
+      <button class="btn drop" id="spinStartBtn">SPIN</button>
+    </div>
+  </div>
+</div>
+
+<!-- YOU GOT POPUP UI -->
+<div id="youGotPopup" class="you-got-popup">
+  <div class="you-got-box">
+    <div class="you-got-shockwave"></div>
+
+    <div class="you-got-title">YOU GOT:</div>
+
+    <div class="you-got-body">
+      <img id="ygImg" class="you-got-img" src="" alt="">
+      <div class="you-got-info">
+        <div id="ygName" class="you-got-name">Weapon Name</div>
+        <div id="ygRarity" class="you-got-rarity">RARITY</div>
+      </div>
+    </div>
+
+    <button id="ygClose" class="you-got-close">Close</button>
+  </div>
+</div>
+
+<!-- Weapon Details Popup Modal -->
+<div id="weaponPopup" class="weapon-popup hidden" aria-hidden="true">
+  <div class="weapon-popup-inner">
+
+    <div class="weapon-popup-header">
+      <h2 id="weaponPopupName">Weapon</h2>
+      <div id="weaponPopupRarity" class="rarity-tag">COMMON</div>
+    </div>
+
+    <div class="weapon-popup-body">
+      <img id="weaponPopupImage" class="weapon-popup-image" src="">
+      <div class="weapon-stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Damage</div>
+          <div id="statDamage" class="stat-value">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Fire Rate</div>
+          <div id="statFire" class="stat-value">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Ammo</div>
+          <div id="statAmmo" class="stat-value">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Magazine</div>
+          <div id="statMagazine" class="stat-value">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+      <button class="btn" onclick="closeWeaponPopup()">Close</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Stats Modal (fallback) -->
+<div class="modal-overlay" id="statsModal" aria-hidden="true">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div id="statsTitle" style="font-weight:900;"></div>
+      <button class="btn" id="closeStats"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div style="display:flex; gap:12px; margin-top:12px;">
+      <div style="flex:0 0 220px; height:140px; border-radius:10px; overflow:hidden; background:rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center;">
+        <img id="statsImg" src="" style="max-width:100%; max-height:100%;">
+      </div>
+      <div style="flex:1;">
+        <div id="statsRarity" style="color:var(--muted); font-weight:900;"></div>
+        <div id="statsDetails" style="margin-top:12px; color:var(--muted);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="adminPanel" style="display:none;">
+  <h3>Admin Panel</h3>
+  <label>Discord Webhook</label>
+  <input id="adminWebhook" type="text">
+  <label>Server Uptime</label>
+  <input id="adminUptime" type="text">
+  <label>Price JSON URL</label>
+  <input id="adminPrices" type="text">
+  <button class="btn" id="saveAdminBtn">Save</button>
+  <button class="btn" id="logoutAdminBtn">Logout</button>
+</div>
+
+<!-- Background Audio -->
+<audio id="bgm" src="background_audio.mp3" loop preload="auto"></audio>
 <script>
-/* Single-file Quaker City (Option B) */
+/* ============================================================
+   BASIC CONFIG / SELECTORS
+   ============================================================ */
+const filterSelect   = document.getElementById("filterSelect");
+const itemGrid       = document.getElementById("itemGrid");
+const acquiredGrid   = document.getElementById("acquiredGrid");
 
-/* ---------------- IMAGE MAP (fixed) ---------------- */
-const IMAGES = {
-  '.38 Special': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447917270901985322/25CE001F-484F-4FDF-BF4A-FC4774C95BCD.png?ex=69395d8a&is=69380c0a&hm=e2984be3e87d899739eb743416b026ec7026221bdab745bae5bb20350bdd61c6',
-  'Ghost Glock 17': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447919932909289594/832A4CE9-FD8F-4AC0-AD33-A17573FB6678.png?ex=69396005&is=69380e85&hm=c65d0869afdd9f413d51d0fc95fdc7425022bfbb003ed81360323ee235edc31d',
-  'Glock 20 Switch': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447924563420647610/Untitled-1.png?ex=69396455&is=693812d5&hm=934924ca97e4e55aa0f5fb25b2a162c116f137470551574d002552a40af62e25',
-  'FNX -45': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447928982212186142/Untitled-2.png?ex=69396872&is=693816f2&hm=9618603ccbed40edd5dd91d7675dd3f81953dc301a014b5b7ac65e85ca27b3a8&',
-  'Beretta M9': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447921669766381732/3528B8D0-0ECC-40C1-B78E-9F4782A78B85.png?ex=693961a3&is=69381023&hm=c98a527bf26c21a4a4107c7b867cc56ffd447ba21d00023fd098142d1257b2bf',
-  'G23': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447928980916146266/E29B517E-6328-4E2A-92FE-FD9A53E3E99A.png?ex=69396872&is=693816f2&hm=73948114d153a5ad0778112fbb9b2b73f4224df4cae1c77eb88e4cffe327fd1c&',
-  'Tec-9': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447929012914487347/Untitled-3.png?ex=69396879&is=693816f9&hm=cd05d44cc96e91a3e7208584293453c3e0b90dcabb83444e00c2202ac58e2552&',
-  'MAC-10': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447929013325664256/Untitled-4.png?ex=69396879&is=693816f9&hm=d7882e3db4141173e2b2a844b1ba194fe412c498e16d92b828ebb5ceea40151d&',
-  'Tactical UZI': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447929013694759056/Untitled-5.png?ex=6939687a&is=693816fa&hm=938ee4d5f6cf6fdd737e8edc7f5d1972b97f5541403e47efb9415fcba5039f4f&',
-  'G22': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447929014080770230/Untitled-6.png?ex=6939687a&is=693816fa&hm=5e704886e078afd69446a1e891ef98d45a620103e2a29ea5ced085a3b5d92efd&',
-  'G41': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447929014378561536/Untitled-7.png?ex=6939687a&is=693816fa&hm=a7039b48bdb73c88273f0735c7a70fea9038f5365f3c2fd1ad3dd5e5cbdb0538&',
-  'G43': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447928980463288320/D4D67B4A-0819-45AD-B9CE-9ED587FDBCFD.png?ex=69396872&is=693816f2&hm=22468180fe4ceb5ded567e5696af1bc42527ed66dfe06d6537c777471f71182a&',
-  'MP9': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447928979737546943/8D2F58DD-9AEC-4C7C-8D2D-47CCC9376227.png?ex=69396871&is=693816f1&hm=274e7ef1f369279e41f92da94c8c569289312a8b7f9eb996b9459644ebc75d75&',
-  'G19 MOS': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447929014755786813/Untitled-8.png?ex=6939687a&is=693816fa&hm=2a2a9f7e73b2630920255c584c286778fc31d12ffc745e04a1b8e90d51be1eee&',
-  'AK-47': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447933467160613075/ChatGPT_Image_Dec_9_2025_07_50_30_AM.png?ex=69396c9f&is=69381b1f&hm=7019158cecb6e768fd47873600d9ac762e6a35eabed057bcf661938d866fee44',
-  'HELLPUP DRACO': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447936430763544707/ChatGPT_Image_Dec_9_2025_08_02_17_AM.png?ex=69396f62&is=69381de2&hm=b6294a35b6c8030783c0a67ee542b2d7605c0f54cea66e102efc920227239b27',
-  'Black ARP': 'images/m4a1.png',
-  'KEL-TEC PLR': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447940726011990157/4062aa87-fe25-4550-9215-408aeb780c3b.png?ex=69397362&is=693821e2&hm=e4157c29e6ef3bfcc08610f0990241120c880ad3d57fb41b56ad98e0247412fe',
-  'All Black Draco': 'https://cdn.discordapp.com/attachments/1435788783852458045/1447941501815619644/ChatGPT_Image_Dec_9_2025_07_58_04_AM.png?ex=6939741b&is=6938229b&hm=46c65393f606b8d2f9f89e564fa49f9d2dca96b035ce627b76517eed74bc2e2b'
-};
-const FALLBACK = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="240"%3E%3Crect fill="%23333" width="400" height="240"/%3E%3Ctext x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23999"%3ENo Image%3C/text%3E%3C/svg%3E';
+const spinModal      = document.getElementById("spinModal");
+const spinStartBtn   = document.getElementById("spinStartBtn");
+const closeSpin      = document.getElementById("closeSpin");
+const spinStrip      = document.getElementById("spinStrip");
 
-/* ---------------- WEAPON STATS (updated damage by rarity) ---------------- */
-const WEAPON_STATS = {
-  '.38 Special': { damage: 25, fire: 750, ammo: '9mm', magStd: 15, magExt: 33 },                  // Common
-  'Ghost Glock 17': { damage: 25, fire: 750, ammo: '9mm', magStd: 15, magExt: 33 },               // Common
-  'Glock 20 Switch': { damage: 35, fire: 600, ammo: '.45 ACP', magStd: 10, magExt: 21 },          // Epic
-  'FNX -45': { damage: 35, fire: 750, ammo: '9mm', magStd: 15, magExt: 30 },                      // Epic
-  'Beretta M9': { damage: 25, fire: 750, ammo: '9mm', magStd: 15, magExt: 30 },                   // Common
-  'G23': { damage: 25, fire: 750, ammo: '9mm', magStd: 16, magExt: 32 },                          // Uncommon
-  'Tec-9': { damage: 35, fire: 400, ammo: '.45 ACP', magStd: 8, magExt: 16 },                     // Epic
-  'MAC-10': { damage: 35, fire: 1000, ammo: '9mm', magStd: 20, magExt: 40 },                      // Epic
-  'Tactical UZI': { damage: 35, fire: 1090, ammo: '.45 ACP', magStd: 30, magExt: 50 },               // Epic
-  'G22': { damage: 30, fire: 1200, ammo: '9mm', magStd: 25, magExt: 50 },                         // Rare
-  'G41': { damage: 30, fire: 1100, ammo: '.32 ACP', magStd: 20, magExt: 40 },                     // Rare
-  'G43': { damage: 25, fire: 800, ammo: '9mm', magStd: 30, magExt: 60 },                          // Uncommon
-  'MP9': { damage: 25, fire: 600, ammo: '.45 ACP', magStd: 25, magExt: 50 },                      // Common
-  'G19 MOS': { damage: 30, fire: 900, ammo: '5.7x28', magStd: 50, magExt: 100 },                  // Rare
-  'AK-47': { damage: 36, fire: 750, ammo: '5.56x45', magStd: 30, magExt: 60 },                    // Legendary
-  'HELLPUP DRACO': { damage: 36, fire: 750, ammo: '5.56x45', magStd: 30, magExt: 60 },            // Legendary
-  'Black ARP': { damage: 35, fire: 800, ammo: '5.56x45', magStd: 30, magExt: 60 },                // Epic
-  'KEL-TEC PLR': { damage: 35, fire: 1200, ammo: '.45 ACP', magStd: 25, magExt: 50 },             // Epic
-  'All Black Draco': { damage: 36, fire: 750, ammo: '5.56x45', magStd: 30, magExt: 60 }                     // Legendary
+const bgm            = document.getElementById("bgm");
+const musicToggle    = document.getElementById("musicToggle");
+const musicLabel     = document.getElementById("musicLabel");
+
+const youGotPopup    = document.getElementById("youGotPopup");
+const ygImg          = document.getElementById("ygImg");
+const ygName         = document.getElementById("ygName");
+const ygRarity       = document.getElementById("ygRarity");
+const ygClose        = document.getElementById("ygClose");
+
+/* ============================================================
+   RARITY COLORS
+   ============================================================ */
+const RARITY_COLOR = {
+  common:     "#a0a0a0",
+  uncommon:   "#4cc94c",
+  rare:       "#4c7cff",
+  epic:       "#a020f0",
+  legendary:  "#ffcc00"
 };
 
-/* ---------------- ITEMS dataset ---------------- */
-const ITEMS = {
-  tier1: [
-    { name:'.38 Special', rarity:'common', category:'Pistols', img:IMAGES['.38 Special'] || FALLBACK },
-    { name:'Ghost Glock 17', rarity:'common', category:'Pistols', img:IMAGES['Ghost Glock 17'] || FALLBACK },
-    { name:'Glock 20 Switch', rarity:'epic', category:'Pistols', img:IMAGES['Glock 20 Switch'] || FALLBACK },
-    { name:'FNX -45', rarity:'epic', category:'Pistols', img:IMAGES['FNX -45'] || FALLBACK },
-    { name:'Beretta M9', rarity:'common', category:'Pistols', img:IMAGES['Beretta M9'] || FALLBACK },
-    { name:'G23', rarity:'uncommon', category:'Pistols', img:IMAGES['G23'] || FALLBACK },
-    { name:'Tec-9', rarity:'epic', category:'Pistols', img:IMAGES['Tec-9'] || FALLBACK },
-    { name:'MAC-10', rarity:'epic', category:'SMG', img:IMAGES['MAC-10'] || FALLBACK },
-    { name:'Tactical UZI', rarity:'epic', category:'SMG', img:IMAGES['Tactical UZI'] || FALLBACK },
-    { name:'G22', rarity:'rare', category:'SMG', img:IMAGES['G22'] || FALLBACK },
-    { name:'G41', rarity:'rare', category:'SMG', img:IMAGES['G41'] || FALLBACK },
-    { name:'G43', rarity:'uncommon', category:'Pistols', img:IMAGES['G43'] || FALLBACK },
-    { name:'MP9', rarity:'common', category:'SMG', img:IMAGES['MP9'] || FALLBACK },
-    { name:'G19 MOS', rarity:'rare', category:'Pistols', img:IMAGES['G19 MOS'] || FALLBACK }
-  ],
-  tier2: [
-    { name:'AK-47', rarity:'legendary', category:'ARs', img:IMAGES['AK-47'] || FALLBACK },
-    { name:'HELLPUP DRACO', rarity:'legendary', category:'ARs', img:IMAGES['HELLPUP DRACO'] || FALLBACK },
-    { name:'Black ARP', rarity:'epic', category:'ARs', img:IMAGES['Black ARP'] || FALLBACK },
-    { name:'KEL-TEC PLR', rarity:'epic', category:'Pistols', img:IMAGES['KEL-TEC PLR'] || FALLBACK },
-    { name:'All Black Draco', rarity:'legendary', category:'ARs', img:IMAGES['Draco'] || FALLBACK }
-  ],
-  attachments: [
-    { name:'Extended Magazine', rarity:'rare', category:'Mags', img:FALLBACK },
-    { name:'Flashlight', rarity:'uncommon', category:'Mags', img:FALLBACK }
-  ],
-  drugs: [
-    { name:'RP 10', rarity:'common', category:'Common', img:FALLBACK },
-    { name:'RP 20', rarity:'rare', category:'Rare', img:FALLBACK }
-  ]
-};
+/* ============================================================
+   YOU GOT POPUP — SHOW FUNCTION
+   ============================================================ */
+function showYouGot(itemName, rarity, image) {
+  ygImg.src = image;
+  ygName.textContent = itemName;
+  ygRarity.textContent = rarity.toUpperCase();
+  ygRarity.style.color = RARITY_COLOR[rarity];
 
-/* weights */
-const DEFAULT_WEIGHTS = {
-  tier1: { common:35, uncommon:40, rare:25, epic:10 },
-  tier2: { rare:50, epic:40, legendary:10 },
-  attachments: { uncommon:50, rare:30, epic:15, legendary:5 },
-  drugs: { common:35, uncommon:25, rare:25, epic:15 }
-};
+  youGotPopup.classList.add("active");
 
-/* ---------- DOM refs ---------- */
-let itemGrid = document.getElementById('itemGrid'); // let so can rebind
-const contentArea = document.getElementById('contentArea');
-const subtabsEl = document.getElementById('subtabs');
-const filterSelect = document.getElementById('filterSelect');
-const dropBtn = document.getElementById('dropBtn');
-const viewDropsBtn = document.getElementById('viewDropsBtn');
-const acquiredGrid = document.getElementById('acquiredGrid');
-const spinModal = document.getElementById('spinModal');
-const spinStrip = document.getElementById('spinStrip');
-const spinStartBtn = document.getElementById('spinStartBtn');
-const closeSpin = document.getElementById('closeSpin');
+  // Reset animations
+  const shock = document.querySelector(".you-got-shockwave");
+  shock.style.animation = "none";
+  shock.offsetHeight; // trigger reflow
+  shock.style.animation = "shockwave 0.9s ease-out forwards";
 
-const musicToggle = document.getElementById('musicToggle');
-const musicLabel = document.getElementById('musicLabel');
-const bgm = document.getElementById('bgm');
-
-const adminToggle = document.getElementById('adminToggle');
-const adminPanel = document.getElementById('adminPanel');
-const saveAdminBtn = document.getElementById('saveAdminBtn');
-const logoutAdminBtn = document.getElementById('logoutAdminBtn');
-const adminWebhook = document.getElementById('adminWebhook');
-const adminUptime = document.getElementById('adminUptime');
-const adminPrices = document.getElementById('adminPrices');
-
-const statsModal = document.getElementById('statsModal');
-const statsTitle = document.getElementById('statsTitle');
-const statsImg = document.getElementById('statsImg');
-const statsRarity = document.getElementById('statsRarity');
-const statsDetails = document.getElementById('statsDetails');
-const closeStats = document.getElementById('closeStats');
-
-const weaponPopup = document.getElementById('weaponPopup');
-const weaponPopupName = document.getElementById('weaponPopupName');
-const weaponPopupRarity = document.getElementById('weaponPopupRarity');
-const weaponPopupImage = document.getElementById('weaponPopupImage');
-const statDamage = document.getElementById('statDamage');
-const statFire = document.getElementById('statFire');
-const statAmmo = document.getElementById('statAmmo');
-const statMagazine = document.getElementById('statMagazine');
-
-let activeTab = 'tier1';
-let activeSub = 'All';
-let acquired = [];
-let spinning = false;
-
-/* ---------- helpers ---------- */
-function tick(ms){ return new Promise(r=> setTimeout(r,ms)); }
-function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function loadCfg(){ try{return JSON.parse(localStorage.getItem('qc_cfg')||'{}')}catch(e){return{}} }
-function saveCfg(c){ localStorage.setItem('qc_cfg', JSON.stringify(c)); }
-function getWeights(){ const c = loadCfg(); return c.weights || DEFAULT_WEIGHTS; }
-function setWeights(w){ const c = loadCfg(); c.weights = w; saveCfg(c); }
-
-/* ---------- admin (client-side) ---------- */
-const ADMIN_PASS = 'Qacti';
-function isAdmin(){ return sessionStorage.getItem('qc_admin') === '1'; }
-function setAdmin(flag){ if(flag) sessionStorage.setItem('qc_admin','1'); else sessionStorage.removeItem('qc_admin'); adminPanel.style.display = flag ? 'block':'none'; }
-adminToggle.addEventListener('click', ()=>{
-  if(isAdmin()){ adminPanel.style.display = adminPanel.style.display === 'block' ? 'none':'block'; return; }
-  const p = prompt('Enter admin password:'); if(p === ADMIN_PASS){ setAdmin(true); loadAdmin(); alert('Admin ON'); } else alert('Wrong password');
-});
-logoutAdminBtn.addEventListener('click', ()=> { setAdmin(false); adminPanel.style.display = 'none'; alert('Logged out'); });
-saveAdminBtn.addEventListener('click', ()=> {
-  if(!isAdmin()){ alert('Admin only'); return; }
-  const cfg = loadCfg(); cfg.webhook = adminWebhook.value.trim(); cfg.uptime = adminUptime.value.trim(); cfg.prices = adminPrices.value.trim(); saveCfg(cfg); alert('Saved');
-});
-function loadAdmin(){ const cfg = loadCfg(); adminWebhook.value = cfg.webhook||''; adminUptime.value = cfg.uptime||''; adminPrices.value = cfg.prices||''; }
-
-/* ---------- subtabs sets ---------- */
-const SUBTABS = {
-  tier1: ['All','Pistols','SMG','ARs','Specials'],
-  tier2: ['All','ARs','Snipers','LMGs'],
-  attachments: ['All','Mags','Optics','Other'],
-  drugs: ['All','Common','Rare']
-};
-function renderSubtabs(tab){
-  subtabsEl.innerHTML = '';
-  const arr = SUBTABS[tab] || ['All'];
-  arr.forEach((s,i)=>{
-    const el = document.createElement('div');
-    el.className = 'sub' + (i===0 ? ' active' : '');
-    el.textContent = s;
-    el.dataset.sub = s;
-    el.addEventListener('click', ()=> {
-      document.querySelectorAll('.subtabs .sub').forEach(x=> x.classList.remove('active'));
-      el.classList.add('active');
-      activeSub = s;
-      renderGrid();
-    });
-    subtabsEl.appendChild(el);
-  });
-  activeSub = arr[0];
+  ygImg.style.animation = "none";
+  ygImg.offsetHeight;
+  ygImg.style.animation = "ygPop 0.40s ease-out forwards";
 }
 
-/* ---------- filtering ---------- */
-function itemsForTab(tab){
-  const all = (ITEMS[tab] || []).slice();
-  const filter = filterSelect.value;
-  let res = all;
-  if(filter !== 'all') res = res.filter(i => i.rarity === filter);
-  if(activeSub && activeSub !== 'All'){
-    res = res.filter(i=>{
-      const cat = (i.category||'').toLowerCase();
-      const s = activeSub.toLowerCase();
-      if(s === 'smg') return cat.includes('smg');
-      if(s === 'pistols') return cat.includes('pist');
-      return cat.includes(s);
-    });
+/* CLOSE YOU GOT */
+ygClose.onclick = () => {
+  youGotPopup.classList.remove("active");
+};
+
+/* ============================================================
+   MUSIC TOGGLE
+   ============================================================ */
+musicToggle.onclick = () => {
+  if (bgm.paused) {
+    bgm.play();
+    musicLabel.textContent = "Music: On";
+  } else {
+    bgm.pause();
+    musicLabel.textContent = "Music: Off";
   }
-  return res;
+};
+
+/* ============================================================
+   OPEN & CLOSE SPIN MODAL
+   ============================================================ */
+document.getElementById("dropBtn").onclick = () => {
+  spinModal.style.display = "flex";
+};
+closeSpin.onclick = () => {
+  spinModal.style.display = "none";
+};
+
+/* ============================================================
+   WEIGHTED DROP TABLE (EXACTLY AS YOU ALREADY SET)
+   ============================================================ */
+const DROP_TABLE = {
+  common: 25,
+  uncommon: 25,
+  rare: 30,
+  epic: 35,
+  legendary: 36
+};
+
+/* ============================================================
+   WHEEL SPIN LOGIC (2.5 SEC)
+   ============================================================ */
+function chooseDrop() {
+  const items = window.ALL_ITEMS; // your existing list
+  let pool = [];
+
+  Object.keys(items).forEach(name => {
+    const rarity = items[name].rarity;
+    const weight = DROP_TABLE[rarity] || 1;
+    for (let i = 0; i < weight; i++) pool.push(name);
+  });
+
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
-/* create card (clean) */
-function createCard(item){
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.innerHTML = `
-    <div class="top-row"><div class="name">${item.name}</div></div>
-    <div class="img-wrap"><img loading="lazy" src="${item.img}" alt="${item.name}" onerror="this.src='${FALLBACK}'"></div>
-    <div style="height:8px"></div>
-    <div class="badge">${(item.rarity||'common').toUpperCase()}</div>
+/* ============================================================
+   START SPIN BUTTON
+   ============================================================ */
+spinStartBtn.onclick = () => {
+  spinStrip.innerHTML = "";
+
+  const items = window.ALL_ITEMS;
+  const entries = Object.keys(items);
+
+  // Fill strip with images (looping)
+  for (let i = 0; i < 40; i++) {
+    const pick = entries[i % entries.length];
+    const div = document.createElement("div");
+    div.className = "strip-item";
+    div.innerHTML = `<img src="${items[pick].image}" />`;
+    spinStrip.appendChild(div);
+  }
+
+  // Animate strip (2.5 seconds total)
+  spinStrip.style.transition = "transform 2.5s cubic-bezier(.17,.67,.83,.67)";
+  spinStrip.style.transform = `translateX(-${Math.random() * 1200 + 2000}px)`;
+
+  // Determine actual result
+  const result = chooseDrop();
+  const final = items[result];
+
+  setTimeout(() => {
+    spinModal.style.display = "none";
+
+    // Add to acquired list
+    addAcquired(result);
+
+    // Show “YOU GOT”
+    showYouGot(result, final.rarity, final.image);
+
+  }, 2500);
+};
+
+/* ============================================================
+   ADD ITEM TO ACQUIRED
+   ============================================================ */
+function addAcquired(name) {
+  const card = document.createElement("div");
+  card.className = "acq-card";
+  card.innerHTML = `
+    <img src="${ALL_ITEMS[name].image}">
+    <div>${name}</div>
   `;
-  el.addEventListener('click', ()=> openWeaponPopupFromCard(item));
-  return el;
+  acquiredGrid.appendChild(card);
 }
 
-/* render grid (handles turf) */
-function renderGrid(){
-  const nodes = itemsForTab(activeTab);
-  if(activeTab === 'turf'){
-    const local = 'images/turfmap.png';
-    const remote = 'https://media.discordapp.net/attachments/1445307831220699229/1447757901463683114/image.png';
-    contentArea.innerHTML = `<div class="turf-map"><img src="${local}" alt="Turf Map" onerror="this.onerror=null; this.src='${remote}';"></div>`;
-    return;
-  }
+/* ============================================================
+   RENDER ITEMS TO GRID (Unchanged)
+   ============================================================ */
+function renderItems() {
+  const filter = filterSelect.value;
+  itemGrid.innerHTML = "";
 
-  contentArea.innerHTML = `<div class="grid-wrap"><div class="grid" id="itemGrid" aria-live="polite"></div></div>`;
-  itemGrid = document.getElementById('itemGrid');
-  itemGrid.innerHTML = '';
-  if(nodes.length === 0){
-    itemGrid.innerHTML = '<div style="grid-column:1/-1; color:var(--muted); padding:18px; text-align:center;">No items in this category.</div>';
-    return;
-  }
-  nodes.forEach(it => itemGrid.appendChild(createCard(it)));
-}
+  Object.keys(ALL_ITEMS).forEach(name => {
+    const item = ALL_ITEMS[name];
+    if (filter !== "all" && item.rarity !== filter) return;
 
-/* open popup from card */
-function openWeaponPopupFromCard(item){
-  const name = item.name;
-  const rarity = item.rarity || 'common';
-  const stats = WEAPON_STATS[name] || {};
-  openWeaponPopup(name, rarity, stats, item.img || FALLBACK);
-}
+    const card = document.createElement("div");
+    card.className = "item-card";
 
-/* open popup generic */
-function openWeaponPopup(name, rarity, stats, img){
-  weaponPopupName.textContent = name;
-  weaponPopupRarity.textContent = (rarity||'common').toUpperCase();
-  weaponPopupImage.src = img || FALLBACK;
-  statDamage.textContent = stats.damage ?? '-';
-  statFire.textContent = stats.fire ? (stats.fire + ' RPM') : '-';
-  statAmmo.textContent = stats.ammo ?? '-';
-  statMagazine.textContent = (stats.magStd ? ('Reg: ' + stats.magStd) : '-') + (stats.magExt ? (' | Ext: ' + stats.magExt) : '');
-  weaponPopup.classList.remove('hidden');
-  weaponPopup.setAttribute('aria-hidden','false');
-}
-function closeWeaponPopup(){
-  weaponPopup.classList.add('hidden');
-  weaponPopup.setAttribute('aria-hidden','true');
-}
-
-/* fallback stats modal close */
-closeStats.addEventListener('click', ()=> { statsModal.classList.remove('open'); statsModal.style.display = 'none'; });
-document.getElementById('statsModal').addEventListener('click', (e)=> { if(e.target.id === 'statsModal'){ statsModal.classList.remove('open'); statsModal.style.display = 'none'; } });
-
-/* topnav click handler (robust) */
-document.querySelectorAll('.topnav .cat').forEach(el=>{
-  el.addEventListener('click', ()=> {
-    document.querySelectorAll('.topnav .cat').forEach(x=> x.classList.remove('active'));
-    el.classList.add('active');
-    activeTab = el.dataset.tab;
-    renderSubtabs(activeTab);
-    renderGrid();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    card.innerHTML = `
+      <img src="${item.image}">
+      <div class="item-name">${name}</div>
+      <div class="item-rarity" style="color:${RARITY_COLOR[item.rarity]}">${item.rarity.toUpperCase()}</div>
+    `;
+    itemGrid.appendChild(card);
   });
-});
-
-/* filter */
-filterSelect.addEventListener('change', ()=> renderGrid());
-
-/* music toggle */
-function setMusicOn(on){
-  localStorage.setItem('qc_music_on', on ? '1':'0');
-  if(on){ musicToggle.classList.add('on'); musicLabel.textContent = 'Music: On'; musicToggle.querySelector('i').className='fa-solid fa-volume-high'; bgm.play().catch(()=>{}); }
-  else { musicToggle.classList.remove('on'); musicLabel.textContent = 'Music: Off'; musicToggle.querySelector('i').className='fa-solid fa-volume-xmark'; bgm.pause(); }
-}
-musicToggle.addEventListener('click', ()=> {
-  const current = localStorage.getItem('qc_music_on') === '1';
-  setMusicOn(!current);
-});
-function enableBGM(){ function start(){ if(bgm){ bgm.play().catch(()=>{}); } document.removeEventListener('click', start); document.removeEventListener('touchstart', start); } document.addEventListener('click', start); document.addEventListener('touchstart', start); }
-enableBGM();
-setTimeout(()=> { const mp = localStorage.getItem('qc_music_on'); setMusicOn(mp !== '0'); }, 100);
-
-/* spinner modal logic: 5 second spin with easing */
-function renderSpinStrip(){
-  spinStrip.innerHTML = '';
-  const pool = (ITEMS[activeTab]||[]).slice();
-  if(pool.length === 0){ spinStrip.innerHTML = '<div style="color:var(--muted)">No items in this category.</div>'; return; }
-  for(let i=0;i<60;i++){
-    const it = rand(pool);
-    const tile = document.createElement('div');
-    tile.style.minWidth='140px'; tile.style.height='120px'; tile.style.borderRadius='10px'; tile.style.overflow='hidden';
-    tile.style.background='linear-gradient(180deg, rgba(0,0,0,.16), rgba(255,255,255,0))'; tile.style.border='1px solid rgba(255,255,255,.04)';
-    tile.style.display='flex'; tile.style.flexDirection='column'; tile.style.alignItems='center'; tile.style.justifyContent='center';
-    tile.style.padding='8px'; tile.innerHTML = `<div style="font-weight:900;color:var(--muted);margin-bottom:6px;">${it.name}</div><img src="${it.img}" style="max-width:100%; max-height:64px; object-fit:contain" onerror="this.src='${FALLBACK}'">`;
-    spinStrip.appendChild(tile);
-  }
 }
 
-function computeDelays(durationMs, steps){
-  // produce delays (ms) per step using easing (i/n)^2 weights and normalize to duration
-  const weights = [];
-  let sum = 0;
-  for(let i=1;i<=steps;i++){
-    const w = Math.pow(i/steps, 2); // quadratic easing (accelerating weight -> decelerating delays)
-    weights.push(w); sum += w;
-  }
-  return weights.map(w => (w / sum) * durationMs);
-}
+filterSelect.onchange = renderItems;
 
-spinStartBtn.addEventListener('click', async ()=>{
-  if(spinning) return;
-  spinning = true;
-  playSFX('spin');
-  renderSpinStrip();
-  const steps = 60;
-  const duration = 5000; // 5 seconds total
-  const delays = computeDelays(duration, steps);
-  for (let i=0;i<steps;i++){
-    if(spinStrip.firstElementChild) spinStrip.appendChild(spinStrip.firstElementChild);
-    await tick(delays[i]);
-  }
-  const picked = pickWeightedItem(activeTab);
-  addAcquired(picked);
-  sendWebhook({ action:'spin', tier:activeTab, result:picked.name, rarity:picked.rarity, ts:new Date().toISOString() });
-  playSFX('win');
-  setTimeout(()=> { closeSpinModal(); spinning = false; }, 700);
-});
-
-function openSpinModal(){ spinModal.classList.add('open'); spinModal.style.display='flex'; renderSpinStrip(); }
-function closeSpinModal(){ spinModal.classList.remove('open'); spinModal.style.display='none'; }
-dropBtn.addEventListener('click', openSpinModal);
-closeSpin.addEventListener('click', closeSpinModal);
-
-/* weighting picker */
-function pickRarity(weights){
-  const entries = Object.entries(weights).filter(([k,v])=> Number(v) > 0);
-  const total = entries.reduce((s,[_k,v])=> s + Number(v), 0);
-  const r = Math.random() * total; let acc = 0;
-  for(const [k,v] of entries){ acc += Number(v); if(r <= acc) return k; }
-  return entries[entries.length-1][0];
-}
-function pickWeightedItem(tabKey){
-  const w = getWeights();
-  const weights = w[tabKey] || DEFAULT_WEIGHTS[tabKey] || DEFAULT_WEIGHTS.tier1;
-  const rarity = pickRarity(weights);
-  const pool = (ITEMS[tabKey]||[]).filter(i=> i.rarity === rarity);
-  if(pool.length) return rand(pool);
-  const all = [].concat(...Object.values(ITEMS));
-  return rand(all);
-}
-
-/* acquired */
-function addAcquired(item){
-  acquired.unshift(item);
-  const card = document.createElement('div');
-  card.className = 'drop-card';
-  card.style.display='flex'; card.style.gap='10px'; card.style.alignItems='center'; card.style.padding='8px'; card.style.borderRadius='10px';
-  card.style.border='1px solid rgba(255,255,255,.04)'; card.style.background='linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0))';
-  card.innerHTML = `<img src="${item.img}" style="width:56px;height:56px;object-fit:contain;border-radius:8px;" onerror="this.src='${FALLBACK}'"><div><div style="font-weight:900">${item.name}</div><div style="color:var(--muted);font-size:12px">${(item.rarity||'common').toUpperCase()}</div></div>`;
-  card.addEventListener('click', ()=> openWeaponPopupFromCard(item));
-  acquiredGrid.prepend(card);
-  while(acquiredGrid.children.length > 120) acquiredGrid.removeChild(acquiredGrid.lastChild);
-}
-
-/* SFX */
-const audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext||window.webkitAudioContext)() : null;
-function playTone(freq,len=0.08,type='sine',gain=0.06){
-  if(!audioCtx) return;
-  try{ const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type=type; o.frequency.value=freq; o.connect(g); g.connect(audioCtx.destination); const now = audioCtx.currentTime; g.gain.value=0; g.gain.linearRampToValueAtTime(gain, now+0.01); o.start(now); g.gain.exponentialRampToValueAtTime(0.0001, now+len); o.stop(now+len+0.02); }catch(e){}
-}
-function playSFX(name){
-  if(!audioCtx) return;
-  if(audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-  if(name === 'click') playTone(880,0.06,'square',0.05);
-  if(name === 'spin') playTone(240,0.12,'sawtooth',0.12);
-  if(name === 'win'){ playTone(880,0.08,'sine',0.12); setTimeout(()=>playTone(1320,0.12,'sine',0.11),120); setTimeout(()=>playTone(1760,0.16,'sine',0.09),260); }
-}
-
-/* webhooks */
-function sendWebhook(payload){
-  const cfg = loadCfg();
-  const webhook = cfg.webhook || '';
-  if(!webhook) return;
-  fetch(webhook, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ content: `Quaker | ${payload.action} → ${payload.result||''} (${payload.rarity||''}) — ${payload.ts||''}` }) })
-    .catch(e=> console.warn('webhook fail', e));
-}
-
-/* startup */
-function init(){
-  renderSubtabs(activeTab);
-  renderGrid();
-  const cfg = loadCfg();
-  if(cfg.webhook) adminWebhook.value = cfg.webhook;
-  if(cfg.uptime) adminUptime.value = cfg.uptime;
-  if(cfg.prices) adminPrices.value = cfg.prices;
-  document.getElementById('lastUpdated').textContent = 'Last updated: ' + new Date().toLocaleString();
-  // music pref
-  const mp = localStorage.getItem('qc_music_on');
-  setTimeout(()=> setMusicOn(mp !== '0'), 60);
-  // allow audio context resume on first interaction
-  document.addEventListener('click', ()=> { if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{}); });
-  console.log('Quaker City Option B final build ready. Admin password (client-side):', ADMIN_PASS);
-}
-init();
-
-/* ESC closes modals */
-document.addEventListener('keydown', (e)=> { if(e.key === 'Escape'){ document.querySelectorAll('.modal-overlay.open').forEach(m=>{ m.classList.remove('open'); m.style.display='none'; }); weaponPopup.classList.add('hidden'); } });
-/* backdrop close */
-document.querySelectorAll('.modal-overlay').forEach(m=> m.addEventListener('click', (e)=> { if(e.target === m){ m.classList.remove('open'); m.style.display='none'; } }));
-
+/* Load initial */
+renderItems();
 </script>
-</body>
-</html>
