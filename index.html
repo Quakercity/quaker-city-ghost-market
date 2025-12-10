@@ -1162,11 +1162,6 @@ spinStartBtn.addEventListener('click', async ()=>{
       if(first) spinStrip.appendChild(first);
       await tick(delays[i]);
     }
-    
-    // Brief pause showing the landed item (200ms) before next spin
-    if(spinIndex < itemCount - 1) {
-      await tick(200);
-    }
   }
   
   // After all spins complete, show all items won
