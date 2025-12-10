@@ -678,8 +678,8 @@ const IMAGES = {
   'XDM-Elite': 'images/xdm_elite.png',
   'P90': 'images/p90.png',
   'MP5A3': 'images/mp5_a3.png',
-  'M16A1': 'images/m16a1.png'
-   'Red Draco': 'images/red_draco.png',
+  'M16A1': 'images/m16a1.png',
+  'Red Draco': 'images/red_draco.png'
 };
 
 const FALLBACK = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="240"%3E%3Crect fill="%23333" width="400" height="240"/%3E%3Ctext x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23999"%3ENo Image%3C/text%3E%3C/svg%3E';
@@ -778,36 +778,7 @@ const ITEMS = {
   { name:'G19 GFlex', rarity:'rare', category:'Pistols', img:IMAGES['G19 GFlex'] },
   { name:'G30', rarity:'rare', category:'Pistols', img:IMAGES['G30'] },
   { name:'Ruger SR45', rarity:'rare', category:'Pistols', img:IMAGES['Ruger SR45'] },
-  { name:'GH', rarity:'rare', category:'Pistols', img:IMAGES['GH'] },
-
-  /* -------- EPIC (Red) -------- */
-  { name:'Glock 20 Switch', rarity:'epic', category:'Pistols', img:IMAGES['Glock 20 Switch'] },
-  { name:'FNX -45', rarity:'epic', category:'Pistols', img:IMAGES['FNX -45'] },
-  { name:'Tec-9', rarity:'epic', category:'Pistols', img:IMAGES['Tec-9'] },
-  { name:'MAC-10', rarity:'epic', category:'SMG', img:IMAGES['MAC-10'] },
-  { name:'Tactical UZI', rarity:'epic', category:'SMG', img:IMAGES['Tactical UZI'] },
-  { name:'KEL-TEC PLR', rarity:'epic', category:'Pistols', img:IMAGES['KEL-TEC PLR'] },
-  { name:'Tone ARP', rarity:'epic', category:'ARs', img:IMAGES['Tone ARP'] },
-  { name:'300 ARP', rarity:'epic', category:'ARs', img:IMAGES['300 ARP'] },
-  { name:'G17 Switch', rarity:'epic', category:'Pistols', img:IMAGES['G17 Switch'] },
-  { name:'G17B', rarity:'epic', category:'Pistols', img:IMAGES['G17B'] },
-  { name:'G40', rarity:'epic', category:'Pistols', img:IMAGES['G40'] },
-
-  { name:'Red ARP', rarity:'epic', category:'ARs', img:IMAGES['Red ARP'] },
-  { name:'MPA30', rarity:'epic', category:'SMG', img:IMAGES['MPA30'] },
-  { name:'Keltec', rarity:'epic', category:'SMG', img:IMAGES['Keltec'] },
-  { name:'Incognito G19', rarity:'epic', category:'Pistols', img:IMAGES['Incognito G19'] },
-
-  /* -------- LEGENDARY (Yellow) -------- */
-  { name:'AK-47', rarity:'legendary', category:'ARs', img:IMAGES['AK-47'] },
-  { name:'ZPAP M92', rarity:'legendary', category:'ARs', img:IMAGES['ZPAP M92'] },
-  { name:'Deagle', rarity:'legendary', category:'Pistols', img:IMAGES['Deagle'] },
-  { name:'G18c', rarity:'legendary', category:'Pistols', img:IMAGES['G18c'] },
-  { name:'XDM-Elite', rarity:'legendary', category:'Pistols', img:IMAGES['XDM-Elite'] },
-  { name:'P90', rarity:'legendary', category:'SMG', img:IMAGES['P90'] },
-  { name:'Red Draco', rarity:'epic', category:'ARs', img:IMAGES['Red Draco'] },
-  { name:'MP5A3', rarity:'legendary', category:'SMG', img:IMAGES['MP5A3'] },
-  { name:'M16A1', rarity:'legendary', category:'ARs', img:IMAGES['M16A1'] }
+  { name:'GH', rarity:'rare', category:'Pistols', img:IMAGES['GH'] }
 ],
 
 tier2: [
@@ -992,6 +963,33 @@ function renderSubtabs(tab){
     subtabsEl.appendChild(el);
   });
   activeSub = arr[0];
+  
+  // Update filter dropdown based on tab
+  if(tab === 'tier1') {
+    filterSelect.innerHTML = `
+      <option value="all">All</option>
+      <option value="common">Common</option>
+      <option value="uncommon">Uncommon</option>
+      <option value="rare">Rare</option>
+    `;
+  } else if(tab === 'tier2' || tab === 'testdrops') {
+    filterSelect.innerHTML = `
+      <option value="all">All</option>
+      <option value="uncommon">Uncommon</option>
+      <option value="rare">Rare</option>
+      <option value="epic">Epic</option>
+      <option value="legendary">Legendary</option>
+    `;
+  } else {
+    filterSelect.innerHTML = `
+      <option value="all">All</option>
+      <option value="common">Common</option>
+      <option value="uncommon">Uncommon</option>
+      <option value="rare">Rare</option>
+      <option value="epic">Epic</option>
+      <option value="legendary">Legendary</option>
+    `;
+  }
 }
 
 /* ---------- filtering ---------- */
