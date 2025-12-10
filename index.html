@@ -174,7 +174,7 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
   align-items: center;
   justify-content: center;
   z-index: 100000;
-  animation: victoryFadeIn 0.4s ease-out;
+  animation: victoryFadeIn 0.2s ease-out;
 }
 
 @keyframes victoryFadeIn {
@@ -192,7 +192,7 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
   width: 95%;
   text-align: center;
   box-shadow: 0 0 50px rgba(220, 20, 60, 0.6), inset 0 0 30px rgba(220, 20, 60, 0.1);
-  animation: victoryScale 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: victoryScale 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   overflow: hidden;
   max-height: 90vh;
   overflow-y: auto;
@@ -257,8 +257,8 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: all 0.3s ease;
-  animation: victoryItemAppear 0.5s ease-out backwards;
+  transition: all 0.2s ease;
+  animation: victoryItemAppear 0.3s ease-out backwards;
 }
 
 @keyframes victoryItemAppear {
@@ -272,12 +272,12 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
   }
 }
 
-.victory-item:nth-child(1) { animation-delay: 0.1s; }
-.victory-item:nth-child(2) { animation-delay: 0.2s; }
-.victory-item:nth-child(3) { animation-delay: 0.3s; }
-.victory-item:nth-child(4) { animation-delay: 0.4s; }
-.victory-item:nth-child(5) { animation-delay: 0.5s; }
-.victory-item:nth-child(6) { animation-delay: 0.6s; }
+.victory-item:nth-child(1) { animation-delay: 0.05s; }
+.victory-item:nth-child(2) { animation-delay: 0.1s; }
+.victory-item:nth-child(3) { animation-delay: 0.15s; }
+.victory-item:nth-child(4) { animation-delay: 0.2s; }
+.victory-item:nth-child(5) { animation-delay: 0.25s; }
+.victory-item:nth-child(6) { animation-delay: 0.3s; }
 
 .victory-item:hover {
   transform: translateY(-5px);
@@ -952,13 +952,13 @@ function enableBGM(){ function start(){ if(bgm){ bgm.play().catch(()=>{}); } doc
 enableBGM();
 setTimeout(()=> { const mp = localStorage.getItem('qc_music_on'); setMusicOn(mp !== '0'); }, 100);
 
-/* spinner modal logic: 3 second spin with easing */
+/* spinner modal logic: 2.5 second spin with easing */
 function renderSpinStrip(){
   spinStrip.innerHTML = '';
   const pool = (ITEMS[activeTab]||[]).slice();
   if(pool.length === 0){ spinStrip.innerHTML = '<div style="color:var(--muted)">No items in this category.</div>'; return; }
   const fragment = document.createDocumentFragment();
-  for(let i=0;i<40;i++){
+  for(let i=0;i<30;i++){
     const it = rand(pool);
     const tile = document.createElement('div');
     tile.className = 'spin-tile';
@@ -985,8 +985,8 @@ spinStartBtn.addEventListener('click', async ()=>{
   spinning = true;
   playSFX('spin');
   renderSpinStrip();
-  const steps = 40;
-  const duration = 3000; // 3 seconds total
+  const steps = 30;
+  const duration = 2500; // 2.5 seconds total
   const delays = computeDelays(duration, steps);
   for (let i=0;i<steps;i++){
     const first = spinStrip.firstElementChild;
@@ -1013,7 +1013,7 @@ spinStartBtn.addEventListener('click', async ()=>{
     closeSpinModal(); 
     spinning = false; 
     showVictoryFrame(pickedItems);
-  }, 300);
+  }, 150);
 });
 
 function openSpinModal(){ spinModal.classList.add('open'); spinModal.style.display='flex'; renderSpinStrip(); }
