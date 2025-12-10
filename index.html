@@ -708,17 +708,17 @@ const IMAGES = {
   'MP9': 'images/mp9.png',
   'Hellcat': 'images/hellcat.png',
   'TP9': 'images/tp9.png',
-  'SXD9': 'images/sx9.png',
-  'G43x': 'images/g43x.png',
-
+  'SXD9': 'images/sxd9.png',
+ 
   /* -------------------- UNCOMMON (Green) -------------------- */
   'G23': 'images/g23.png',
   'G43': 'images/g43x.png',
-  '1911': 'images/1911.png',
   'Fn509': 'images/fn509.png',
   'G19x': 'images/g19x.png',
   'G27': 'images/g27.png',
   'G2C': 'images/g2c.png',
+ 'G43x': 'images/g43x.png',
+
 
   /* -------------------- RARE (Blue) -------------------- */
   'G22': 'images/g22.png',
@@ -729,6 +729,7 @@ const IMAGES = {
   'G30': 'images/g30.png',
   'Ruger SR45': 'images/ruger_sr45.png',
   'GH': 'images/gh.png',
+  '1911': 'images/1911.png',
 
   /* -------------------- EPIC (Red) -------------------- */
   'Glock 20 Switch': 'images/g20_switch.png',
@@ -774,17 +775,16 @@ const WEAPON_STATS = {
 'Hellcat': { damage: 25, fire: 720, ammo: '9mm', magStd: 13, magExt: 26 },
 'TP9': { damage: 25, fire: 740, ammo: '9mm', magStd: 18, magExt: 36 },
 'SXD9': { damage: 25, fire: 730, ammo: '9mm', magStd: 16, magExt: 32 },
-'G43x': { damage: 25, fire: 710, ammo: '9mm', magStd: 10, magExt: 20 },
+
 
 /* ---------------- UNCOMMON ---------------- */
 'G23': { damage: 28, fire: 750, ammo: '9mm', magStd: 16, magExt: 32 },
 'G43': { damage: 28, fire: 800, ammo: '9mm', magStd: 30, magExt: 60 },
-'1911': { damage: 28, fire: 700, ammo: '.45 ACP', magStd: 8, magExt: 16 },
 'Fn509': { damage: 28, fire: 780, ammo: '9mm', magStd: 17, magExt: 34 },
 'G19x': { damage: 28, fire: 790, ammo: '9mm', magStd: 19, magExt: 38 },
 'G27': { damage: 28, fire: 760, ammo: '9mm', magStd: 15, magExt: 30 },
 'G2C': { damage: 28, fire: 750, ammo: '9mm', magStd: 12, magExt: 24 },
-
+'G43x': { damage: 25, fire: 710, ammo: '9mm', magStd: 10, magExt: 20 },
 /* ---------------- RARE ---------------- */
 'G22': { damage: 30, fire: 1200, ammo: '9mm', magStd: 25, magExt: 50 },
 'G41': { damage: 30, fire: 1100, ammo: '.32 ACP', magStd: 20, magExt: 40 },
@@ -794,6 +794,7 @@ const WEAPON_STATS = {
 'G30': { damage: 30, fire: 820, ammo: '.45 ACP', magStd: 10, magExt: 20 },
 'Ruger SR45': { damage: 30, fire: 840, ammo: '.45 ACP', magStd: 10, magExt: 20 },
 'GH': { damage: 30, fire: 860, ammo: '9mm', magStd: 17, magExt: 34 },
+'1911': { damage: 28, fire: 700, ammo: '.45 ACP', magStd: 8, magExt: 16 },
 
 /* ---------------- EPIC ---------------- */
 'Glock 20 Switch': { damage: 35, fire: 600, ammo: '.45 ACP', magStd: 10, magExt: 21 },
@@ -839,16 +840,15 @@ const ITEMS = {
   { name:'Hellcat', rarity:'common', category:'Pistols', img:IMAGES['Hellcat'] },
   { name:'TP9', rarity:'common', category:'Pistols', img:IMAGES['TP9'] },
   { name:'SXD9', rarity:'common', category:'Pistols', img:IMAGES['SXD9'] },
-  { name:'G43x', rarity:'common', category:'Pistols', img:IMAGES['G43x'] },
-
+ 
   /* -------- UNCOMMON (Green) -------- */
   { name:'G23', rarity:'uncommon', category:'Pistols', img:IMAGES['G23'] },
   { name:'G43', rarity:'uncommon', category:'Pistols', img:IMAGES['G43'] },
-  { name:'1911', rarity:'uncommon', category:'Pistols', img:IMAGES['1911'] },
   { name:'Fn509', rarity:'uncommon', category:'Pistols', img:IMAGES['Fn509'] },
   { name:'G19x', rarity:'uncommon', category:'Pistols', img:IMAGES['G19x'] },
   { name:'G27', rarity:'uncommon', category:'Pistols', img:IMAGES['G27'] },
   { name:'G2C', rarity:'uncommon', category:'Pistols', img:IMAGES['G2C'] },
+  { name:'G43x', rarity:'uncommon', category:'Pistols', img:IMAGES['G43x'] },
 
   /* -------- RARE (Blue) -------- */
   { name:'G22', rarity:'rare', category:'SMG', img:IMAGES['G22'] },
@@ -859,12 +859,13 @@ const ITEMS = {
   { name:'G30', rarity:'rare', category:'Pistols', img:IMAGES['G30'] },
   { name:'Ruger SR45', rarity:'rare', category:'Pistols', img:IMAGES['Ruger SR45'] },
   { name:'GH', rarity:'rare', category:'Pistols', img:IMAGES['GH'] }
+  { name:'1911', rarity:'rare', category:'Pistols', img:IMAGES['1911'] },
 ],
 
 tier2: [
 
   /* -------- UNCOMMON -------- */
-  { name:'1911', rarity:'uncommon', category:'Pistols', img:IMAGES['1911'] },
+  { name:'1911', rarity:'rare', category:'Pistols', img:IMAGES['1911'] },
   { name:'Fn509', rarity:'uncommon', category:'Pistols', img:IMAGES['Fn509'] },
   { name:'G19x', rarity:'uncommon', category:'Pistols', img:IMAGES['G19x'] },
   { name:'G27', rarity:'uncommon', category:'Pistols', img:IMAGES['G27'] },
@@ -907,7 +908,7 @@ tier2: [
   { name:'XDM-Elite', rarity:'legendary', category:'Pistols', img:IMAGES['XDM-Elite'] },
   { name:'P90', rarity:'legendary', category:'SMG', img:IMAGES['P90'] },
   { name:'MP5A3', rarity:'legendary', category:'SMG', img:IMAGES['MP5A3'] },
-  { name:'Red Draco', rarity:'epic', category:'ARs', img:IMAGES['Red Draco'] },
+  { name:'Red Draco', rarity:'legendary', category:'ARs', img:IMAGES['Red Draco'] },
   { name:'M16A1', rarity:'legendary', category:'ARs', img:IMAGES['M16A1'] }
 ],
 
