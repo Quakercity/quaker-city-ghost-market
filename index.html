@@ -517,6 +517,18 @@ select{ background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.04); colo
         <div style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:6px; height:120px; border-radius:6px; background:linear-gradient(180deg, #ff0000, #dc143c); box-shadow: 0 0 30px rgba(255,0,0,.8), 0 0 15px rgba(255,0,0,1); pointer-events:none;"></div>
       </div>
 
+      <!-- Display for landed gun -->
+      <div id="landedGunDisplay" style="display:none; margin-top:16px; padding:16px; background:rgba(0,71,171,.2); border:2px solid var(--accent-2); border-radius:10px; text-align:center;">
+        <div style="font-weight:900; color:var(--accent-2); margin-bottom:8px;">YOU GOT:</div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:16px;">
+          <img id="landedGunImage" src="" style="max-width:100px; max-height:80px; object-fit:contain;">
+          <div>
+            <div id="landedGunName" style="font-weight:900; font-size:18px; color:white;"></div>
+            <div id="landedGunRarity" style="font-weight:700; font-size:14px; margin-top:4px;"></div>
+          </div>
+        </div>
+      </div>
+
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
         <button class="btn" id="closeSpin">Close</button>
         <button class="btn drop" id="spinStartBtn">SPIN</button>
@@ -881,6 +893,10 @@ const spinModal = document.getElementById('spinModal');
 const spinStrip = document.getElementById('spinStrip');
 const spinStartBtn = document.getElementById('spinStartBtn');
 const closeSpin = document.getElementById('closeSpin');
+const landedGunDisplay = document.getElementById('landedGunDisplay');
+const landedGunImage = document.getElementById('landedGunImage');
+const landedGunName = document.getElementById('landedGunName');
+const landedGunRarity = document.getElementById('landedGunRarity');
 
 const musicToggle = document.getElementById('musicToggle');
 const musicLabel = document.getElementById('musicLabel');
@@ -1134,6 +1150,7 @@ spinStartBtn.addEventListener('click', async ()=>{
   if(spinning) return;
   spinning = true;
   playSFX('spin');
+  landedGunDisplay.style.display = 'none';
   
   // Determine how many items to drop based on tier
   let itemCount = 4; // Default for tier1
@@ -1144,6 +1161,9 @@ spinStartBtn.addEventListener('click', async ()=>{
   
   // Spin for each item individually
   for(let spinIndex = 0; spinIndex < itemCount; spinIndex++) {
+    // Hide landed gun display before spinning
+    landedGunDisplay.style.display = 'none';
+    
     // Pick the item for this spin
     const item = pickWeightedItem(activeTab);
     pickedItems.push(item);
@@ -1163,8 +1183,17 @@ spinStartBtn.addEventListener('click', async ()=>{
       await tick(delays[i]);
     }
     
-    // Show what gun was landed on for 500ms before next spin
+    // Show what gun was landed on
+    landedGunImage.src = item.img || FALLBACK;
+    landedGunName.textContent = item.name;
+    landedGunRarity.textContent = (item.rarity || 'common').toUpperCase();
+    landedGunRarity.style.color = getRarityColor(item.rarity);
+    landedGunDisplay.style.display = 'block';
+    
+    // Pause to show the landed gun (800ms) before next spin
     if(spinIndex < itemCount - 1) {
+      await tick(800);
+    } else {
       await tick(500);
     }
   }
@@ -1176,6 +1205,17 @@ spinStartBtn.addEventListener('click', async ()=>{
   spinning = false;
   showVictoryFrame(pickedItems);
 });
+
+function getRarityColor(rarity) {
+  const colors = {
+    common: '#8b7355',
+    uncommon: '#4caf50',
+    rare: '#2196f3',
+    epic: '#9c27b0',
+    legendary: '#ff9800'
+  };
+  return colors[rarity] || colors.common;
+}
 
 function openSpinModal(){ spinModal.classList.add('open'); spinModal.style.display='flex'; renderSpinStrip(); }
 function closeSpinModal(){ spinModal.classList.remove('open'); spinModal.style.display='none'; }
